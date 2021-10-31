@@ -25,12 +25,12 @@ MonoBehaviour:
     m_Address: MainScreen
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: b8b4a49ab8908e94ca8fc4d4d11d8f7b
-    m_Address: FigureHint_O
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 06c5ca06a9fb5d54cb1a5bab2d72c562
     m_Address: Cell
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 84017ef256b9f424e80c65fb366ba4d0
+    m_Address: Figure_I
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

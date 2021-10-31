@@ -1,5 +1,6 @@
 ﻿using Core.AI;
 using Core.Cells;
+using Core.Figures.FigureAlgorithms;
 using Core.Grid;
 using EcsCore;
 using Leopotam.Ecs;
@@ -32,7 +33,7 @@ namespace Core.Figures
                     figure.Row = aiDecision.Row;
                     figure.Column = aiDecision.Column;
                     figure.Mono.SetGridPosition(figure.Row, figure.Column);
-                    _fallCounter = 0.1f;
+                    _fallCounter = 1f;
                     return;
                 } 
             }
@@ -51,7 +52,7 @@ namespace Core.Figures
                 _world.NewEntity().Replace(new FigureSpawnSignal());
                 _world.NewEntity().Replace(new CheckLinesSignal());
 
-                GridService.FillGrid(_grid.FillMatrix, figure);
+                FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
 
                 if (figure.Row + 1 > _grid.FillMatrix.GetLength(0))
                     _screenMono.ShowGameOver();
@@ -60,10 +61,9 @@ namespace Core.Figures
                 
                 figure.Mono.Delete();
                 _filter.GetEntity(0).Del<FigureComponent>();
-                _grid.Mono.LightDown();
             }
 
-            _fallCounter = 0.1f;
+            _fallCounter = 1f;
         }
 
         private void CreateSingleFigures(in FigureComponent figure)
@@ -71,31 +71,14 @@ namespace Core.Figures
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
-
-                if (cell.Row == figure.Row || cell.Row == figure.Row + 1)
-                {
-                    if (cell.Column == figure.Column || cell.Column == figure.Column + 1)
-                    {
-                        cell.View.SetImageActive(true);
-                    }
-                }
+                cell.View.LightDown();
+                FigureAlgorithmFacade.UpdateFillCell(figure, cell);
             }
         }
 
         private static bool IsFall(in bool[,] fillMatrix, in FigureComponent figure)
         {
-            var rows = fillMatrix.GetLength(0);
-
-            if (figure.Row >= rows)
-                return false;
-
-            if (figure.Row == 0)
-                return true;
-
-            var isFillUnder = fillMatrix[figure.Row - 1, figure.Column];
-            var isFillRightUnder = fillMatrix[figure.Row - 1, figure.Column + 1];
-
-            return isFillUnder || isFillRightUnder;
+            return FigureAlgorithmFacade.IsFall(fillMatrix, figure);
         }
     }
 }

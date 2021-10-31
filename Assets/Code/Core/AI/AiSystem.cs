@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Cells;
 using Core.Figures;
+using Core.Figures.FigureAlgorithms;
 using Core.Grid;
 using EcsCore;
 using Leopotam.Ecs;
@@ -13,6 +15,7 @@ namespace Core.AI
     public class AiSystem : IEcsRunSystem
     {
         private EcsFilter<FigureComponent>.Exclude<AiDecision> _filter;
+        private EcsFilter<CellComponent> _cells;
         private GridData _gridData;
         private float _timer;
 
@@ -32,17 +35,22 @@ namespace Core.AI
             }
             ref var figure = ref _filter.Get1(0);
 
-            var placeToFall = FindBetterPlaceToFall(_gridData.FillMatrix);
+            var placeToFall = FindBetterPlaceToFall(_gridData.FillMatrix, figure);
             _filter.GetEntity(0)
                    .Replace(new AiDecision
                    {
-                       Column = placeToFall.x,
-                       Row = placeToFall.y
+                       Column = placeToFall.Column,
+                       Row = placeToFall.Row
                    });
-            _gridData.Mono.LightUp(placeToFall);
+
+            foreach (var i in _cells)
+            {
+                ref var cell = ref _cells.Get1(i);
+                FigureAlgorithmFacade.LightUpCellByFigure(figure, cell, placeToFall);
+            }
         }
 
-        private static Vector2Int FindBetterPlaceToFall(in bool[,] fillMatrix)
+        private static GridPosition FindBetterPlaceToFall(in bool[,] fillMatrix, in FigureComponent figure)
         {
             var comparer = new AiMoveVariantComparer();
             var rows = fillMatrix.GetLength(0);
@@ -52,9 +60,10 @@ namespace Core.AI
             // анализируем все столбцы и строки
             for (var row = rows - 1; row >= 0; row--)
             {
-                for (var column = 0; column < columns - 1; column++)
+                for (var column = 0; column < columns; column++)
                 {
-                    if (!GridService.IsCanPlaceFigure(fillMatrix, row, column))
+                    var place = new GridPosition(row, column);
+                    if (!FigureAlgorithmFacade.IsCanPlaceFigure(fillMatrix, figure, place))
                         continue;
 
                     var variant = new AiMoveVariant
@@ -68,11 +77,11 @@ namespace Core.AI
             }
 
             if (variants.Count == 0)
-                return Vector2Int.zero;
+                return GridPosition.Zero;
 
             var result = variants.Last();
 
-            return new Vector2Int(result.Column, result.Row);
+            return new GridPosition(result.Row, result.Column);
         }
     }
 }
