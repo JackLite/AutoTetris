@@ -6,6 +6,7 @@
         public int Rows;
         public int Columns;
         public bool[,] FillMatrix;
+        public bool IsGridStable = true;
 
         public GridData(GridMono gridMono)
         {

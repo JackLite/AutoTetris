@@ -16,11 +16,15 @@ namespace Core.AI
     {
         private EcsFilter<FigureComponent>.Exclude<AiDecision> _filter;
         private EcsFilter<CellComponent> _cells;
+        private EcsFilter<CellsStopFallingSignal> _cellsStopFalling;
         private GridData _gridData;
         private float _timer;
 
         public void Run()
         {
+            if (!_gridData.IsGridStable)
+                return;
+            
             if (_filter.GetEntitiesCount() == 0)
             {
                 _timer = .5f;

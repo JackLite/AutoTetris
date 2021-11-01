@@ -51,6 +51,7 @@ namespace Core.Cells
         {
             _image.enabled = true;
             _isLightUp = true;
+            _currentOpacity = maxOpacity;
         }
 
         private void Update()
