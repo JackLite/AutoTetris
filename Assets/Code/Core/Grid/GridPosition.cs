@@ -1,4 +1,6 @@
-﻿namespace Core.Grid
+﻿using Core.Figures;
+
+namespace Core.Grid
 {
     public struct GridPosition
     {
@@ -11,6 +13,12 @@
         {
             Row = row;
             Column = column;
+        }
+
+        public GridPosition(Figure figure)
+        {
+            Row = figure.Row;
+            Column = figure.Column;
         }
     }
 }

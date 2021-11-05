@@ -49,7 +49,7 @@ namespace Core.Figures
 
             
             
-            entity.Replace(new FigureComponent
+            entity.Replace(new Figure
             {
                 Type = type, Mono = mono, Row = startRow, Column = startColumn
             });

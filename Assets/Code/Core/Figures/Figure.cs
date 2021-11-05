@@ -2,7 +2,7 @@
 
 namespace Core.Figures
 {
-    public struct FigureComponent
+    public struct Figure
     {
         public FigureType Type;
 

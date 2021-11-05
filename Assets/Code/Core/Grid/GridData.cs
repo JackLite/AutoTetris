@@ -7,6 +7,7 @@
         public int Columns;
         public bool[,] FillMatrix;
         public bool IsGridStable = true;
+        public bool IsNeedCheckPieces;
 
         public GridData(GridMono gridMono)
         {

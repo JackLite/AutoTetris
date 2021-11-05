@@ -12,8 +12,8 @@ namespace Core.Figures
     public class MoveFigureSystem : IEcsRunSystem
     {
         private float _fallCounter;
-        private EcsFilter<FigureComponent> _filter;
-        private EcsFilter<CellComponent> _cells;
+        private EcsFilter<Figure> _filter;
+        private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
         private GridData _grid;
         private EcsWorld _world;
@@ -32,8 +32,10 @@ namespace Core.Figures
                     ref var aiDecision = ref entity.Get<AiDecision>();
                     figure.Row = aiDecision.Row;
                     figure.Column = aiDecision.Column;
+                    figure.Rotation = aiDecision.Rotation;
                     figure.Mono.SetGridPosition(figure.Row, figure.Column);
                     _fallCounter = 1f;
+                    FinishMove(figure);
                     return;
                 } 
             }
@@ -49,24 +51,29 @@ namespace Core.Figures
 
             if (IsFall(_grid.FillMatrix, figure))
             {
-                _world.NewEntity().Replace(new FigureSpawnSignal());
-                _world.NewEntity().Replace(new CheckLinesSignal());
-
-                FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
-
-                if (figure.Row + 1 > _grid.FillMatrix.GetLength(0))
-                    _screenMono.ShowGameOver();
-                
-                CreateSingleFigures(in figure);
-                
-                figure.Mono.Delete();
-                _filter.GetEntity(0).Del<FigureComponent>();
+                FinishMove(figure);
             }
 
             _fallCounter = 1f;
         }
 
-        private void CreateSingleFigures(in FigureComponent figure)
+        private void FinishMove(Figure figure)
+        {
+            _world.NewEntity().Replace(new FigureSpawnSignal());
+            _world.NewEntity().Replace(new CheckLinesSignal());
+
+            FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
+
+            if (figure.Row + 1 > _grid.FillMatrix.GetLength(0))
+                _screenMono.ShowGameOver();
+
+            CreateSingleFigures(in figure);
+
+            figure.Mono.Delete();
+            _filter.GetEntity(0).Del<Figure>();
+        }
+
+        private void CreateSingleFigures(in Figure figure)
         {
             foreach (var i in _cells)
             {
@@ -76,7 +83,7 @@ namespace Core.Figures
             }
         }
 
-        private static bool IsFall(in bool[,] fillMatrix, in FigureComponent figure)
+        private static bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             return FigureAlgorithmFacade.IsFall(fillMatrix, figure);
         }

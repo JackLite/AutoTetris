@@ -11,7 +11,7 @@ namespace Core.Cells
     {
         private GridData _grid;
         private EcsWorld _world;
-        private EcsFilter<CellComponent> _cells;
+        private EcsFilter<Cell> _cells;
         private float _checkSpeed;
         private CellMono[,] _cellsArray;
 
@@ -26,8 +26,6 @@ namespace Core.Cells
                     CreateCell(row, column);
                 }
             }
-
-            _world.NewEntity().Replace(new CellsStopFallingSignal());
         }
 
         private async void CreateCell(int row, int column)
@@ -35,7 +33,7 @@ namespace Core.Cells
             var handle = Addressables.InstantiateAsync("Cell", _grid.Mono.transform);
             await handle.Task;
             var cellMono = handle.Result.GetComponent<CellMono>();
-            var cell = new CellComponent
+            var cell = new Cell
             {
                 Column = column, Row = row, State = CellState.Empty, View = cellMono
             };
@@ -48,6 +46,8 @@ namespace Core.Cells
 
         public void Run()
         {
+            if (!_grid.IsNeedCheckPieces)
+                return;
             _checkSpeed -= Time.deltaTime;
 
             if (_checkSpeed > 0)
@@ -82,8 +82,9 @@ namespace Core.Cells
             }
 
             _grid.IsGridStable = IsGridStable();
+            _grid.IsNeedCheckPieces = !_grid.IsGridStable;
 
-            _checkSpeed = 0.4f;
+            _checkSpeed = 0.15f;
         }
 
         private bool IsGridStable()
