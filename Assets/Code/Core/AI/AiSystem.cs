@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace Core.AI
 {
-    [EcsSystem(typeof(CoreSetup))]
+    [EcsSystem(typeof(CoreModule))]
     public class AiSystem : IEcsRunSystem
     {
         private EcsFilter<Figure>.Exclude<AiDecision> _filter;

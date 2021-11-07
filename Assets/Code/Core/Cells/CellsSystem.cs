@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 
 namespace Core.Cells
 {
-    [EcsSystem(typeof(CoreSetup))]
+    [EcsSystem(typeof(CoreModule))]
     public class CellsSystem : IEcsInitSystem, IEcsRunSystem
     {
         private GridData _grid;

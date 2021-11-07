@@ -6,7 +6,7 @@ using UnityEngine.AddressableAssets;
 
 namespace Core.Figures
 {
-    [EcsSystem(typeof(CoreSetup))]
+    [EcsSystem(typeof(CoreModule))]
     public class SpawnFigureSystem : IEcsInitSystem, IEcsRunSystem
     {
         private float _counter;
@@ -45,7 +45,7 @@ namespace Core.Figures
             var startRow = _gridData.FillMatrix.GetLength(0);
             var startColumn = _gridData.FillMatrix.GetLength(1) / 2 - 1;
             mono.SetGridPosition(startRow, startColumn);
-            var entity = EcsWorldContainer.world.NewEntity();
+            var entity = EcsWorldStartup.world.NewEntity();
 
             
             

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Core.Figures
 {
-    [EcsSystem(typeof(CoreSetup))]
+    [EcsSystem(typeof(CoreModule))]
     public class MoveFigureSystem : IEcsRunSystem
     {
         private float _fallCounter;

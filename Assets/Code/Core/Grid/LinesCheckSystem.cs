@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Core.Grid
 {
-    [EcsSystem(typeof(CoreSetup))]
+    [EcsSystem(typeof(CoreModule))]
     public class LinesCheckSystem : IEcsRunSystem
     {
         private EcsFilter<CheckLinesSignal> _signal;

@@ -2,35 +2,37 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using Core.Grid;
 using EcsCore;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Core
+namespace Global
 {
-    public class CoreSetup : EcsSetup
+    [EcsGlobalModule]
+    public class StartScreenModule : EcsModule
     {
-        private GameObject _mainScreen;
-        protected override Type Type => GetType();
+        private GameObject _startScreen;
         private readonly Dictionary<Type, object> _dependencies;
 
-        public CoreSetup()
+        protected override Type Type => GetType();
+        public override Type ActivationSignal { get; }
+        public override Type DeactivationSignal { get; }
+        
+
+        public StartScreenModule()
         {
             _dependencies = new Dictionary<Type, object>();
         }
-        
+
         protected override async Task Setup()
         {
-            var task = Addressables.InstantiateAsync("MainScreen").Task;
-            await task;
-            _mainScreen = task.Result;
-            var mainScreen = _mainScreen.GetComponent<MainScreenMono>();
-            _dependencies[typeof(MainScreenMono)] = mainScreen;
-            _dependencies[typeof(GridData)] = new GridData(mainScreen.grid.GetComponent<GridMono>());
+            var handler = Addressables.InstantiateAsync("StartScreen");
+            await handler.Task;
+            _startScreen = handler.Result;
+            _dependencies.Add(typeof(StartScreenMono), _startScreen.GetComponent<StartScreenMono>());
         }
-
+        
         protected override void InsertDependencies(IEcsSystem system)
         {
             var fields = system.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);

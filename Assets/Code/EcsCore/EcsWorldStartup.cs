@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -12,20 +11,23 @@ namespace EcsCore
     ///     Отвечает за запуск ECS-мира
     ///     Создаёт, обрабатывает и удаляет системы
     /// </summary>
-    public class EcsWorldContainer : MonoBehaviour
+    public class EcsWorldStartup : MonoBehaviour
     {
         private static readonly Lazy<EcsWorld> LazyWorld = new Lazy<EcsWorld>();
         public static readonly EcsWorld world = LazyWorld.Value;
         private bool _isInitialize;
         private EcsSystems _systems;
+        private EcsModuleSystem _moduleSystem;
 
         private async void Awake()
         {
+            _moduleSystem = new EcsModuleSystem();
             _systems = new EcsSystems(world);
-            var setups = GetAllEcsSetups();
+            _systems.Add(_moduleSystem);
+            var setups = GetGlobalModules();
 
             foreach (var type in setups)
-                await type.Setup(_systems);
+                await type.Activate(world);
 
             _systems.Init();
             _isInitialize = true;
@@ -54,12 +56,13 @@ namespace EcsCore
             world.Destroy();
         }
 
-        private static IEnumerable<EcsSetup> GetAllEcsSetups()
+        private static IEnumerable<EcsModule> GetGlobalModules()
         {
             return Assembly.GetExecutingAssembly()
                            .GetTypes()
-                           .Where(t => t.IsSubclassOf(typeof(EcsSetup)))
-                           .Select(t => (EcsSetup)Activator.CreateInstance(t));
+                           .Where(t => t.IsSubclassOf(typeof(EcsModule)))
+                           .Where(t => t.GetCustomAttribute<EcsGlobalModuleAttribute>() != null)
+                           .Select(t => (EcsModule)Activator.CreateInstance(t));
         }
     }
 }

@@ -5,7 +5,7 @@ namespace EcsCore
     /// <summary>
     /// Атрибут, которым помечаются все классы, являющиеся ECS-системами
     /// </summary>
-    /// <seealso cref="EcsSetup"/>
+    /// <seealso cref="EcsModule"/>
     /// <seealso cref="EcsUtilities"/>
     public class EcsSystemAttribute : Attribute
     {
@@ -15,7 +15,7 @@ namespace EcsCore
         public readonly Type Setup;
 
         /// <param name="setup">Тип точки создания системы</param>
-        /// <seealso cref="EcsSetup"/>
+        /// <seealso cref="EcsModule"/>
         /// <seealso cref="EcsUtilities"/>
         public EcsSystemAttribute(Type setup)
         {

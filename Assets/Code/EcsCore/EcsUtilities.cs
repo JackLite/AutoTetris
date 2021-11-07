@@ -16,7 +16,7 @@ namespace EcsCore
         /// </summary>
         /// <param name="setupType">Тип точки создания</param>
         /// <returns>Перечисление созданных систем</returns>
-        /// <seealso cref="EcsSetup.Setup"/>
+        /// <seealso cref="EcsModule.Activate"/>
         public static IEnumerable<IEcsSystem> CreateSystems(Type setupType)
         {
             return
