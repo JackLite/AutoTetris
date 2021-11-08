@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core.Input;
+using UnityEngine;
 
 namespace Core
 {
@@ -8,6 +9,9 @@ namespace Core
 
         [SerializeField]
         private GameObject gameOver;
+        
+        [field:SerializeField]
+        public SwipeMono SwipeMono { get; private set; }
 
         public void ShowGameOver()
         {

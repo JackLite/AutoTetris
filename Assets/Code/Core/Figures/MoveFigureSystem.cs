@@ -2,6 +2,7 @@
 using Core.Cells;
 using Core.Figures.FigureAlgorithms;
 using Core.Grid;
+using Core.Input;
 using EcsCore;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -9,14 +10,29 @@ using UnityEngine;
 namespace Core.Figures
 {
     [EcsSystem(typeof(CoreModule))]
-    public class MoveFigureSystem : IEcsRunSystem
+    public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
+        private const float START_SPEED = 1f;
+        private const float SPEED_VELOCITY = .05f;
         private float _fallCounter;
+        private float _currentSpeed;
         private EcsFilter<Figure> _filter;
         private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
         private GridData _grid;
         private EcsWorld _world;
+        private InputSignal _inputSignal;
+
+        public void Init()
+        {
+            EcsWorldEventsBlackboard.AddEventHandler<InputSignal>(SaveInputSignal);
+            _currentSpeed = START_SPEED;
+        }
+
+        private void SaveInputSignal(InputSignal signal)
+        {
+            _inputSignal = signal;
+        }
 
         public void Run()
         {
@@ -25,19 +41,22 @@ namespace Core.Figures
 
             ref var figure = ref _filter.Get1(0);
             var entity = _filter.GetEntity(0);
+
             if (figure.Column > 0 && entity.Has<AiDecision>())
             {
-                if (Input.GetKey(KeyCode.DownArrow))
+                if (_inputSignal != null)
                 {
                     ref var aiDecision = ref entity.Get<AiDecision>();
                     figure.Row = aiDecision.Row;
                     figure.Column = aiDecision.Column;
                     figure.Rotation = aiDecision.Rotation;
                     figure.Mono.SetGridPosition(figure.Row, figure.Column);
-                    _fallCounter = 1f;
                     FinishMove(figure);
+                    _fallCounter = _currentSpeed;
+                    _inputSignal = null;
+
                     return;
-                } 
+                }
             }
 
             _fallCounter -= Time.deltaTime;
@@ -54,7 +73,7 @@ namespace Core.Figures
                 FinishMove(figure);
             }
 
-            _fallCounter = 1f;
+            _fallCounter = _currentSpeed;
         }
 
         private void FinishMove(Figure figure)
@@ -71,6 +90,7 @@ namespace Core.Figures
 
             figure.Mono.Delete();
             _filter.GetEntity(0).Del<Figure>();
+            _currentSpeed *= 1 - SPEED_VELOCITY;
         }
 
         private void CreateSingleFigures(in Figure figure)
@@ -86,6 +106,11 @@ namespace Core.Figures
         private static bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             return FigureAlgorithmFacade.IsFall(fillMatrix, figure);
+        }
+
+        public void Destroy()
+        {
+            EcsWorldEventsBlackboard.RemoveEventHandler<InputSignal>(SaveInputSignal);
         }
     }
 }

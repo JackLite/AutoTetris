@@ -47,8 +47,6 @@ namespace Core.Figures
             mono.SetGridPosition(startRow, startColumn);
             var entity = EcsWorldStartup.world.NewEntity();
 
-            
-            
             entity.Replace(new Figure
             {
                 Type = type, Mono = mono, Row = startRow, Column = startColumn
