@@ -1,4 +1,4 @@
-﻿namespace Core.Figures
+﻿namespace Core.Grid
 {
     public struct CheckLinesSignal
     {

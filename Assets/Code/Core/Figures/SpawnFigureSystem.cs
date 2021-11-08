@@ -42,7 +42,7 @@ namespace Core.Figures
             var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
             await task;
             var mono = task.Result.GetComponent<FigureMono>();
-            var startRow = _gridData.FillMatrix.GetLength(0);
+            var startRow = _gridData.FillMatrix.GetLength(0) - 4;
             var startColumn = _gridData.FillMatrix.GetLength(1) / 2 - 1;
             mono.SetGridPosition(startRow, startColumn);
             var entity = EcsWorldStartup.world.NewEntity();

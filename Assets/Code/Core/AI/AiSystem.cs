@@ -38,6 +38,9 @@ namespace Core.AI
             }
             ref var figure = ref _filter.Get1(0);
 
+            if (figure.Row > 20) 
+                return;
+            
             var aiDecision = FindBetterMove(_gridData.FillMatrix, ref figure);
             _filter.GetEntity(0).Replace(aiDecision);
 

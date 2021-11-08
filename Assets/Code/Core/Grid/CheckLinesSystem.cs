@@ -1,13 +1,11 @@
 ﻿using Core.Cells;
-using Core.Figures;
 using EcsCore;
 using Leopotam.Ecs;
-using UnityEngine;
 
 namespace Core.Grid
 {
     [EcsSystem(typeof(CoreModule))]
-    public class LinesCheckSystem : IEcsRunSystem
+    public class CheckLinesSystem : IEcsRunSystem
     {
         private EcsFilter<CheckLinesSignal> _signal;
         private EcsFilter<Cell> _cells;
@@ -36,6 +34,7 @@ namespace Core.Grid
 
             _signal.GetEntity(0).Destroy();
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
+            _grid.IsGridStable = fullRows.Count == 0;
         }
     }
 }

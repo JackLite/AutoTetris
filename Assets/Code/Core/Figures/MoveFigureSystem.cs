@@ -13,7 +13,7 @@ namespace Core.Figures
     public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
         private const float START_SPEED = 1f;
-        private const float SPEED_VELOCITY = .05f;
+        private const float SPEED_VELOCITY = .005f;
         private float _fallCounter;
         private float _currentSpeed;
         private EcsFilter<Figure> _filter;
@@ -82,14 +82,14 @@ namespace Core.Figures
             _world.NewEntity().Replace(new CheckLinesSignal());
 
             FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
-
-            if (figure.Row + 1 > _grid.FillMatrix.GetLength(0))
+            
+            if (figure.Row >= _grid.Rows)
                 _screenMono.ShowGameOver();
 
             CreateSingleFigures(in figure);
 
             figure.Mono.Delete();
-            _filter.GetEntity(0).Del<Figure>();
+            _filter.GetEntity(0).Destroy();
             _currentSpeed *= 1 - SPEED_VELOCITY;
         }
 
