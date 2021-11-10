@@ -16,9 +16,6 @@ namespace Global
         private readonly Dictionary<Type, object> _dependencies;
 
         protected override Type Type => GetType();
-        public override Type ActivationSignal { get; }
-        public override Type DeactivationSignal { get; }
-        
 
         public StartScreenModule()
         {
@@ -32,7 +29,7 @@ namespace Global
             _startScreen = handler.Result;
             _dependencies.Add(typeof(StartScreenMono), _startScreen.GetComponent<StartScreenMono>());
         }
-        
+
         protected override void InsertDependencies(IEcsSystem system)
         {
             var fields = system.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
@@ -40,7 +37,7 @@ namespace Global
             foreach (var field in fields)
             {
                 var t = field.FieldType;
-                if(_dependencies.ContainsKey(t))
+                if (_dependencies.ContainsKey(t))
                     field.SetValue(system, _dependencies[t]);
             }
         }

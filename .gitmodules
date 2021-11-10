@@ -1,0 +1,3 @@
+[submodule "Assets/Third-party/GoldEcs"]
+	path = Assets/Third-party/GoldEcs
+	url = https://github.com/JackLite/GoldEcs.git

@@ -15,8 +15,6 @@ namespace Core
         private GameObject _mainScreen;
         protected override Type Type => GetType();
         private readonly Dictionary<Type, object> _dependencies;
-        public override Type ActivationSignal => typeof(CoreActivationSignal);
-        public override Type DeactivationSignal => typeof(CoreActivationSignal);
 
         public CoreModule()
         {
