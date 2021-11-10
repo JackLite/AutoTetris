@@ -28,5 +28,18 @@ namespace Core.Grid
 
             return rows;
         }
+
+        public static bool IsFillSomeAtTopRow(bool[,] fillMatrix)
+        {
+            var topRow = fillMatrix.GetLength(0) - 1;
+
+            for (var column = 0; column < fillMatrix.GetLength(1); column++)
+            {
+                if (fillMatrix[topRow, column])
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

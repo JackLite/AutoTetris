@@ -42,5 +42,11 @@ namespace Core
                     field.SetValue(system, _dependencies[t]);
             }
         }
+
+        public override void Deactivate()
+        {
+            Addressables.ReleaseInstance(_mainScreen);
+            base.Deactivate();
+        }
     }
 }

@@ -4,6 +4,7 @@ using Core.Figures.FigureAlgorithms;
 using Core.Grid;
 using Core.Input;
 using EcsCore;
+using Global;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Core.Figures
     [EcsSystem(typeof(CoreModule))]
     public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private const float START_SPEED = 1f;
+        private const float START_DELAY = .1f;
         private const float SPEED_VELOCITY = .005f;
         private float _fallCounter;
         private float _currentSpeed;
@@ -26,7 +27,7 @@ namespace Core.Figures
         public void Init()
         {
             EcsWorldEventsBlackboard.AddEventHandler<InputSignal>(SaveInputSignal);
-            _currentSpeed = START_SPEED;
+            _currentSpeed = START_DELAY;
         }
 
         private void SaveInputSignal(InputSignal signal)
@@ -78,13 +79,16 @@ namespace Core.Figures
 
         private void FinishMove(Figure figure)
         {
-            _world.NewEntity().Replace(new FigureSpawnSignal());
             _world.NewEntity().Replace(new CheckLinesSignal());
 
             FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
             
-            if (figure.Row >= _grid.Rows)
-                _screenMono.ShowGameOver();
+            if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
+            {
+                _world.NewEntity().Replace(new GameOverSignal());
+                return;
+            }
+            _world.NewEntity().Replace(new FigureSpawnSignal());
 
             CreateSingleFigures(in figure);
 
@@ -111,6 +115,11 @@ namespace Core.Figures
         public void Destroy()
         {
             EcsWorldEventsBlackboard.RemoveEventHandler<InputSignal>(SaveInputSignal);
+
+            foreach (var i in _filter)
+            {
+                _filter.GetEntity(i).Destroy();
+            }
         }
     }
 }

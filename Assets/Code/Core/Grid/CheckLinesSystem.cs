@@ -5,7 +5,7 @@ using Leopotam.Ecs;
 namespace Core.Grid
 {
     [EcsSystem(typeof(CoreModule))]
-    public class CheckLinesSystem : IEcsRunSystem
+    public class CheckLinesSystem : IEcsRunSystem, IEcsDestroySystem
     {
         private EcsFilter<CheckLinesSignal> _signal;
         private EcsFilter<Cell> _cells;
@@ -35,6 +35,14 @@ namespace Core.Grid
             _signal.GetEntity(0).Destroy();
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
+        }
+
+        public void Destroy()
+        {
+            foreach (var i in _signal)
+            {
+                _signal.GetEntity(i).Destroy();
+            }
         }
     }
 }

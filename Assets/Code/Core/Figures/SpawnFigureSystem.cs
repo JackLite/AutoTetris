@@ -31,6 +31,8 @@ namespace Core.Figures
             if (_filter.GetEntitiesCount() == 0)
                 return;
 
+            if (GridService.IsFillSomeAtTopRow(_gridData.FillMatrix))
+                return;
             CreateFigure();
             _filter.GetEntity(0).Destroy();
         }

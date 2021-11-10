@@ -1,4 +1,6 @@
-﻿using Core.Figures;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Core.Figures;
 using Core.Grid;
 using EcsCore;
 using Leopotam.Ecs;
@@ -8,7 +10,7 @@ using UnityEngine.AddressableAssets;
 namespace Core.Cells
 {
     [EcsSystem(typeof(CoreModule))]
-    public class CellsSystem : IEcsInitSystem, IEcsRunSystem
+    public class CellsSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
         private const float FIRST_DELAY = .2f;
         private const float DELAY = .1f;
@@ -57,14 +59,25 @@ namespace Core.Cells
             if (_checkSpeed > 0)
                 return;
 
-            foreach (var i in _cells)
-            {
-                ref var cell = ref _cells.Get1(i);
+            var topNotEmptyRow = GetTopNotEmptyRow();
+            var bottomRow = GetBottomEmptyRow(topNotEmptyRow);
 
-                _cellsArray[cell.Row, cell.Column] = cell.View;
+            if (topNotEmptyRow == -1 || bottomRow == -1)
+            {
+                Finish();
+
+                return;
             }
 
-            for (var row = 1; row < _grid.Rows; row++)
+            MoveDownStartAbove(bottomRow);
+
+            _checkSpeed = DELAY;
+            _grid.IsNeedCheckPieces = true;
+        }
+
+        private void MoveDownStartAbove(int bottomRow)
+        {
+            for (var row = bottomRow + 1; row < _grid.Rows; row++)
             {
                 for (var column = 0; column < _grid.Columns; column++)
                 {
@@ -72,46 +85,79 @@ namespace Core.Cells
 
                     if (!isFill)
                         continue;
-                    var isFillUnder = _grid.FillMatrix[row - 1, column];
 
-                    if (isFillUnder)
-                        continue;
                     _cellsArray[row, column].SetImageActive(false);
                     _grid.FillMatrix[row, column] = false;
                     _cellsArray[row - 1, column].SetImageActive(true);
                     _grid.FillMatrix[row - 1, column] = true;
                 }
             }
-
-            _grid.IsNeedCheckPieces = IsNeedCheckPieces();
-
-            _checkSpeed = DELAY;
-
-            if (!_grid.IsNeedCheckPieces)
-            {
-                _world.NewEntity().Replace(new CheckLinesSignal());
-                _checkSpeed = FIRST_DELAY;
-            }
         }
 
-        private bool IsNeedCheckPieces()
+        private void Finish()
         {
-            for (var row = 1; row < _grid.Rows; row++)
+            _grid.IsNeedCheckPieces = false;
+            _world.NewEntity().Replace(new CheckLinesSignal());
+            _checkSpeed = FIRST_DELAY;
+        }
+
+        private int GetBottomEmptyRow(int topNotEmptyRow)
+        {
+            for (var row = 0; row < topNotEmptyRow; row++)
             {
+                var isEmptyRow = true;
+
                 for (var column = 0; column < _grid.Columns; column++)
                 {
-                    var isFill = _grid.FillMatrix[row, column];
-
-                    if (!isFill)
+                    if (!_grid.FillMatrix[row, column])
                         continue;
-                    var isFillUnder = _grid.FillMatrix[row - 1, column];
+                    isEmptyRow = false;
 
-                    if (!isFillUnder)
-                        return true;
+                    break;
                 }
+
+                if (!isEmptyRow)
+                    continue;
+
+                return row;
             }
-            
-            return false;
+
+            return -1;
+        }
+
+        private int GetTopNotEmptyRow()
+        {
+            var topNotEmptyRow = -1;
+
+            for (var row = _grid.Rows - 1; row > 0; row--)
+            {
+                var isEmptyRow = true;
+
+                for (var column = 0; column < _grid.Columns; column++)
+                {
+                    if (!_grid.FillMatrix[row, column])
+                        continue;
+                    isEmptyRow = false;
+
+                    break;
+                }
+
+                if (isEmptyRow)
+                    continue;
+                topNotEmptyRow = row;
+
+                break;
+            }
+
+            return topNotEmptyRow;
+        }
+
+        public void Destroy()
+        {
+            foreach (var i in _cells)
+            {
+                _cells.GetEntity(i).Destroy();
+            }
         }
     }
 }

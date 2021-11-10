@@ -10,14 +10,14 @@ using UnityEngine.AddressableAssets;
 namespace Global
 {
     [EcsGlobalModule]
-    public class StartScreenModule : EcsModule
+    public class MainModule : EcsModule
     {
         private GameObject _startScreen;
         private readonly Dictionary<Type, object> _dependencies;
 
         protected override Type Type => GetType();
 
-        public StartScreenModule()
+        public MainModule()
         {
             _dependencies = new Dictionary<Type, object>();
         }
