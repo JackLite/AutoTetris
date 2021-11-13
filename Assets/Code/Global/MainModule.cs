@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 using EcsCore;
-using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -14,8 +12,6 @@ namespace Global
     {
         private GameObject _startScreen;
         private readonly Dictionary<Type, object> _dependencies;
-
-        protected override Type Type => GetType();
 
         public MainModule()
         {
@@ -30,16 +26,9 @@ namespace Global
             _dependencies.Add(typeof(StartScreenMono), _startScreen.GetComponent<StartScreenMono>());
         }
 
-        protected override void InsertDependencies(IEcsSystem system)
+        protected override Dictionary<Type, object> GetDependencies()
         {
-            var fields = system.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance);
-
-            foreach (var field in fields)
-            {
-                var t = field.FieldType;
-                if (_dependencies.ContainsKey(t))
-                    field.SetValue(system, _dependencies[t]);
-            }
+            return _dependencies;
         }
     }
 }

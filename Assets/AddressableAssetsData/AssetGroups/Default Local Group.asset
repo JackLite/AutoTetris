@@ -37,6 +37,10 @@ MonoBehaviour:
     m_Address: StartScreen
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: b7b80bae7c9af8547849a6d11bb5a401
+    m_Address: GameOverScreen
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 06d91d58714a25140a5968b80a93ca1b, type: 2}
   m_SchemaSet:
