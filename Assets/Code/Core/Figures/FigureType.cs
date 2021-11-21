@@ -2,9 +2,9 @@
 {
     public enum FigureType
     {
-        I,
-        O,
-        T,
+        I = 0,
+        O = 1,
+        T = 2,
         S,
         Z,
         J,

@@ -50,10 +50,7 @@ namespace Core.AI
         private void LightUpMove(Figure figure, in AiDecision aiDecision)
         {
             figure.Rotation = aiDecision.Rotation;
-            var position = new GridPosition
-            {
-                Column = aiDecision.Column, Row = aiDecision.Row
-            };
+            var position = new GridPosition(aiDecision.Row, aiDecision.Column);
 
             foreach (var i in _cells)
             {

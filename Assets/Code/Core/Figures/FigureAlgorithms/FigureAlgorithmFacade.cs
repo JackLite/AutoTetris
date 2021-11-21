@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
 using Core.Cells;
+using Core.Figures.FigureAlgorithms.FigureI;
+using Core.Figures.FigureAlgorithms.FigureO;
+using Core.Figures.FigureAlgorithms.FigureT;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms
@@ -13,11 +16,14 @@ namespace Core.Figures.FigureAlgorithms
             _algorithms = new Dictionary<FigureType, FigureAlgorithm>
             {
                 {
-                    FigureType.O, new FigureO.FigureOAlgorithm()
+                    FigureType.O, new FigureOAlgorithm()
                 },
                 {
-                    FigureType.I, new FigureI.FigureIAlgorithm()
+                    FigureType.I, new FigureIAlgorithm()
                 },
+                {
+                    FigureType.T, new FigureTAlgorithm()
+                }
             };
         }
 

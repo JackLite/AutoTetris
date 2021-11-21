@@ -39,8 +39,9 @@ namespace Core.Figures
 
         private async void CreateFigure()
         {
-            var type = _random.Next(0, 2) > 0 ? FigureType.O : FigureType.I;
-            var name = type == FigureType.I ? "Figure_I" : "Figure_O";
+            var type = (FigureType) _random.Next(0, 3);
+            
+            var name = GetName(type);
             var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
             await task;
             var mono = task.Result.GetComponent<FigureMono>();
@@ -55,5 +56,20 @@ namespace Core.Figures
             });
         }
 
+
+        private string GetName(FigureType type)
+        {
+            switch (type)
+            {
+                case FigureType.I:
+                    return "Figure_I";
+                case FigureType.O:
+                    return "Figure_O";
+                case FigureType.T:
+                    return "Figure_T";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
     }
 }
