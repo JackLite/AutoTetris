@@ -82,6 +82,7 @@ namespace Core.Figures
                 FigureType.L => "Figure_L",
                 FigureType.J => "Figure_J",
                 FigureType.Z => "Figure_Z",
+                FigureType.S => "Figure_S",
                 _            => throw new ArgumentOutOfRangeException (nameof(type), type, null)
             };
         }
