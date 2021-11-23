@@ -75,21 +75,15 @@ namespace Core.Figures
 
         private string GetName(FigureType type)
         {
-            switch (type)
-            {
-                case FigureType.I:
-                    return "Figure_I";
-                case FigureType.O:
-                    return "Figure_O";
-                case FigureType.T:
-                    return "Figure_T";
-                case FigureType.L:
-                    return "Figure_L";
-                case FigureType.J:
-                    return "Figure_J";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            return type switch {
+                FigureType.I => "Figure_I",
+                FigureType.O => "Figure_O",
+                FigureType.T => "Figure_T",
+                FigureType.L => "Figure_L",
+                FigureType.J => "Figure_J",
+                FigureType.Z => "Figure_Z",
+                _            => throw new ArgumentOutOfRangeException (nameof(type), type, null)
+            };
         }
     }
 }
