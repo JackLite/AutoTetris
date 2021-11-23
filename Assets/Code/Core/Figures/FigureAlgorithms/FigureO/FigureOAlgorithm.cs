@@ -1,31 +1,21 @@
 ﻿using System.Collections.Generic;
-using Core.Cells;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms.FigureO
 {
-    public class FigureOAlgorithm : FigureAlgorithm
+    public class FigureOAlgorithm : FigureAlgorithm, IRotatedFigure
     {
-        private readonly IEnumerable<FigureRotation> _rotations = new[]
+        public FigureOAlgorithm()
         {
-            FigureRotation.Zero
-        };
+            RotatedFigures.Add(FigureRotation.Zero, this);
 
-        public override IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure)
-        {
-            return new[]
-            {
-                place,
-                place.Right(),
-                place.Above(),
-                place.Right().Above()
-            };
+            FigureRotations.Add(FigureRotation.Zero);
         }
 
-        protected override bool CheckBordersPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
+        public bool CheckBordersForPlaceFigure(in bool[,] fillMatrix, in GridPosition position)
         {
-            var row = place.Row;
-            var column = place.Column;
+            var row = position.Row;
+            var column = position.Column;
 
             if (row > fillMatrix.GetLength(0) - 2 || column > fillMatrix.GetLength(1) - 2)
                 return false;
@@ -33,7 +23,7 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             return true;
         }
 
-        public override bool IsFall(in bool[,] fillMatrix, in Figure figure)
+        public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             var rows = fillMatrix.GetLength(0);
 
@@ -49,9 +39,12 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             return isFillUnder || isFillRightUnder;
         }
 
-        public override IEnumerable<FigureRotation> GetRotationVariants()
+        public IEnumerable<GridPosition> GetPositions(in GridPosition position)
         {
-            return _rotations;
+            return new[]
+            {
+                position, position.Right(), position.Above(), position.Right().Above()
+            };
         }
     }
 }

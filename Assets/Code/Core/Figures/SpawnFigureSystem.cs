@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Core.Grid;
 using EcsCore;
 using Leopotam.Ecs;
 using UnityEngine.AddressableAssets;
+using Utilities;
 
 namespace Core.Figures
 {
@@ -15,17 +18,19 @@ namespace Core.Figures
         private EcsFilter<FigureSpawnSignal> _filter;
         private EcsWorld _world;
         private readonly Random _random;
+        private readonly Stack<FigureType> _figureBag = new Stack<FigureType>();
 
         public SpawnFigureSystem()
         {
             _random = new Random();
         }
-        
+
         public void Init()
         {
             _world.NewEntity().Replace(new FigureSpawnSignal());
+            FillBag(_figureBag);
         }
-            
+
         public void Run()
         {
             if (_filter.GetEntitiesCount() == 0)
@@ -39,8 +44,11 @@ namespace Core.Figures
 
         private async void CreateFigure()
         {
-            var type = (FigureType) _random.Next(0, 3);
-            
+            var type = _figureBag.Pop();
+
+            if (_figureBag.Count == 0)
+                FillBag(_figureBag);
+
             var name = GetName(type);
             var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
             await task;
@@ -56,6 +64,14 @@ namespace Core.Figures
             });
         }
 
+        private void FillBag(Stack<FigureType> figureBag)
+        {
+            var variants = Enum.GetValues(typeof(FigureType)).Cast<FigureType>().ToArray();
+            _random.Shuffle(variants);
+
+            foreach (var type in variants)
+                figureBag.Push(type);
+        }
 
         private string GetName(FigureType type)
         {
@@ -67,6 +83,8 @@ namespace Core.Figures
                     return "Figure_O";
                 case FigureType.T:
                     return "Figure_T";
+                case FigureType.L:
+                    return "Figure_L";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

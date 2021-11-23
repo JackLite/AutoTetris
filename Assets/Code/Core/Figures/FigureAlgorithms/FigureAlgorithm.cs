@@ -6,13 +6,15 @@ namespace Core.Figures.FigureAlgorithms
 {
     public abstract class FigureAlgorithm
     {
-        public abstract bool IsFall(in bool[,] fillMatrix, in Figure figure);
+        protected readonly Dictionary<FigureRotation, IRotatedFigure> RotatedFigures =
+            new Dictionary<FigureRotation, IRotatedFigure>();
 
-        public abstract IEnumerable<FigureRotation> GetRotationVariants();
+        protected readonly List<FigureRotation> FigureRotations = new List<FigureRotation>(4);
 
-        public abstract IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure);
-
-        protected abstract bool CheckBordersPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place);
+        public IEnumerable<FigureRotation> GetRotationVariants()
+        {
+            return FigureRotations;
+        }
 
         private void SetMatrixValue(in bool[,] fillMatrix, in Figure figure, in GridPosition place, in bool value)
         {
@@ -47,7 +49,7 @@ namespace Core.Figures.FigureAlgorithms
             cell.View.SetImageActive(true);
         }
 
-        protected bool IsFigureAtCell(in GridPosition place, in Cell cell, in Figure figure)
+        private bool IsFigureAtCell(in GridPosition place, in Cell cell, in Figure figure)
         {
             foreach (var pos in GetPositions(place, figure))
             {
@@ -59,7 +61,7 @@ namespace Core.Figures.FigureAlgorithms
 
         public bool IsCanPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
         {
-            if (!CheckBordersPlaceFigure(fillMatrix, figure, place))
+            if (!RotatedFigures[figure.Rotation].CheckBordersForPlaceFigure(fillMatrix, place))
                 return false;
 
             foreach (var pos in GetPositions(place, figure))
@@ -77,6 +79,24 @@ namespace Core.Figures.FigureAlgorithms
                 return;
 
             cell.View.LightUp();
+        }
+        
+        public virtual bool IsFall(in bool[,] fillMatrix, in Figure figure)
+        {
+            var rows = fillMatrix.GetLength(0);
+
+            if (figure.Row >= rows)
+                return false;
+
+            if (figure.Row == 0)
+                return true;
+
+            return RotatedFigures[figure.Rotation].IsFall(fillMatrix, figure);
+        }
+
+        protected virtual IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure)
+        {
+            return RotatedFigures[figure.Rotation].GetPositions(place);
         }
     }
 }
