@@ -1,13 +1,18 @@
-﻿using Core.Cells;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms
 {
     public interface IRotatedFigure
     {
-        bool IsCanPlaceFigure(in bool[,] fillMatrix, in GridPosition position);
-        void SetMatrixValue(in bool[,] fillMatrix, in GridPosition position, in bool value);
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        bool CheckBordersForPlaceFigure(in bool[,] fillMatrix, in GridPosition position);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         bool IsFall(in bool[,] fillMatrix, in Figure figure);
-        bool IsFigureAtCell(in GridPosition position, in Cell cell);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        IEnumerable<GridPosition> GetPositions(in GridPosition position);
     }
 }

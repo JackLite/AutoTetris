@@ -26,40 +26,14 @@ namespace Core.Figures.FigureAlgorithms.FigureI
             };
         }
 
-        public override bool IsCanPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
+        public override IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure)
         {
-            return _rotatedFigures[figure.Rotation].IsCanPlaceFigure(fillMatrix, place);
+            return _rotatedFigures[figure.Rotation].GetPositions(place);
         }
 
-        protected override void SetMatrixValue(
-            in bool[,] fillMatrix,
-            in Figure figure,
-            in GridPosition place,
-            in bool value)
+        protected override bool CheckBordersPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
         {
-            _rotatedFigures[figure.Rotation].SetMatrixValue(fillMatrix, place, value);
-        }
-
-        public override void CheckAndUpdateCell(in Figure figure, in Cell cell)
-        {
-            var position = new GridPosition(figure.Row, figure.Column);
-
-            var rotatedFigure = _rotatedFigures[figure.Rotation];
-
-            if (!rotatedFigure.IsFigureAtCell(position, cell))
-                return;
-
-            cell.View.SetImageActive(true);
-        }
-
-        public override void LightUpCellByFigure(in Cell cell, in Figure figure, in GridPosition place)
-        {
-            var rotatedFigure = _rotatedFigures[figure.Rotation];
-
-            if (!rotatedFigure.IsFigureAtCell(place, cell))
-                return;
-
-            cell.View.LightUp();
+            return _rotatedFigures[figure.Rotation].CheckBordersForPlaceFigure(fillMatrix, place);
         }
 
         public override bool IsFall(in bool[,] fillMatrix, in Figure figure)

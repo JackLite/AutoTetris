@@ -11,7 +11,18 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             FigureRotation.Zero
         };
 
-        public override bool IsCanPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
+        public override IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure)
+        {
+            return new[]
+            {
+                place,
+                place.Right(),
+                place.Above(),
+                place.Right().Above()
+            };
+        }
+
+        protected override bool CheckBordersPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
         {
             var row = place.Row;
             var column = place.Column;
@@ -19,40 +30,7 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             if (row > fillMatrix.GetLength(0) - 2 || column > fillMatrix.GetLength(1) - 2)
                 return false;
 
-            return !fillMatrix[row, column]
-                   && !fillMatrix[row + 1, column]
-                   && !fillMatrix[row, column + 1]
-                   && !fillMatrix[row + 1, column + 1];
-        }
-
-        protected override void SetMatrixValue(in bool[,] fillMatrix, in Figure _, in GridPosition place, in bool value)
-        {
-            fillMatrix[place.Row, place.Column] = value;
-            fillMatrix[place.Row + 1, place.Column] = value;
-            fillMatrix[place.Row, place.Column + 1] = value;
-            fillMatrix[place.Row + 1, place.Column + 1] = value;
-        }
-
-        public override void CheckAndUpdateCell(in Figure figure, in Cell cell)
-        {
-            if (cell.Row != figure.Row && cell.Row != figure.Row + 1)
-                return;
-
-            if (cell.Column != figure.Column && cell.Column != figure.Column + 1)
-                return;
-
-            cell.View.SetImageActive(true);
-        }
-
-        public override void LightUpCellByFigure(in Cell cell, in Figure figure, in GridPosition place)
-        {
-            if (cell.Row != place.Row && cell.Row != place.Row + 1)
-                return;
-
-            if (cell.Column != place.Column && cell.Column != place.Column + 1)
-                return;
-
-            cell.View.LightUp();
+            return true;
         }
 
         public override bool IsFall(in bool[,] fillMatrix, in Figure figure)

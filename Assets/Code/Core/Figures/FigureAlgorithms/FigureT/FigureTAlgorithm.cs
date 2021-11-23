@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Core.Cells;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms.FigureT
@@ -13,26 +12,18 @@ namespace Core.Figures.FigureAlgorithms.FigureT
             _rotatedFigures = new Dictionary<FigureRotation, IRotatedFigure>
             {
                 {
-                    FigureRotation.Zero, new FigureTRotaionZero()
+                    FigureRotation.Zero, new FigureTRotationZero()
+                },
+                {
+                    FigureRotation.ClockWise, new FigureTRotationClockwise()
+                },
+                {
+                    FigureRotation.CounterClockwise, new FigureTRotationCounterClockwise()
+                },
+                {
+                    FigureRotation.Mirror, new FigureTRotationMirror()
                 }
             };
-        }
-
-        public override bool IsCanPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
-        {
-            return _rotatedFigures[figure.Rotation].IsCanPlaceFigure(fillMatrix, place);
-        }
-
-        public override void CheckAndUpdateCell(in Figure figure, in Cell cell)
-        {
-            var position = new GridPosition(figure.Row, figure.Column);
-
-            var rotatedFigure = _rotatedFigures[figure.Rotation];
-
-            if (!rotatedFigure.IsFigureAtCell(position, cell))
-                return;
-
-            cell.View.SetImageActive(true);
         }
 
         public override bool IsFall(in bool[,] fillMatrix, in Figure figure)
@@ -52,27 +43,24 @@ namespace Core.Figures.FigureAlgorithms.FigureT
         {
             return new[]
             {
-                FigureRotation.Zero
+                FigureRotation.Zero,
+                FigureRotation.Mirror,
+                FigureRotation.ClockWise,
+                FigureRotation.CounterClockwise
             };
         }
 
-        public override void LightUpCellByFigure(in Cell cell, in Figure figure, in GridPosition place)
+        public override IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure)
         {
-            var rotatedFigure = _rotatedFigures[figure.Rotation];
-
-            if (!rotatedFigure.IsFigureAtCell(place, cell))
-                return;
-
-            cell.View.LightUp();
+            return _rotatedFigures[figure.Rotation].GetPositions(place);
         }
 
-        protected override void SetMatrixValue(
-            in bool[,] fillMatrix,
-            in Figure figure,
-            in GridPosition place,
-            in bool value)
+        protected override bool CheckBordersPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
         {
-            _rotatedFigures[figure.Rotation].SetMatrixValue(fillMatrix, place, value);
+            if (!_rotatedFigures[figure.Rotation].CheckBordersForPlaceFigure(fillMatrix, place))
+                return false;
+
+            return true;
         }
     }
 }
