@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using Core.Grid;
 
-namespace Core.Figures.FigureAlgorithms.FigureL
+namespace Core.Figures.FigureAlgorithms.FigureJ
 {
     /// <summary>
     /// [ ] [ ] [ ]
-    /// [ ] [ ] [*]
+    /// [*] [ ] [ ]
     /// [X] [*] [*]
     /// </summary>
-    public class FigureLRotationCounterClockwise : IRotatedFigure
+    public class FigureJRotationClockwise : IRotatedFigure
     {
         public bool CheckBordersForPlaceFigure(in bool[,] fillMatrix, in GridPosition position)
         {
@@ -32,10 +32,7 @@ namespace Core.Figures.FigureAlgorithms.FigureL
         {
             return new[]
             {
-                position, 
-                position.Right(), 
-                position.Right().Right(), 
-                position.Right().Right().Above()
+                position, position.Above(), position.Right(), position.Right().Right()
             };
         }
     }

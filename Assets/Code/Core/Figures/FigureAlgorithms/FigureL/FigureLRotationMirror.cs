@@ -4,9 +4,9 @@ using Core.Grid;
 namespace Core.Figures.FigureAlgorithms.FigureL
 {
     /// <summary>
-    /// [ ] [*] [ ]
-    /// [ ] [*] [ ]
     /// [X] [*] [ ]
+    /// [ ] [*] [ ]
+    /// [ ] [*] [ ]
     /// </summary>
     public class FigureLRotationMirror : IRotatedFigure
     {
@@ -15,7 +15,7 @@ namespace Core.Figures.FigureAlgorithms.FigureL
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
 
-            if (position.Row > rows - 3 || position.Column > columns - 2)
+            if (position.Row < 2 || position.Row > rows - 1 || position.Column > columns - 2)
                 return false;
 
             return true;
@@ -23,7 +23,8 @@ namespace Core.Figures.FigureAlgorithms.FigureL
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            return fillMatrix[figure.Row - 1, figure.Column] || fillMatrix[figure.Row - 1, figure.Column + 1];
+            return fillMatrix[figure.Row - 1, figure.Column] 
+                   || fillMatrix[figure.Row - 3, figure.Column + 1];
         }
 
         public IEnumerable<GridPosition> GetPositions(in GridPosition position)
@@ -32,8 +33,8 @@ namespace Core.Figures.FigureAlgorithms.FigureL
             {
                 position, 
                 position.Right(),
-                position.Right().Above(), 
-                position.Right().Above().Above()
+                position.Right().Under(),
+                position.Right().Under().Under()
             };
         }
     }

@@ -13,7 +13,7 @@ namespace Core.Figures
     [EcsSystem(typeof(CoreModule))]
     public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private const float START_DELAY = .1f;
+        private const float START_DELAY = .5f;
         private const float SPEED_VELOCITY = .005f;
         private float _fallCounter;
         private float _currentSpeed;

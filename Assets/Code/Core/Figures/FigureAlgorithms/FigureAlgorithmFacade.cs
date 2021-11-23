@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Core.Cells;
 using Core.Figures.FigureAlgorithms.FigureI;
+using Core.Figures.FigureAlgorithms.FigureJ;
 using Core.Figures.FigureAlgorithms.FigureL;
 using Core.Figures.FigureAlgorithms.FigureO;
 using Core.Figures.FigureAlgorithms.FigureT;
@@ -19,6 +20,7 @@ namespace Core.Figures.FigureAlgorithms
             _algorithms.Add(FigureType.I, new FigureIAlgorithm());
             _algorithms.Add(FigureType.T, new FigureTAlgorithm());
             _algorithms.Add(FigureType.L, new FigureLAlgorithm());
+            _algorithms.Add(FigureType.J, new FigureJAlgorithm());
         }
 
         public static bool IsCanPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)

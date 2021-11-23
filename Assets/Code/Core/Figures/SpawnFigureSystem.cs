@@ -85,6 +85,8 @@ namespace Core.Figures
                     return "Figure_T";
                 case FigureType.L:
                     return "Figure_L";
+                case FigureType.J:
+                    return "Figure_J";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
