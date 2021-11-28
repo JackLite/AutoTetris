@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Core.Cells;
 using Core.Grid;
+using UnityEngine;
 
 namespace Core.Figures.FigureAlgorithms
 {
@@ -16,7 +17,7 @@ namespace Core.Figures.FigureAlgorithms
             return FigureRotations;
         }
 
-        private void SetMatrixValue(in bool[,] fillMatrix, in Figure figure, in GridPosition place, in bool value)
+        public void SetMatrixValue(in bool[,] fillMatrix, in Figure figure, in GridPosition place, in bool value)
         {
             foreach (var position in GetPositions(place, figure))
             {
@@ -81,7 +82,7 @@ namespace Core.Figures.FigureAlgorithms
             cell.View.LightUp();
         }
         
-        public virtual bool IsFall(in bool[,] fillMatrix, in Figure figure)
+        public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             var rows = fillMatrix.GetLength(0);
 
@@ -90,13 +91,34 @@ namespace Core.Figures.FigureAlgorithms
 
             if (figure.Row == 0)
                 return true;
+            
+            if (!RotatedFigures[figure.Rotation].CheckBordersForPlaceFigure(fillMatrix, new GridPosition(figure)))
+                return false;
 
             return RotatedFigures[figure.Rotation].IsFall(fillMatrix, figure);
         }
 
-        protected virtual IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure)
+        private IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure)
         {
             return RotatedFigures[figure.Rotation].GetPositions(place);
+        }
+        public int HowManyLockedCellsUnder (bool[,] fillMatrix, Figure figure, GridPosition place)
+        {
+            var wasLockedCells = GridService.GetLockedCellsUnderFill(fillMatrix);
+            SetMatrixValue(fillMatrix, figure, place, true);
+            var newLockedCells = GridService.GetLockedCellsUnderFill(fillMatrix);
+            SetMatrixValue(fillMatrix, figure, place, false);
+
+            return newLockedCells - wasLockedCells;
+        }
+        public int HowManyEmptyCellsUnder(bool[,] fillMatrix, Figure figure, GridPosition place)
+        {
+            var wasEmptyCells = GridService.GetEmptyCellsUnderFill(fillMatrix);
+            SetMatrixValue(fillMatrix, figure, place, true);
+            var newEmptyCells = GridService.GetEmptyCellsUnderFill(fillMatrix);
+            SetMatrixValue(fillMatrix, figure, place, false);
+
+            return newEmptyCells - wasEmptyCells;
         }
     }
 }

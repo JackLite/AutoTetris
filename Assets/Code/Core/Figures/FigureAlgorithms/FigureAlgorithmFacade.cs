@@ -30,8 +30,15 @@ namespace Core.Figures.FigureAlgorithms
         public static bool IsCanPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
         {
             var algorithm = _algorithms[figure.Type];
-
-            return algorithm.IsCanPlaceFigure(fillMatrix, figure, place);
+            var figureAtPlace = new Figure
+            {
+                Column = place.Column,
+                Rotation = figure.Rotation,
+                Row = place.Row,
+                Type = figure.Type
+            };
+            var isCanPlaceFigure = algorithm.IsCanPlaceFigure(fillMatrix, figure, place);
+            return isCanPlaceFigure && algorithm.IsFall(fillMatrix, figureAtPlace);
         }
 
         public static void FillGrid(in bool[,] fillMatrix, in Figure figure)
@@ -74,6 +81,29 @@ namespace Core.Figures.FigureAlgorithms
             var algorithm = _algorithms[figure.Type];
 
             return algorithm.GetRotationVariants();
+        }
+        public static int HowManyLockedCellsUnder(bool[,] fillMatrix, Figure figure, GridPosition place)
+        {
+            var algorithm = _algorithms[figure.Type];
+
+            return algorithm.HowManyLockedCellsUnder(fillMatrix, figure, place);
+        }
+        public static int HowManyEmptyCellsUnder(bool[,] fillMatrix, Figure figure, GridPosition place)
+        {
+            var algorithm = _algorithms[figure.Type];
+
+            return algorithm.HowManyEmptyCellsUnder(fillMatrix, figure, place);
+        }
+        public static int CalculateHeterogeneity(bool[,] fillMatrix, Figure figure, GridPosition place)
+        {
+            var algorithm = _algorithms[figure.Type];
+
+            var old = GridService.CalculateHeterogeneity(fillMatrix);
+            algorithm.SetMatrixValue(fillMatrix, figure, place, true);
+            var heterogeneity = GridService.CalculateHeterogeneity(fillMatrix);
+            algorithm.SetMatrixValue(fillMatrix, figure, place, false);
+
+            return heterogeneity - old;
         }
     }
 }

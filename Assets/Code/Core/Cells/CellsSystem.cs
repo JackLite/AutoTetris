@@ -12,8 +12,8 @@ namespace Core.Cells
     [EcsSystem(typeof(CoreModule))]
     public class CellsSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private const float FIRST_DELAY = .2f;
-        private const float DELAY = .1f;
+        private const float FIRST_DELAY = .02f;
+        private const float DELAY = .01f;
         private GridData _grid;
         private EcsWorld _world;
         private EcsFilter<Cell> _cells;

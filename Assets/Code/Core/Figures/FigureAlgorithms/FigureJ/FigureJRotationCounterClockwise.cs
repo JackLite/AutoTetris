@@ -15,7 +15,7 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
 
-            if (position.Row == 0 || position.Row > rows - 1 || position.Column > columns - 3)
+            if (position.Row < 2 || position.Row > rows - 1 || position.Column > columns - 3)
                 return false;
 
             return true;

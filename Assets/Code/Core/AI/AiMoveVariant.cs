@@ -8,5 +8,7 @@ namespace Core.AI
         public int Column;
         public int Weight;
         public FigureRotation Rotation;
+        public int H;
+        public int FR;
     }
 }

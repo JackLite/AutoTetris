@@ -23,7 +23,7 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             return true;
         }
 
-        public bool IsFall(in bool[,] fillMatrix, in Figure figure)
+        bool IRotatedFigure.IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             var rows = fillMatrix.GetLength(0);
 

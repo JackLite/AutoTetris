@@ -25,7 +25,7 @@ namespace Core.Figures.FigureAlgorithms.FigureS
         {
             return fillMatrix[figure.Row - 1, figure.Column]
                    || fillMatrix[figure.Row - 1, figure.Column + 1]
-                   || fillMatrix[figure.Row - 2, figure.Column + 2];
+                   || fillMatrix[figure.Row, figure.Column + 2];
         }
 
         public IEnumerable<GridPosition> GetPositions (in GridPosition position)

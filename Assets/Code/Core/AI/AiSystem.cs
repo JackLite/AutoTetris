@@ -26,7 +26,7 @@ namespace Core.AI
             
             if (_filter.GetEntitiesCount() == 0)
             {
-                _timer = .5f;
+                _timer = .25f;
                 return;
             }
 
@@ -76,7 +76,6 @@ namespace Core.AI
                 return AiDecision.Zero;
 
             var result = variants.Last();
-
             return new AiDecision
             {
                 Column = result.Column, Row = result.Row, Rotation = result.Rotation
@@ -102,12 +101,16 @@ namespace Core.AI
                         continue;
 
                     var rowsCount = FigureAlgorithmFacade.HowManyRowsWillFill(fillMatrix, figure, place);
+                    //var lockedCells = FigureAlgorithmFacade.HowManyLockedCellsUnder(fillMatrix, figure, place);
+                    var heterogeneity = FigureAlgorithmFacade.CalculateHeterogeneity(fillMatrix, figure, place);
                     var weight = 100 * rowsCount;
-                    weight += 10 * (rows - row);
-                    weight += Math.Abs(column - columns / 2);
+                    weight -= 10 * heterogeneity;
+                    weight -=  10 * row;
+                    //weight += Math.Abs(column - columns / 2);
                     var variant = new AiMoveVariant
                     {
-                        Column = column, Row = row, Weight = weight, Rotation = figure.Rotation
+                        Column = column, Row = row, Weight = weight, Rotation = figure.Rotation,
+                        H = heterogeneity, FR = rowsCount
                     };
 
                     variants.Add(variant);
