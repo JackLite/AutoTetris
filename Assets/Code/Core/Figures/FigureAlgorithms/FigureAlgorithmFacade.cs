@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.AI;
 using Core.Cells;
 using Core.Figures.FigureAlgorithms.FigureI;
 using Core.Figures.FigureAlgorithms.FigureJ;
@@ -55,11 +56,15 @@ namespace Core.Figures.FigureAlgorithms
             algorithm.CheckAndUpdateCell(figure, cell);
         }
 
-        public static void LightUpCellByFigure(in Figure figure, in Cell cell, in GridPosition place)
+        public static void LightUpCellByFigure(
+            in Figure figure,
+            in Cell cell,
+            in GridPosition place,
+            Direction aiDecisionDirection)
         {
             var algorithm = _algorithms[figure.Type];
 
-            algorithm.LightUpCellByFigure(cell, figure, place);
+            algorithm.LightUpCellByFigure(cell, figure, place, aiDecisionDirection);
         }
 
         public static bool IsFall(in bool[,] fillMatrix, in Figure figure)

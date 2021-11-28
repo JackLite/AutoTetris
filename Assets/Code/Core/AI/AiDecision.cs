@@ -1,5 +1,4 @@
 ﻿using Core.Figures;
-using UnityEngine;
 
 namespace Core.AI
 {
@@ -8,6 +7,7 @@ namespace Core.AI
         public int Row;
         public int Column;
         public FigureRotation Rotation;
+        public Direction Direction;
         public static AiDecision Zero { get; } = new AiDecision();
     }
 }

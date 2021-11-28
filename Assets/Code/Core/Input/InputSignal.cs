@@ -2,6 +2,6 @@
 {
     public class InputSignal
     {
-        public InputSignalType Type;
+        public Direction Direction;
     }
 }

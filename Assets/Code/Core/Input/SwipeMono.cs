@@ -1,5 +1,4 @@
-﻿using System;
-using EcsCore;
+﻿using EcsCore;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -15,7 +14,7 @@ namespace Core.Input
         /// Задаётся в процентах от высоты экрана
         /// </summary>
         [SerializeField]
-        private float downSwipeThreshold;
+        private float swipeThreshold;
 
         public void OnPointerDown(PointerEventData eventData)
         {
@@ -28,14 +27,61 @@ namespace Core.Input
             if (!_isSwipeStart)
                 return;
 
-            var distanceY = Math.Abs(eventData.position.y - _swipeStartPoint.y);
+            if (CheckDownSwipe(eventData.position))
+            {
+                EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Down });
+                Debug.Log("Swipe down");
+                return;
+            }
+            
+            if (CheckLeftSwipe(eventData.position))
+            {
+                EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Left });
+                Debug.Log("Swipe left");
+                return;
+            }
+            
+            if (CheckRightSwipe(eventData.position))
+            {
+                EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Right });
+                Debug.Log("Swipe right");
+                return;
+            }
+        }
+
+        private bool CheckDownSwipe(in Vector2 pointerEndPosition)
+        {
+            if (_swipeStartPoint.y < pointerEndPosition.y)
+                return false;
+            var distanceY = _swipeStartPoint.y - pointerEndPosition.y;
             var screenHeight = Screen.height;
             var distance = distanceY / screenHeight;
 
-            if (distance < downSwipeThreshold * .01)
-                return;
-            
-            EcsWorldEventsBlackboard.AddEvent(new InputSignal{Type = InputSignalType.Down});
+            return distance > swipeThreshold * .01;
+        }
+
+        private bool CheckLeftSwipe(in Vector2 pointerEndPosition)
+        {
+            if (_swipeStartPoint.x < pointerEndPosition.x)
+                return false;
+
+            var distanceX = _swipeStartPoint.x - pointerEndPosition.x;
+            var screenWidth = Screen.width;
+            var distance = distanceX / screenWidth;
+
+            return distance > swipeThreshold * .01;
+        }
+
+        private bool CheckRightSwipe(in Vector2 pointerEndPosition)
+        {
+            if (_swipeStartPoint.x > pointerEndPosition.x)
+                return false;
+
+            var distanceX = pointerEndPosition.x - _swipeStartPoint.x;
+            var screenWidth = Screen.width;
+            var distance = distanceX / screenWidth;
+
+            return distance > swipeThreshold * .01;
         }
     }
 }

@@ -13,11 +13,12 @@ namespace Core.Figures
     [EcsSystem(typeof(CoreModule))]
     public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private const float START_DELAY = .5f;
+        private const float START_DELAY = 5f;
         private const float SPEED_VELOCITY = .005f;
         private float _fallCounter;
         private float _currentSpeed;
         private EcsFilter<Figure> _filter;
+        private EcsFilter<AiDecision> _decisionsFilter;
         private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
         private GridData _grid;
@@ -41,13 +42,12 @@ namespace Core.Figures
                 return;
 
             ref var figure = ref _filter.Get1(0);
-            var entity = _filter.GetEntity(0);
 
-            if (figure.Column > 0 && entity.Has<AiDecision>())
+            if (figure.Column > 0 && _decisionsFilter.GetEntitiesCount() > 0)
             {
                 if (_inputSignal != null)
                 {
-                    ref var aiDecision = ref entity.Get<AiDecision>();
+                    var aiDecision = GetAiDecision(_inputSignal.Direction);
                     figure.Row = aiDecision.Row;
                     figure.Column = aiDecision.Column;
                     figure.Rotation = aiDecision.Rotation;
@@ -77,11 +77,29 @@ namespace Core.Figures
             _fallCounter = _currentSpeed;
         }
 
+        private AiDecision GetAiDecision(in Direction direction)
+        {
+            foreach (var i in _decisionsFilter)
+            {
+                ref var aiDecision = ref _decisionsFilter.Get1(i);
+                if (aiDecision.Direction != direction)
+                    continue;
+                
+                return aiDecision;
+            }
+            return AiDecision.Zero;
+        }
+
         private void FinishMove(Figure figure)
         {
             _world.NewEntity().Replace(new CheckLinesSignal());
 
             FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
+
+            foreach (var i in _decisionsFilter)
+            {
+                _decisionsFilter.GetEntity(i).Destroy();
+            }
             
             if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
             {

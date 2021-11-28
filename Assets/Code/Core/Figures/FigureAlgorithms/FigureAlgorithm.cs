@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.AI;
 using Core.Cells;
 using Core.Grid;
 using UnityEngine;
@@ -74,12 +75,17 @@ namespace Core.Figures.FigureAlgorithms
             return true;
         }
         
-        public void LightUpCellByFigure(in Cell cell, in Figure figure, in GridPosition place)
+        public void LightUpCellByFigure(
+            in Cell cell,
+            in Figure figure,
+            in GridPosition place,
+            Direction aiDecisionDirection)
         {
             if (!IsFigureAtCell(place, cell, figure))
                 return;
 
             cell.View.LightUp();
+            cell.View.SetDirection(aiDecisionDirection);
         }
         
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)

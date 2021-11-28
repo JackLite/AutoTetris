@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.AI;
 using Core.Figures;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +21,9 @@ namespace Core.Cells
         [SerializeField]
         private Color color;
 
+        [SerializeField]
+        private RectTransform arrowTransform;
+
         private RectTransform _rect;
         private Image _image;
         private bool _isLightUp;
@@ -35,6 +39,7 @@ namespace Core.Cells
         private void Start()
         {
             _currentOpacity = minOpacity;
+            arrowTransform.gameObject.SetActive(false);
         }
 
         public void SetImageActive(bool isActive)
@@ -52,6 +57,7 @@ namespace Core.Cells
             _image.enabled = true;
             _isLightUp = true;
             _currentOpacity = maxOpacity;
+            arrowTransform.gameObject.SetActive(true);
         }
 
         private void Update()
@@ -91,7 +97,19 @@ namespace Core.Cells
         public void LightDown()
         {
             _image.color = Color.white;
+            arrowTransform.gameObject.SetActive(false);
             _isLightUp = false;
+        }
+
+        public void SetDirection(Direction direction)
+        {
+            float angle = direction switch
+            {
+                Direction.Left   => 180,
+                Direction.Down => -90,
+                Direction.Right  => 0
+            };
+            arrowTransform.localRotation = Quaternion.Euler(0, 0, angle);
         }
     }
 }
