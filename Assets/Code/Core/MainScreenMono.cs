@@ -1,4 +1,5 @@
 ﻿using Core.Input;
+using Core.Scores;
 using UnityEngine;
 
 namespace Core
@@ -7,15 +8,7 @@ namespace Core
     {
         public RectTransform grid;
 
-        [SerializeField]
-        private GameObject gameOver;
-        
         [field:SerializeField]
-        public SwipeMono SwipeMono { get; private set; }
-
-        public void ShowGameOver()
-        {
-            gameOver.SetActive(true);
-        }
+        public ScoreView ScoreView { get; private set; }
     }
 }

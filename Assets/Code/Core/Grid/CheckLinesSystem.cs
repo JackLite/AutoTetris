@@ -1,5 +1,6 @@
 ﻿using Core.Cells;
 using EcsCore;
+using Global;
 using Leopotam.Ecs;
 
 namespace Core.Grid
@@ -10,6 +11,7 @@ namespace Core.Grid
         private EcsFilter<CheckLinesSignal> _signal;
         private EcsFilter<Cell> _cells;
         private GridData _grid;
+        private PlayerData _playerData;
 
         public void Run()
         {
@@ -35,6 +37,7 @@ namespace Core.Grid
             _signal.GetEntity(0).Destroy();
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
+            _playerData.Scores += fullRows.Count * 10;
         }
 
         public void Destroy()

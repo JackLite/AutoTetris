@@ -24,6 +24,7 @@ namespace Global
             await handler.Task;
             _startScreen = handler.Result;
             _dependencies.Add(typeof(StartScreenMono), _startScreen.GetComponent<StartScreenMono>());
+            _dependencies.Add(typeof(PlayerData), new PlayerData());
         }
 
         protected override Dictionary<Type, object> GetDependencies()

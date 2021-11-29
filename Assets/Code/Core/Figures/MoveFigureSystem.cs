@@ -13,7 +13,7 @@ namespace Core.Figures
     [EcsSystem(typeof(CoreModule))]
     public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private const float START_DELAY = 5f;
+        private const float START_DELAY = .5f;
         private const float SPEED_VELOCITY = .005f;
         private float _fallCounter;
         private float _currentSpeed;
@@ -22,6 +22,7 @@ namespace Core.Figures
         private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
         private GridData _grid;
+        private PlayerData _playedData;
         private EcsWorld _world;
         private InputSignal _inputSignal;
 
@@ -106,6 +107,7 @@ namespace Core.Figures
                 _world.NewEntity().Replace(new GameOverSignal());
                 return;
             }
+            _playedData.Scores += 1;
             _world.NewEntity().Replace(new FigureSpawnSignal());
 
             CreateSingleFigures(in figure);
