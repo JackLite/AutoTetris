@@ -3,6 +3,7 @@ using Core.Cells;
 using Core.Figures.FigureAlgorithms;
 using Core.Grid;
 using Core.Input;
+using Core.Pause;
 using EcsCore;
 using Global;
 using Leopotam.Ecs;
@@ -22,6 +23,7 @@ namespace Core.Figures
         private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
         private GridData _grid;
+        private CoreState _coreState;
         private PlayerData _playedData;
         private EcsWorld _world;
         private InputSignal _inputSignal;
@@ -39,7 +41,7 @@ namespace Core.Figures
 
         public void Run()
         {
-            if (_filter.GetEntitiesCount() == 0)
+            if (_filter.GetEntitiesCount() == 0 || _coreState.IsPaused)
                 return;
 
             ref var figure = ref _filter.Get1(0);

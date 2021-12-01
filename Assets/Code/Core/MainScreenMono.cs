@@ -1,6 +1,7 @@
-﻿using Core.Input;
+﻿using Core.Pause;
 using Core.Scores;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Core
 {
@@ -10,5 +11,14 @@ namespace Core
 
         [field:SerializeField]
         public ScoreView ScoreView { get; private set; }
+
+        [field:SerializeField]
+        public Button PauseButton { get; private set; }
+
+        [field:SerializeField]
+        public Button UnPauseButton { get; private set; }
+
+        [field:SerializeField]
+        public GameObject PauseScreen { get; private set; }
     }
 }

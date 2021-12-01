@@ -26,6 +26,7 @@ namespace Core
             var mainScreen = _mainScreen.GetComponent<MainScreenMono>();
             _dependencies[typeof(MainScreenMono)] = mainScreen;
             _dependencies[typeof(GridData)] = new GridData(mainScreen.grid.GetComponent<GridMono>());
+            _dependencies[typeof(CoreState)] = new CoreState();
         }
 
         protected override Dictionary<Type, object> GetDependencies()

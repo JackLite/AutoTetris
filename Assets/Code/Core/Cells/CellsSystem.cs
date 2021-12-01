@@ -15,6 +15,7 @@ namespace Core.Cells
         private const float FIRST_DELAY = .2f;
         private const float DELAY = .1f;
         private GridData _grid;
+        private CoreState _coreState;
         private EcsWorld _world;
         private EcsFilter<Cell> _cells;
         private float _checkSpeed;
@@ -51,7 +52,7 @@ namespace Core.Cells
 
         public void Run()
         {
-            if (!_grid.IsNeedCheckPieces)
+            if (!_grid.IsNeedCheckPieces || _coreState.IsPaused)
                 return;
 
             _checkSpeed -= Time.deltaTime;

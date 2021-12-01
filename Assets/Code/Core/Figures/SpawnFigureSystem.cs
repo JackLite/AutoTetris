@@ -17,6 +17,7 @@ namespace Core.Figures
         private GridData _gridData;
         private EcsFilter<FigureSpawnSignal> _filter;
         private EcsWorld _world;
+        private CoreState _coreState;
         private readonly Random _random;
         private readonly Stack<FigureType> _figureBag = new Stack<FigureType>();
 
@@ -33,13 +34,12 @@ namespace Core.Figures
 
         public void Run()
         {
-            if (_filter.GetEntitiesCount() == 0)
+            if (_filter.GetEntitiesCount() == 0 || _coreState.IsPaused)
                 return;
 
             if (GridService.IsFillSomeAtTopRow(_gridData.FillMatrix))
                 return;
             CreateFigure();
-            _filter.GetEntity(0).Destroy();
         }
 
         private async void CreateFigure()
