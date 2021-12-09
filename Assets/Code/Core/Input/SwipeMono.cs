@@ -30,21 +30,18 @@ namespace Core.Input
             if (CheckDownSwipe(eventData.position))
             {
                 EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Down });
-                Debug.Log("Swipe down");
                 return;
             }
             
             if (CheckLeftSwipe(eventData.position))
             {
                 EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Left });
-                Debug.Log("Swipe left");
                 return;
             }
             
             if (CheckRightSwipe(eventData.position))
             {
                 EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Right });
-                Debug.Log("Swipe right");
                 return;
             }
         }

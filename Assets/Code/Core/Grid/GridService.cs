@@ -114,11 +114,23 @@ namespace Core.Grid
 
                 if (isFillCurrent)
                     count--;
-                
+
                 if (isEmptyRow)
                     break;
             }
             return count;
+        }
+
+        public static bool IsRowEmpty(int rowIndex, bool[,] fillMatrix)
+        {
+            if (rowIndex >= fillMatrix.GetLength(0))
+                return true;
+
+            var columns = fillMatrix.GetLength(1);
+            for (var i = 0; i < columns; ++i)
+                if (fillMatrix[rowIndex, i])
+                    return false;
+            return true;
         }
     }
 }

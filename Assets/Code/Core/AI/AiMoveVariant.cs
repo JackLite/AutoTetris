@@ -1,4 +1,7 @@
 ﻿using Core.Figures;
+using Core.Figures.FigureAlgorithms.Path;
+using Core.Grid;
+using Unity.Collections;
 
 namespace Core.AI
 {
@@ -10,5 +13,6 @@ namespace Core.AI
         public FigureRotation Rotation;
         public int H;
         public int FR;
+        public PathAction[] Path;
     }
 }

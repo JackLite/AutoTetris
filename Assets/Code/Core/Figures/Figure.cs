@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core.Grid;
+using UnityEngine;
 
 namespace Core.Figures
 {
@@ -18,5 +19,7 @@ namespace Core.Figures
         public FigureMono Mono;
 
         public bool IsMoving;
+
+        public GridPosition Position => new GridPosition(Row, Column);
     }
 }

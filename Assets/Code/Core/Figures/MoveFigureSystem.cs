@@ -1,9 +1,10 @@
-﻿using Core.AI;
+﻿using System.Collections.Generic;
+using Core.AI;
 using Core.Cells;
 using Core.Figures.FigureAlgorithms;
+using Core.Figures.FigureAlgorithms.Path;
 using Core.Grid;
 using Core.Input;
-using Core.Pause;
 using EcsCore;
 using Global;
 using Leopotam.Ecs;
@@ -18,7 +19,8 @@ namespace Core.Figures
         private const float SPEED_VELOCITY = .005f;
         private float _fallCounter;
         private float _currentSpeed;
-        private EcsFilter<Figure> _filter;
+        private EcsFilter<Figure>.Exclude<FigureFinishComponent> _activeFigureFilter;
+        private EcsFilter<Figure, FigureFinishComponent> _finishFigureFilter;
         private EcsFilter<AiDecision> _decisionsFilter;
         private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
@@ -41,22 +43,51 @@ namespace Core.Figures
 
         public void Run()
         {
-            if (_filter.GetEntitiesCount() == 0 || _coreState.IsPaused)
+            if (_coreState.IsPaused)
                 return;
 
-            ref var figure = ref _filter.Get1(0);
+            if (_finishFigureFilter.GetEntitiesCount() != 0)
+                ProcessFinishing();
+            else if (_activeFigureFilter.GetEntitiesCount() != 0)
+                ProcessMoving();
+        }
+
+        private void ProcessFinishing()
+        {
+            ref var figure = ref _finishFigureFilter.Get1(0);
+            ref var figureFinish = ref _finishFigureFilter.Get2(0);
+
+            _fallCounter -= Time.deltaTime;
+
+            if (_fallCounter >= 0)
+                return;
+
+            var nextAction = figureFinish.Actions.Pop();
+            nextAction.Invoke(ref figure);
+            figure.Mono.SetGridPosition(figure.Row, figure.Column);
+            if (figureFinish.Actions.Count == 0)
+            {
+                FinishMove(figure);
+                _fallCounter = _currentSpeed;
+            }
+            else
+                _fallCounter = _currentSpeed / 5f;
+        }
+
+        private void ProcessMoving()
+        {
+            ref var figure = ref _activeFigureFilter.Get1(0);
 
             if (figure.Column > 0 && _decisionsFilter.GetEntitiesCount() > 0)
             {
                 if (_inputSignal != null)
                 {
                     var aiDecision = GetAiDecision(_inputSignal.Direction);
-                    figure.Row = aiDecision.Row;
-                    figure.Column = aiDecision.Column;
+                    var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
+                    var finishComponent = new FigureFinishComponent { Actions = new Stack<PathAction>(path) };
+                    _activeFigureFilter.GetEntity(0).Replace(finishComponent);
                     figure.Rotation = aiDecision.Rotation;
-                    figure.Mono.SetGridPosition(figure.Row, figure.Column);
-                    FinishMove(figure);
-                    _fallCounter = _currentSpeed;
+                    _fallCounter = _currentSpeed / 5f;
                     _inputSignal = null;
 
                     return;
@@ -87,7 +118,7 @@ namespace Core.Figures
                 ref var aiDecision = ref _decisionsFilter.Get1(i);
                 if (aiDecision.Direction != direction)
                     continue;
-                
+
                 return aiDecision;
             }
             return AiDecision.Zero;
@@ -103,7 +134,7 @@ namespace Core.Figures
             {
                 _decisionsFilter.GetEntity(i).Destroy();
             }
-            
+
             if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
             {
                 _world.NewEntity().Replace(new GameOverSignal());
@@ -115,7 +146,7 @@ namespace Core.Figures
             CreateSingleFigures(in figure);
 
             figure.Mono.Delete();
-            _filter.GetEntity(0).Destroy();
+            _activeFigureFilter.GetEntity(0).Destroy();
             _currentSpeed *= 1 - SPEED_VELOCITY;
         }
 
@@ -138,9 +169,9 @@ namespace Core.Figures
         {
             EcsWorldEventsBlackboard.RemoveEventHandler<InputSignal>(SaveInputSignal);
 
-            foreach (var i in _filter)
+            foreach (var i in _activeFigureFilter)
             {
-                _filter.GetEntity(i).Destroy();
+                _activeFigureFilter.GetEntity(i).Destroy();
             }
         }
     }

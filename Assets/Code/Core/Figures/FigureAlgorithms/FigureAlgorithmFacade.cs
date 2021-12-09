@@ -38,8 +38,13 @@ namespace Core.Figures.FigureAlgorithms
                 Row = place.Row,
                 Type = figure.Type
             };
-            var isCanPlaceFigure = algorithm.IsCanPlaceFigure(fillMatrix, figure, place);
-            return isCanPlaceFigure && algorithm.IsFall(fillMatrix, figureAtPlace);
+            return IsHasSpaceForFigure(fillMatrix, figure, place) && algorithm.IsFall(fillMatrix, figureAtPlace);
+        }
+
+        public static bool IsHasSpaceForFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
+        {
+            var algorithm = _algorithms[figure.Type];
+            return algorithm.IsCanPlaceFigure(fillMatrix, figure, place);
         }
 
         public static void FillGrid(in bool[,] fillMatrix, in Figure figure)

@@ -4,9 +4,11 @@ using System.Linq;
 using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
+using Core.Figures.FigureAlgorithms.Path;
 using Core.Grid;
 using EcsCore;
 using Leopotam.Ecs;
+using Unity.Collections;
 using UnityEngine;
 
 namespace Core.AI
@@ -76,6 +78,7 @@ namespace Core.AI
             {
                 figure.Rotation = rotation;
                 Analyze(fillMatrix, figure, variants, comparer);
+                break;
             }
 
             figure.Rotation = currentRotation;
@@ -96,10 +99,7 @@ namespace Core.AI
             return result;
         }
 
-        private static void UpdateResult(
-            IList<AiDecision> result,
-            AiMoveVariant? variant,
-            Direction direction)
+        private static void UpdateResult(IList<AiDecision> result, AiMoveVariant? variant, Direction direction)
         {
             if (!variant.HasValue)
                 return;
@@ -107,14 +107,14 @@ namespace Core.AI
             var decision = new AiDecision
             {
                 Column = variant.Value.Column, Row = variant.Value.Row, Rotation = variant.Value.Rotation,
-                Direction = direction
+                Direction = direction, Path = variant.Value.Path
             };
             result.Add(decision);
         }
 
         private static AiMoveVariant? GetBetterMoveForColumns(int from, int to, IList<AiMoveVariant> variants)
         {
-            for(var i = variants.Count - 1; i >= 0; i--)
+            for (var i = variants.Count - 1; i >= 0; i--)
             {
                 var variant = variants[i];
                 if (variant.Column >= from && variant.Column <= to)
@@ -140,6 +140,9 @@ namespace Core.AI
 
                     if (!FigureAlgorithmFacade.IsCanPlaceFigure(fillMatrix, figure, place))
                         continue;
+                    var actions = Pathfinder.FindPath(figure.Position, place, fillMatrix, figure);
+                    if (actions.Count == 0)
+                        continue;
 
                     var rowsCount = FigureAlgorithmFacade.HowManyRowsWillFill(fillMatrix, figure, place);
                     var lockedCells = FigureAlgorithmFacade.HowManyLockedCellsUnder(fillMatrix, figure, place);
@@ -149,10 +152,11 @@ namespace Core.AI
                     //weight -= 10 * heterogeneity;
                     weight += 10 * (rows - row);
                     weight += Math.Abs(column - columns / 2);
+
                     var variant = new AiMoveVariant
                     {
                         Column = column, Row = row, Weight = weight, Rotation = figure.Rotation,
-                        H = heterogeneity, FR = rowsCount
+                        H = heterogeneity, FR = rowsCount, Path = actions.ToArray()
                     };
 
                     variants.Add(variant);

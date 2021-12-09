@@ -68,6 +68,8 @@ namespace Core.Figures.FigureAlgorithms
 
             foreach (var pos in GetPositions(place, figure))
             {
+                if (pos.Row < 0 || pos.Column < 0)
+                    return false;
                 if (fillMatrix[pos.Row, pos.Column])
                     return false;
             }
