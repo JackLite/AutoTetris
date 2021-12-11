@@ -17,5 +17,20 @@
         {
             figure.Row--;
         }
+
+        public static void RotateClockwise(ref Figure figure)
+        {
+            figure.Rotation = FigureRotation.ClockWise;
+        }
+        
+        public static void RotateCounterClockwise(ref Figure figure)
+        {
+            figure.Rotation = FigureRotation.CounterClockwise;
+        }
+        
+        public static void RotateMirror(ref Figure figure)
+        {
+            figure.Rotation = FigureRotation.Mirror;
+        }
     }
 }

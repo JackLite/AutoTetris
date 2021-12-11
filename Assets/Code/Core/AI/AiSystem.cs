@@ -78,7 +78,6 @@ namespace Core.AI
             {
                 figure.Rotation = rotation;
                 Analyze(fillMatrix, figure, variants, comparer);
-                break;
             }
 
             figure.Rotation = currentRotation;
@@ -143,7 +142,15 @@ namespace Core.AI
                     var actions = Pathfinder.FindPath(figure.Position, place, fillMatrix, figure);
                     if (actions.Count == 0)
                         continue;
-
+                    if (figure.Rotation == FigureRotation.Mirror)
+                        actions.AddFirst(PathActions.RotateMirror);
+                    
+                    if (figure.Rotation == FigureRotation.ClockWise)
+                        actions.AddFirst(PathActions.RotateClockwise);
+                    
+                    if (figure.Rotation == FigureRotation.CounterClockwise)
+                        actions.AddFirst(PathActions.RotateCounterClockwise);
+                    
                     var rowsCount = FigureAlgorithmFacade.HowManyRowsWillFill(fillMatrix, figure, place);
                     var lockedCells = FigureAlgorithmFacade.HowManyLockedCellsUnder(fillMatrix, figure, place);
                     var heterogeneity = FigureAlgorithmFacade.CalculateHeterogeneity(fillMatrix, figure, place);

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace Core.Figures
@@ -7,6 +10,10 @@ namespace Core.Figures
     public class FigureMono : MonoBehaviour
     {
         public const int CELL_SIZE = 85;
+
+        [SerializeField]
+        private RotationStructure[] rotations;
+
         private RectTransform _rect;
         private void Awake()
         {
@@ -30,6 +37,21 @@ namespace Core.Figures
         public void Delete()
         {
             Addressables.ReleaseInstance(gameObject);
+        }
+
+        public void Rotate(FigureRotation rotation)
+        {
+            foreach (var structure in rotations)
+            {
+                structure.rotationObject.SetActive(structure.rotations.Contains(rotation));
+            }
+        }
+
+        [Serializable]
+        private struct RotationStructure
+        {
+            public GameObject rotationObject;
+            public FigureRotation[] rotations;
         }
     }
 }

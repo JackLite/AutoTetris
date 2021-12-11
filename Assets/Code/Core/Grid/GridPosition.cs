@@ -79,5 +79,10 @@ namespace Core.Grid
         {
             return Equals(left, right);
         }
+
+        public override string ToString()
+        {
+            return "Row: " + Row + "; Column: " + Column;
+        }
     }
 }

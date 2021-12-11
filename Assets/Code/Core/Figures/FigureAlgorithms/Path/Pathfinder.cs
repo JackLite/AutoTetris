@@ -1,45 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms.Path
 {
     public static class Pathfinder
     {
-        public static List<PathAction> FindPath(
+        public static LinkedList<PathAction> FindPath(
             in GridPosition from,
             in GridPosition to,
             bool[,] fillMatrix,
             in Figure figure)
         {
-            var positions = CheckPath(from, to, fillMatrix, figure);
-            var currentPosition = to;
-            var result = new List<PathAction>();
-            foreach (var nextPos in positions)
-            {
-                if (currentPosition.Column > nextPos.Column)
-                    result.Add(PathActions.MoveRight);
-                if (currentPosition.Column < nextPos.Column)
-                    result.Add(PathActions.MoveLeft);
-                if (currentPosition.Row < nextPos.Row)
-                    result.Add(PathActions.MoveDown);
-                currentPosition = nextPos;
-            }
-            return result;
-            return FindActions(from, to);
+            return CheckPath(from, to, fillMatrix, figure);;
         }
 
-        private static List<GridPosition> CheckPath(
+        private static LinkedList<PathAction> CheckPath(
             in GridPosition from,
             in GridPosition to,
             bool[,] fillMatrix,
             in Figure figure)
         {
-            var currentPosition = to;
             var positions = new List<GridPosition>();
-            var startNode = new PathNode(currentPosition);
+            var startNode = new PathNode(to);
             var checkedPositions = new List<GridPosition>();
             var nodes = new LinkedList<PathNode>();
+            var actions = new LinkedList<PathAction>();
             nodes.AddLast(startNode);
             var iterations = 1000;
             // берём следующую позицию рядом
@@ -51,6 +38,8 @@ namespace Core.Figures.FigureAlgorithms.Path
                 if (!nodes.Last.Value.IsSomeDirectionsLeft())
                 {
                     nodes.RemoveLast();
+                    if(actions.Count > 0)
+                        actions.RemoveLast();
                     continue;
                 }
                 var position = nodes.Last.Value.PopNextVariant();
@@ -59,6 +48,7 @@ namespace Core.Figures.FigureAlgorithms.Path
                 if (FigureAlgorithmFacade.IsHasSpaceForFigure(fillMatrix, figure, position))
                 {
                     checkedPositions.Add(position);
+                    actions.AddLast(ConvertToAction(nodes.Last.Value.Place, position));
                     nodes.AddLast(new PathNode(position));
                     if (position == from)
                         break;
@@ -72,43 +62,20 @@ namespace Core.Figures.FigureAlgorithms.Path
                 }
             }
             // если позиция не занята - добавляем в список проверенных позиций и обновляем текущую
-            
-            return positions;
+
+            return actions;
         }
 
-        private static List<PathAction> FindActions(in GridPosition from, in GridPosition to)
+        private static PathAction ConvertToAction(in GridPosition from, in GridPosition to)
         {
-            var currentPosition = to;
+            if (from.Column > to.Column)
+                return PathActions.MoveRight;
+            if (from.Column < to.Column)
+                return PathActions.MoveLeft;
+            if (from.Row < to.Row)
+                return PathActions.MoveDown;
 
-            var result = new List<PathAction>();
-            var iterations = 100;
-            while (currentPosition != from)
-            {
-                var hDiff = Math.Abs(currentPosition.Column - from.Column);
-                var vDiff = from.Row - currentPosition.Row;
-                if (hDiff > vDiff)
-                {
-                    if (currentPosition.Column > from.Column)
-                    {
-                        currentPosition = currentPosition.Left();
-                        result.Add(PathActions.MoveRight);
-                    }
-                    else if (currentPosition.Column < from.Column)
-                    {
-                        currentPosition = currentPosition.Right();
-                        result.Add(PathActions.MoveLeft);
-                    }
-                }
-                else
-                {
-                    currentPosition = currentPosition.Above();
-                    result.Add(PathActions.MoveDown);
-                }
-                iterations--;
-                if (iterations < 0)
-                    break;
-            }
-            return result;
+            throw new ArgumentException("There is no action for move from " + from + " to " + to);
         }
     }
 }

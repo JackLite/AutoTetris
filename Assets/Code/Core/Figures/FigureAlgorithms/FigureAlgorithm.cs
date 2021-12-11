@@ -40,7 +40,7 @@ namespace Core.Figures.FigureAlgorithms
 
             return fullRows.Count;
         }
-        
+
         public void CheckAndUpdateCell(in Figure figure, in Cell cell)
         {
             var position = new GridPosition(figure.Row, figure.Column);
@@ -55,7 +55,8 @@ namespace Core.Figures.FigureAlgorithms
         {
             foreach (var pos in GetPositions(place, figure))
             {
-                if (pos.Row == cell.Row && pos.Column == cell.Column) return true;
+                if (pos.Row == cell.Row && pos.Column == cell.Column)
+                    return true;
             }
 
             return false;
@@ -68,7 +69,10 @@ namespace Core.Figures.FigureAlgorithms
 
             foreach (var pos in GetPositions(place, figure))
             {
-                if (pos.Row < 0 || pos.Column < 0)
+                if (pos.Row < 0
+                    || pos.Column < 0
+                    || pos.Row >= fillMatrix.GetLength(0)
+                    || pos.Column >= fillMatrix.GetLength(1))
                     return false;
                 if (fillMatrix[pos.Row, pos.Column])
                     return false;
@@ -76,7 +80,7 @@ namespace Core.Figures.FigureAlgorithms
 
             return true;
         }
-        
+
         public void LightUpCellByFigure(
             in Cell cell,
             in Figure figure,
@@ -89,7 +93,7 @@ namespace Core.Figures.FigureAlgorithms
             cell.View.LightUp();
             cell.View.SetDirection(aiDecisionDirection);
         }
-        
+
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             var rows = fillMatrix.GetLength(0);
@@ -99,7 +103,7 @@ namespace Core.Figures.FigureAlgorithms
 
             if (figure.Row == 0)
                 return true;
-            
+
             if (!RotatedFigures[figure.Rotation].CheckBordersForPlaceFigure(fillMatrix, new GridPosition(figure)))
                 return false;
 
@@ -110,7 +114,7 @@ namespace Core.Figures.FigureAlgorithms
         {
             return RotatedFigures[figure.Rotation].GetPositions(place);
         }
-        public int HowManyLockedCellsUnder (bool[,] fillMatrix, Figure figure, GridPosition place)
+        public int HowManyLockedCellsUnder(bool[,] fillMatrix, Figure figure, GridPosition place)
         {
             var wasLockedCells = GridService.GetLockedCellsUnderFill(fillMatrix);
             SetMatrixValue(fillMatrix, figure, place, true);

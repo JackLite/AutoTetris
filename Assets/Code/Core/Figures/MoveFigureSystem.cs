@@ -64,6 +64,7 @@ namespace Core.Figures
 
             var nextAction = figureFinish.Actions.Pop();
             nextAction.Invoke(ref figure);
+            figure.Mono.Rotate(figure.Rotation);
             figure.Mono.SetGridPosition(figure.Row, figure.Column);
             if (figureFinish.Actions.Count == 0)
             {
@@ -83,10 +84,10 @@ namespace Core.Figures
                 if (_inputSignal != null)
                 {
                     var aiDecision = GetAiDecision(_inputSignal.Direction);
+                    figure.Rotation = aiDecision.Rotation;
                     var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
                     var finishComponent = new FigureFinishComponent { Actions = new Stack<PathAction>(path) };
                     _activeFigureFilter.GetEntity(0).Replace(finishComponent);
-                    figure.Rotation = aiDecision.Rotation;
                     _fallCounter = _currentSpeed / 5f;
                     _inputSignal = null;
 
