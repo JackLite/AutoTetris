@@ -7,6 +7,7 @@ using Core.Grid;
 using Core.Input;
 using EcsCore;
 using Global;
+using Global.GameOver;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ namespace Core.Figures
         private GridData _grid;
         private CoreState _coreState;
         private PlayerData _playedData;
+        private EcsEventTable _eventTable;
         private EcsWorld _world;
         private InputSignal _inputSignal;
 
@@ -38,7 +40,8 @@ namespace Core.Figures
 
         private void SaveInputSignal(InputSignal signal)
         {
-            _inputSignal = signal;
+            if(_activeFigureFilter.GetEntitiesCount() > 0)
+                _inputSignal = signal;
         }
 
         public void Run()
@@ -61,18 +64,19 @@ namespace Core.Figures
 
             if (_fallCounter >= 0)
                 return;
-
-            var nextAction = figureFinish.Actions.Pop();
-            nextAction.Invoke(ref figure);
-            figure.Mono.Rotate(figure.Rotation);
-            figure.Mono.SetGridPosition(figure.Row, figure.Column);
+            
             if (figureFinish.Actions.Count == 0)
             {
                 FinishMove(figure);
                 _fallCounter = _currentSpeed;
+                return;
             }
-            else
-                _fallCounter = _currentSpeed / 5f;
+            _fallCounter = _currentSpeed / 5f;
+            
+            var nextAction = figureFinish.Actions.Pop();
+            nextAction.Invoke(ref figure);
+            figure.Mono.Rotate(figure.Rotation);
+            figure.Mono.SetGridPosition(figure.Row, figure.Column);
         }
 
         private void ProcessMoving()
@@ -127,7 +131,7 @@ namespace Core.Figures
 
         private void FinishMove(Figure figure)
         {
-            _world.NewEntity().Replace(new CheckLinesSignal());
+            _eventTable.AddEvent<CheckLinesSignal>();
 
             FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
 
@@ -138,26 +142,26 @@ namespace Core.Figures
 
             if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
             {
-                _world.NewEntity().Replace(new GameOverSignal());
+                _eventTable.AddEvent<GameOverSignal>();
                 return;
             }
             _playedData.Scores += 1;
-            _world.NewEntity().Replace(new FigureSpawnSignal());
+            _eventTable.AddEvent<FigureSpawnSignal>();
 
-            CreateSingleFigures(in figure);
+            CreateSingleFigures();
 
             figure.Mono.Delete();
             _activeFigureFilter.GetEntity(0).Destroy();
             _currentSpeed *= 1 - SPEED_VELOCITY;
         }
 
-        private void CreateSingleFigures(in Figure figure)
+        private void CreateSingleFigures()
         {
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
                 cell.View.LightDown();
-                FigureAlgorithmFacade.UpdateFillCell(figure, cell);
+                cell.View.SetImageActive(_grid.FillMatrix[cell.Row, cell.Column]);
             }
         }
 

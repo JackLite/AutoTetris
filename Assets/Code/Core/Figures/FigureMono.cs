@@ -9,7 +9,7 @@ namespace Core.Figures
     [RequireComponent(typeof(RectTransform))]
     public class FigureMono : MonoBehaviour
     {
-        public const int CELL_SIZE = 85;
+        public const int CELL_SIZE = 75;
 
         [SerializeField]
         private RotationStructure[] rotations;

@@ -16,6 +16,7 @@ namespace Core.Cells
         private const float DELAY = .1f;
         private GridData _grid;
         private CoreState _coreState;
+        private EcsEventTable _eventTable;
         private EcsWorld _world;
         private EcsFilter<Cell> _cells;
         private float _checkSpeed;
@@ -98,7 +99,7 @@ namespace Core.Cells
         private void Finish()
         {
             _grid.IsNeedCheckPieces = false;
-            _world.NewEntity().Replace(new CheckLinesSignal());
+            _eventTable.AddEvent<CheckLinesSignal>();
             _checkSpeed = FIRST_DELAY;
         }
 

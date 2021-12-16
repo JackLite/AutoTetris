@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Global
+namespace Global.GameOver
 {
     public class GameOverMono : MonoBehaviour
     {

@@ -1,8 +1,5 @@
-﻿using EcsCore;
-
-namespace Core.Figures
+﻿namespace Core.Figures
 {
-    [EcsOneFrame]
     public struct FigureSpawnSignal
     {
     }

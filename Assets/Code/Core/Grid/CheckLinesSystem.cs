@@ -28,13 +28,6 @@ namespace Core.Grid
                 }
             }
 
-            foreach (var i in _cells)
-            {
-                ref var cell = ref _cells.Get1(i);
-                cell.View.SetImageActive(_grid.FillMatrix[cell.Row, cell.Column]);
-            }
-
-            _signal.GetEntity(0).Destroy();
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
             _playerData.Scores += fullRows.Count * 10;

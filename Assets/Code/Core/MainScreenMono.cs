@@ -1,5 +1,6 @@
 ﻿using Core.Pause;
 using Core.Scores;
+using Core.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,5 +21,8 @@ namespace Core
 
         [field:SerializeField]
         public GameObject PauseScreen { get; private set; }
+
+        [field:SerializeField]
+        public NextFigureUI NextFigure { get; private set; }
     }
 }

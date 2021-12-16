@@ -32,7 +32,7 @@ namespace Core.Grid
 
         public static bool IsFillSomeAtTopRow(bool[,] fillMatrix)
         {
-            var topRow = fillMatrix.GetLength(0) - 1;
+            var topRow = fillMatrix.GetLength(0) - 3;
 
             for (var column = 0; column < fillMatrix.GetLength(1); column++)
             {

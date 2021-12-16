@@ -2,14 +2,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Global
+namespace MainMenu
 {
     [RequireComponent(typeof(Button))]
     public class StartGameButton : MonoBehaviour
     {
         private Button _button;
-
-        public event Action OnClick;
 
         private void Awake()
         {
@@ -20,5 +18,7 @@ namespace Global
         {
             _button.onClick.AddListener(() => OnClick?.Invoke());
         }
+
+        public event Action OnClick;
     }
 }

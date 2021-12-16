@@ -1,7 +1,7 @@
-﻿namespace Global
+﻿namespace MainMenu
 {
     public struct StartGameSignal
     {
-        
+
     }
 }

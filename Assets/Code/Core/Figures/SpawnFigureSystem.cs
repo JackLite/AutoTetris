@@ -15,7 +15,7 @@ namespace Core.Figures
         private float _counter;
         private MainScreenMono _mainScreen;
         private GridData _gridData;
-        private EcsFilter<FigureSpawnSignal> _filter;
+        private EcsEventTable _eventTable;
         private EcsWorld _world;
         private CoreState _coreState;
         private readonly Random _random;
@@ -28,13 +28,13 @@ namespace Core.Figures
 
         public void Init()
         {
-            _world.NewEntity().Replace(new FigureSpawnSignal());
+            _eventTable.AddEvent<FigureSpawnSignal>();
             FillBag(_figureBag);
         }
 
         public void Run()
         {
-            if (_filter.GetEntitiesCount() == 0 || _coreState.IsPaused)
+            if (!_eventTable.IsEventExist<FigureSpawnSignal>() || _coreState.IsPaused)
                 return;
 
             if (GridService.IsFillSomeAtTopRow(_gridData.FillMatrix))
@@ -49,19 +49,21 @@ namespace Core.Figures
             if (_figureBag.Count == 0)
                 FillBag(_figureBag);
 
-            var name = GetName(type);
+            var name = FiguresUtility.GetFigureAddress(type);
             var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
             await task;
             var mono = task.Result.GetComponent<FigureMono>();
             var startRow = _gridData.FillMatrix.GetLength(0) - 4;
             var startColumn = _gridData.FillMatrix.GetLength(1) / 2 - 1;
             mono.SetGridPosition(startRow, startColumn);
-            var entity = EcsWorldStartup.world.NewEntity();
+            var entity = EcsWorldContainer.World.NewEntity();
 
             entity.Replace(new Figure
             {
                 Type = type, Mono = mono, Row = startRow, Column = startColumn
             });
+            
+            _mainScreen.NextFigure.ShowNext(_figureBag.Peek());
         }
 
         private void FillBag(Stack<FigureType> figureBag)
@@ -71,20 +73,6 @@ namespace Core.Figures
 
             foreach (var type in variants)
                 figureBag.Push(type);
-        }
-
-        private string GetName(FigureType type)
-        {
-            return type switch {
-                FigureType.I => "Figure_I",
-                FigureType.O => "Figure_O",
-                FigureType.T => "Figure_T",
-                FigureType.L => "Figure_L",
-                FigureType.J => "Figure_J",
-                FigureType.Z => "Figure_Z",
-                FigureType.S => "Figure_S",
-                _            => throw new ArgumentOutOfRangeException (nameof(type), type, null)
-            };
         }
     }
 }

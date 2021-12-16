@@ -1,6 +1,7 @@
 ﻿using EcsCore;
 using Global;
 using Leopotam.Ecs;
+using Utilities;
 
 namespace Core.Scores
 {
@@ -18,6 +19,7 @@ namespace Core.Scores
             
             mainScreenMono.ScoreView.UpdateScores(playerData.Scores);
             _lastScores = playerData.Scores;
+            SaveUtility.SaveInt("player.scores", _lastScores);
         }
     }
 }

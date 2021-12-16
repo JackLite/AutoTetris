@@ -1,4 +1,4 @@
-﻿namespace Global
+﻿namespace Global.GameOver
 {
     public struct GameOverSignal
     {

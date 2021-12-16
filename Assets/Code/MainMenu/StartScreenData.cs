@@ -1,4 +1,4 @@
-﻿namespace Global
+﻿namespace MainMenu
 {
     public struct StartScreenData
     {

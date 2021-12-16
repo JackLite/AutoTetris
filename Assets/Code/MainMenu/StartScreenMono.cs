@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Global
+namespace MainMenu
 {
     public class StartScreenMono : MonoBehaviour
     {

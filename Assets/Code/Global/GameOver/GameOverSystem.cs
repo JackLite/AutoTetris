@@ -4,18 +4,18 @@ using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Global
+namespace Global.GameOver
 {
     [EcsSystem(typeof(MainModule))]
     public class GameOverSystem : IEcsRunSystem
     {
-        private EcsFilter<GameOverSignal> _filter;
         private EcsWorld _world;
+        private EcsEventTable _eventTable;
         private GameObject _gameOverScreen;
 
         public void Run()
         {
-            if (_filter.GetEntitiesCount() == 0)
+            if (!_eventTable.IsEventExist<GameOverSignal>())
                 return;
 
             CreateGameOverScreen();
@@ -25,7 +25,6 @@ namespace Global
                       ModuleType = typeof(CoreModule)
                   });
             
-            _filter.GetEntity(0).Destroy();
         }
 
         private async void CreateGameOverScreen()
@@ -38,7 +37,7 @@ namespace Global
 
         private void StartGame()
         {
-            _world.NewEntity().Replace(new StartGameSignal());
+            _world.ActivateModule<CoreModule>();
             Addressables.ReleaseInstance(_gameOverScreen);
         }
     }
