@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Core.AI;
 using Core.Cells;
 using Core.Figures.FigureAlgorithms;
@@ -40,7 +41,7 @@ namespace Core.Figures
 
         private void SaveInputSignal(InputSignal signal)
         {
-            if(_activeFigureFilter.GetEntitiesCount() > 0)
+            if (_activeFigureFilter.GetEntitiesCount() > 0)
                 _inputSignal = signal;
         }
 
@@ -64,15 +65,18 @@ namespace Core.Figures
 
             if (_fallCounter >= 0)
                 return;
-            
+
             if (figureFinish.Actions.Count == 0)
             {
                 FinishMove(figure);
                 _fallCounter = _currentSpeed;
                 return;
             }
-            _fallCounter = _currentSpeed / 5f;
-            
+            if (figureFinish.Actions.All(a => a == PathActions.MoveDown))
+                _fallCounter = _currentSpeed / 20f;
+            else
+                _fallCounter = _currentSpeed / 5f;
+
             var nextAction = figureFinish.Actions.Pop();
             nextAction.Invoke(ref figure);
             figure.Mono.Rotate(figure.Rotation);
@@ -151,7 +155,10 @@ namespace Core.Figures
             CreateSingleFigures();
 
             figure.Mono.Delete();
-            _activeFigureFilter.GetEntity(0).Destroy();
+            if (_activeFigureFilter.GetEntitiesCount() != 0)
+                _activeFigureFilter.GetEntity(0).Destroy();
+            if (_finishFigureFilter.GetEntitiesCount() != 0)
+                _finishFigureFilter.GetEntity(0).Destroy();
             _currentSpeed *= 1 - SPEED_VELOCITY;
         }
 

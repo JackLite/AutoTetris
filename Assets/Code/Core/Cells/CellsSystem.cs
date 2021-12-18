@@ -25,7 +25,7 @@ namespace Core.Cells
         public void Init()
         {
             _cellsArray = new CellMono[_grid.Rows, _grid.Columns];
-
+            _checkSpeed = FIRST_DELAY;
             for (var row = 0; row < _grid.Rows; row++)
             {
                 for (var column = 0; column < _grid.Columns; column++)
@@ -46,8 +46,7 @@ namespace Core.Cells
             };
             _world.NewEntity().Replace(cell);
             cellMono.SetPosition(row, column);
-            cellMono.SetImageActive(false);
-            _checkSpeed = FIRST_DELAY;
+            cellMono.SetEmpty();
             _cellsArray[row, column] = cellMono;
         }
 
@@ -88,7 +87,7 @@ namespace Core.Cells
                     if (!isFill)
                         continue;
 
-                    _cellsArray[row, column].SetImageActive(false);
+                    _cellsArray[row, column].SetEmpty();
                     _grid.FillMatrix[row, column] = false;
                     _cellsArray[row - 1, column].SetImageActive(true);
                     _grid.FillMatrix[row - 1, column] = true;

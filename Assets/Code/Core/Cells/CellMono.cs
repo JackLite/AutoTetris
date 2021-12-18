@@ -111,5 +111,11 @@ namespace Core.Cells
             };
             arrowTransform.localRotation = Quaternion.Euler(0, 0, angle);
         }
+
+        public void SetEmpty()
+        {
+            LightDown();
+            SetImageActive(false);
+        }
     }
 }

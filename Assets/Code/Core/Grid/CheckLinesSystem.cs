@@ -6,16 +6,16 @@ using Leopotam.Ecs;
 namespace Core.Grid
 {
     [EcsSystem(typeof(CoreModule))]
-    public class CheckLinesSystem : IEcsRunSystem, IEcsDestroySystem
+    public class CheckLinesSystem : IEcsRunSystem
     {
-        private EcsFilter<CheckLinesSignal> _signal;
+        private EcsEventTable _eventTable;
         private EcsFilter<Cell> _cells;
         private GridData _grid;
         private PlayerData _playerData;
 
         public void Run()
         {
-            if (_signal.GetEntitiesCount() == 0)
+            if (!_eventTable.IsEventExist<CheckLinesSignal>())
                 return;
 
             var fullRows = GridService.GetFullRowsIndexes(_grid.FillMatrix);
@@ -28,17 +28,20 @@ namespace Core.Grid
                 }
             }
 
+            foreach (var i in _cells)
+            {
+                ref var cell = ref _cells.Get1(i);
+                foreach (var rowIndex in fullRows)
+                {
+                    if (cell.Row != rowIndex)
+                        continue;
+                    cell.View.SetEmpty();
+                }
+            }
+
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
             _playerData.Scores += fullRows.Count * 10;
-        }
-
-        public void Destroy()
-        {
-            foreach (var i in _signal)
-            {
-                _signal.GetEntity(i).Destroy();
-            }
         }
     }
 }
