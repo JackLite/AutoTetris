@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Core.Figures;
 using Core.Grid;
@@ -15,6 +16,7 @@ namespace Core.Cells
         private const float FIRST_DELAY = .2f;
         private const float DELAY = .1f;
         private GridData _grid;
+        private MainScreenMono _mainScreen;
         private CoreState _coreState;
         private EcsEventTable _eventTable;
         private EcsWorld _world;
@@ -37,7 +39,7 @@ namespace Core.Cells
 
         private async void CreateCell(int row, int column)
         {
-            var handle = Addressables.InstantiateAsync("Cell", _grid.Mono.transform);
+            var handle = Addressables.InstantiateAsync("Cell", _mainScreen.grid);
             await handle.Task;
             var cellMono = handle.Result.GetComponent<CellMono>();
             var cell = new Cell
@@ -155,6 +157,7 @@ namespace Core.Cells
 
         public void Destroy()
         {
+            Array.Clear(_grid.FillMatrix, 0, _grid.FillMatrix.Length);
             foreach (var i in _cells)
             {
                 _cells.GetEntity(i).Destroy();

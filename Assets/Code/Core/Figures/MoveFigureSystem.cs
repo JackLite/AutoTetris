@@ -19,6 +19,7 @@ namespace Core.Figures
     {
         private const float START_DELAY = .5f;
         private const float SPEED_VELOCITY = .005f;
+        private const float SPEED_FALL = .020f;
         private float _fallCounter;
         private float _currentSpeed;
         private EcsFilter<Figure>.Exclude<FigureFinishComponent> _activeFigureFilter;
@@ -73,7 +74,7 @@ namespace Core.Figures
                 return;
             }
             if (figureFinish.Actions.All(a => a == PathActions.MoveDown))
-                _fallCounter = _currentSpeed / 20f;
+                _fallCounter = SPEED_FALL;
             else
                 _fallCounter = _currentSpeed / 5f;
 

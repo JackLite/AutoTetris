@@ -9,10 +9,8 @@ namespace Core.AI
     {
         public int Row;
         public int Column;
-        public int Weight;
         public FigureRotation Rotation;
-        public int H;
-        public int FR;
-        public PathAction[] Path;
+
+        public float Weight;
     }
 }

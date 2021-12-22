@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using Core.AI;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Core.Cells;
 using Core.Figures.FigureAlgorithms.FigureI;
 using Core.Figures.FigureAlgorithms.FigureJ;
@@ -92,28 +93,63 @@ namespace Core.Figures.FigureAlgorithms
 
             return algorithm.GetRotationVariants();
         }
-        public static int HowManyLockedCellsUnder(bool[,] fillMatrix, Figure figure, GridPosition place)
+
+        public static int CalculateSome(bool[,] fillMatrix, Figure figure, GridPosition place, Func<bool[,], int> calc)
         {
             var algorithm = _algorithms[figure.Type];
 
-            return algorithm.HowManyLockedCellsUnder(fillMatrix, figure, place);
-        }
-        public static int HowManyEmptyCellsUnder(bool[,] fillMatrix, Figure figure, GridPosition place)
-        {
-            var algorithm = _algorithms[figure.Type];
-
-            return algorithm.HowManyEmptyCellsUnder(fillMatrix, figure, place);
-        }
-        public static int CalculateHeterogeneity(bool[,] fillMatrix, Figure figure, GridPosition place)
-        {
-            var algorithm = _algorithms[figure.Type];
-
-            var old = GridService.CalculateHeterogeneity(fillMatrix);
             algorithm.SetMatrixValue(fillMatrix, figure, place, true);
-            var heterogeneity = GridService.CalculateHeterogeneity(fillMatrix);
+            var res = calc(fillMatrix);
             algorithm.SetMatrixValue(fillMatrix, figure, place, false);
 
-            return heterogeneity - old;
+            return res;
+        }
+
+        public static bool IsIntersects(
+            in Figure figure,
+            FigureRotation firstRotation,
+            in GridPosition firstPlace,
+            FigureRotation secondRotation,
+            in GridPosition secondPlace)
+        {
+            var algorithm = _algorithms[figure.Type];
+            var firstPositions = algorithm.GetPositions(firstPlace, firstRotation).ToArray();
+            foreach (var pos in algorithm.GetPositions(secondPlace, secondRotation))
+            {
+                foreach (var firstPos in firstPositions)
+                {
+                    if (firstPos == pos)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static int GetMostLeft(in Figure figure, in GridPosition pos, FigureRotation rotation)
+        {
+            var algorithm = _algorithms[figure.Type];
+            var res = 100;
+            foreach (var position in algorithm.GetPositions(pos, rotation))
+            {
+                if (position.Column < res)
+                    res = position.Column;
+            }
+
+            return res;
+        }
+        
+        public static int GetMostRight(in Figure figure, in GridPosition pos, FigureRotation rotation)
+        {
+            var algorithm = _algorithms[figure.Type];
+            var res = 0;
+            foreach (var position in algorithm.GetPositions(pos, rotation))
+            {
+                if (position.Column > res)
+                    res = position.Column;
+            }
+
+            return res;
         }
     }
 }

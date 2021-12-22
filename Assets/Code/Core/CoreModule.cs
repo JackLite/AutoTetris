@@ -25,7 +25,7 @@ namespace Core
             _mainScreen = task.Result;
             var mainScreen = _mainScreen.GetComponent<MainScreenMono>();
             _dependencies[typeof(MainScreenMono)] = mainScreen;
-            _dependencies[typeof(GridData)] = new GridData(mainScreen.grid.GetComponent<GridMono>());
+            _dependencies[typeof(GridData)] = new GridData();
             _dependencies[typeof(CoreState)] = new CoreState();
         }
 

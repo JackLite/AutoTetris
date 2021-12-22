@@ -42,95 +42,72 @@ namespace Core.Grid
 
             return false;
         }
-        public static int GetLockedCellsUnderFill(in bool[,] fillMatrix)
+
+        public static int CalculateAggregateHeight(bool[,] fillMatrix)
         {
-            var count = 0;
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
-            for (var row = 0; row < rows - 2; row++)
+            var result = 0;
+            for (var column = 0; column < columns; ++column)
             {
-                var isEmptyRow = true;
-                for (var column = 0; column < columns; column++)
+                for (var row = rows - 1; row >= 0; --row)
                 {
                     if (fillMatrix[row, column])
                     {
-                        isEmptyRow = false;
+                        result += row;
+                        break;
                     }
-                    var isFillLeft = column == 0 || fillMatrix[row, column - 1];
-                    var isFillRight = column == columns - 1 || fillMatrix[row, column + 1];
-                    var isFillAbove = fillMatrix[row + 1, column];
-                    if (isFillLeft && isFillRight && isFillAbove)
-                        count++;
                 }
-
-                if (isEmptyRow)
-                    break;
             }
-            return count;
+            return result;
         }
-        public static int GetEmptyCellsUnderFill(bool[,] fillMatrix)
+
+        public static int CalculateHoles(bool[,] fillMatrix)
         {
-            var count = 0;
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
-            for (var row = 0; row < rows - 2; row++)
+            var result = 0;
+            for (var column = 0; column < columns; ++column)
             {
-                var isEmptyRow = true;
-                for (var column = 0; column < columns; column++)
+                var startCount = false;
+                for (var row = rows - 1; row >= 0; --row)
                 {
-                    if (fillMatrix[row, column])
-                        isEmptyRow = false;
-                    else
-                        count++;
-                }
-
-                if (isEmptyRow)
-                {
-                    count = Math.Max(0, count - columns);
-                    break;
+                    if (fillMatrix[row, column] && !startCount)
+                    {
+                        startCount = true;
+                        continue;
+                    }
+                    if (!fillMatrix[row, column] && startCount)
+                        result++;
                 }
             }
-            return count;
+            return result;
         }
-        public static int CalculateHeterogeneity(in bool[,] fillMatrix)
+
+        public static int CalculateBumpiness(bool[,] fillMatrix)
         {
-            var count = 0;
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
-            for (var row = 0; row < rows - 2; row++)
+            var result = 0;
+            var prev = -1;
+            for (var column = 0; column < columns; ++column)
             {
-                var isEmptyRow = true;
-                var isFillCurrent = fillMatrix[row, 0];
-                for (var column = 0; column < columns; column++)
+                for (var row = rows - 1; row >= 0; --row)
                 {
                     if (fillMatrix[row, column])
-                        isEmptyRow = false;
-
-                    if (isFillCurrent != fillMatrix[row, column])
-                        count += 1;
-
-                    isFillCurrent = fillMatrix[row, column];
+                    {
+                        if (prev < 0)
+                        {
+                            prev = row;
+                            break;
+                        }
+                        result += Math.Abs(prev - row);
+                        prev = row;
+                        break;
+                    }
                 }
-
-                if (isFillCurrent)
-                    count--;
-
-                if (isEmptyRow)
-                    break;
             }
-            return count;
-        }
-
-        public static bool IsRowEmpty(int rowIndex, bool[,] fillMatrix)
-        {
-            if (rowIndex >= fillMatrix.GetLength(0))
-                return true;
-
-            var columns = fillMatrix.GetLength(1);
-            for (var i = 0; i < columns; ++i)
-                if (fillMatrix[rowIndex, i])
-                    return false;
-            return true;
+            return result;
         }
     }
 }

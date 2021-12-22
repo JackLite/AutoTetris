@@ -8,7 +8,7 @@ namespace Core.AI
     {
         public int Compare(AiMoveVariant x, AiMoveVariant y)
         {
-            return x.Weight.CompareTo(y.Weight);
+            return y.Weight.CompareTo(x.Weight);
         }
 
         public int Compare(object x, object y)

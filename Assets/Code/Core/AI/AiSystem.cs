@@ -17,6 +17,16 @@ namespace Core.AI
     public class AiSystem : IEcsRunSystem
     {
         private const int MOVES_COUNT = 3;
+        private const float AHM = -0.510066f;
+        private const float CLM = 0.760066f;
+        private const float HM = -0.35663f;
+        private const float BM = -0.184483f;
+        private static readonly Dictionary<int, Direction> Directions = new Dictionary<int, Direction>
+        {
+            { 0, Direction.Left },
+            { 1, Direction.Down },
+            { 2, Direction.Right },
+        };
         private EcsFilter<Figure> _filter;
         private EcsFilter<AiDecision> _decisionsFilter;
         private EcsFilter<Cell> _cells;
@@ -77,56 +87,80 @@ namespace Core.AI
             foreach (var rotation in FigureAlgorithmFacade.GetRotationVariants(figure))
             {
                 figure.Rotation = rotation;
-                Analyze(fillMatrix, figure, variants, comparer);
+                Analyze(fillMatrix, figure, variants);
             }
+            variants.Sort(comparer);
 
             figure.Rotation = currentRotation;
 
             if (variants.Count == 0)
                 return Enumerable.Repeat(AiDecision.Zero, MOVES_COUNT);
-
-            //var aiMoveVariant = variants.Last().Value;
-            //return new[] { new AiDecision {Column = aiMoveVariant.Column, Row = aiMoveVariant.Row, Rotation = aiMoveVariant.Rotation} };
-            var leftMove = GetBetterMoveForColumns(0, 2, variants);
-            var bottomMove = GetBetterMoveForColumns(3, 6, variants);
-            var rightMove = GetBetterMoveForColumns(7, 9, variants);
-
-            var result = new List<AiDecision>(MOVES_COUNT);
-            UpdateResult(result, leftMove, Direction.Left);
-            UpdateResult(result, bottomMove, Direction.Down);
-            UpdateResult(result, rightMove, Direction.Right);
-            return result;
+            
+            return ChooseBetterMoves(variants, figure);
         }
 
-        private static void UpdateResult(IList<AiDecision> result, AiMoveVariant? variant, Direction direction)
+        private static IEnumerable<AiDecision> ChooseBetterMoves(List<AiMoveVariant> variants, Figure figure)
         {
-            if (!variant.HasValue)
-                return;
-
-            var decision = new AiDecision
+            var result = new AiDecision[MOVES_COUNT];
+            var count = 0;
+            foreach (var variant in variants)
             {
-                Column = variant.Value.Column, Row = variant.Value.Row, Rotation = variant.Value.Rotation,
-                Direction = direction, Path = variant.Value.Path
-            };
-            result.Add(decision);
-        }
+                if (count == 0)
+                {
+                    result[count++] = CreateDecision(variant);
+                    continue;
+                }
 
-        private static AiMoveVariant? GetBetterMoveForColumns(int from, int to, IList<AiMoveVariant> variants)
-        {
-            for (var i = variants.Count - 1; i >= 0; i--)
-            {
-                var variant = variants[i];
-                if (variant.Column >= from && variant.Column <= to)
-                    return variant;
+                var decision = CreateDecision(variant);
+                var isIntersects = false;
+                foreach (var aiDecision in result)
+                {
+                    if (IsIntersects(figure, aiDecision, decision))
+                    {
+                        isIntersects = true;
+                        break;
+                    }
+                }
+
+                if (isIntersects)
+                    continue;
+                result[count++] = decision;
+                
+                if (count >= MOVES_COUNT)
+                    break;
             }
-            return null;
+
+            var temp = result.OrderBy(d => FigureAlgorithmFacade.GetMostLeft(figure, d.Position, d.Rotation)).ToArray();
+
+            for (var i = 0; i < temp.Length; ++i)
+            {
+                ref var decision = ref temp[i];
+                decision.Direction = Directions[i];
+            }
+
+            return temp;
+        }
+
+        private static bool IsIntersects(in Figure figure, in AiDecision a, in AiDecision b)
+        {
+            return FigureAlgorithmFacade.IsIntersects(figure, a.Rotation, a.Position, b.Rotation, b.Position);
+        }
+
+        private static AiDecision CreateDecision(in AiMoveVariant variant)
+        {
+            return new AiDecision
+            {
+                Column = variant.Column,
+                Row = variant.Row,
+                Rotation = variant.Rotation,
+                Direction = Direction.Down
+            };
         }
 
         private static void Analyze(
             bool[,] fillMatrix,
             Figure figure,
-            List<AiMoveVariant> variants,
-            AiMoveVariantComparer comparer)
+            List<AiMoveVariant> variants)
         {
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
@@ -144,30 +178,34 @@ namespace Core.AI
                         continue;
                     if (figure.Rotation == FigureRotation.Mirror)
                         actions.AddFirst(PathActions.RotateMirror);
-                    
+
                     if (figure.Rotation == FigureRotation.ClockWise)
                         actions.AddFirst(PathActions.RotateClockwise);
-                    
+
                     if (figure.Rotation == FigureRotation.CounterClockwise)
                         actions.AddFirst(PathActions.RotateCounterClockwise);
-                    
-                    var rowsCount = FigureAlgorithmFacade.HowManyRowsWillFill(fillMatrix, figure, place);
-                    var lockedCells = FigureAlgorithmFacade.HowManyLockedCellsUnder(fillMatrix, figure, place);
-                    var heterogeneity = FigureAlgorithmFacade.CalculateHeterogeneity(fillMatrix, figure, place);
-                    var weight = 100 * rowsCount;
-                    //weight -=  10 * lockedCells;
-                    //weight -= 10 * heterogeneity;
-                    weight += 10 * (rows - row);
-                    weight += Math.Abs(column - columns / 2);
 
                     var variant = new AiMoveVariant
                     {
-                        Column = column, Row = row, Weight = weight, Rotation = figure.Rotation,
-                        H = heterogeneity, FR = rowsCount, Path = actions.ToArray()
+                        Column = column, Row = row, Rotation = figure.Rotation
                     };
 
+                    var aggregateHeight = FigureAlgorithmFacade.CalculateSome(fillMatrix,
+                        figure,
+                        place,
+                        GridService.CalculateAggregateHeight);
+                    var completeLines = FigureAlgorithmFacade.HowManyRowsWillFill(fillMatrix, figure, place);
+                    var holes = FigureAlgorithmFacade.CalculateSome(fillMatrix,
+                        figure,
+                        place,
+                        GridService.CalculateHoles);
+                    var bumpiness = FigureAlgorithmFacade.CalculateSome(fillMatrix,
+                        figure,
+                        place,
+                        GridService.CalculateBumpiness);
+
+                    variant.Weight = aggregateHeight * AHM + completeLines * CLM + holes * HM + bumpiness * BM;
                     variants.Add(variant);
-                    variants.Sort(comparer);
                 }
             }
         }

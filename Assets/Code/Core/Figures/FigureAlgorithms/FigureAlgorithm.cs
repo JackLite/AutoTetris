@@ -114,23 +114,10 @@ namespace Core.Figures.FigureAlgorithms
         {
             return RotatedFigures[figure.Rotation].GetPositions(place);
         }
-        public int HowManyLockedCellsUnder(bool[,] fillMatrix, Figure figure, GridPosition place)
+        
+        public IEnumerable<GridPosition> GetPositions(in GridPosition place, FigureRotation rotation)
         {
-            var wasLockedCells = GridService.GetLockedCellsUnderFill(fillMatrix);
-            SetMatrixValue(fillMatrix, figure, place, true);
-            var newLockedCells = GridService.GetLockedCellsUnderFill(fillMatrix);
-            SetMatrixValue(fillMatrix, figure, place, false);
-
-            return newLockedCells - wasLockedCells;
-        }
-        public int HowManyEmptyCellsUnder(bool[,] fillMatrix, Figure figure, GridPosition place)
-        {
-            var wasEmptyCells = GridService.GetEmptyCellsUnderFill(fillMatrix);
-            SetMatrixValue(fillMatrix, figure, place, true);
-            var newEmptyCells = GridService.GetEmptyCellsUnderFill(fillMatrix);
-            SetMatrixValue(fillMatrix, figure, place, false);
-
-            return newEmptyCells - wasEmptyCells;
+            return RotatedFigures[rotation].GetPositions(place);
         }
     }
 }
