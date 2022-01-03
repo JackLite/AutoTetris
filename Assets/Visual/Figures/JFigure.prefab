@@ -316,6 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efc990f54bb4f259c3304f2acae1d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cellSprite: {fileID: 21300000, guid: f0ad66489e5b2a448be19d3a9af06d4b, type: 3}
   rotations:
   - rotationObject: {fileID: 2485447409801666734}
     rotations: 00000000

@@ -30,6 +30,8 @@ namespace Core.Cells
         private float _currentOpacity;
         private bool _isOpacityGrow;
 
+        public Sprite CellSprite => _image.sprite;
+
         private void Awake()
         {
             _rect = GetComponent<RectTransform>();
@@ -45,6 +47,11 @@ namespace Core.Cells
         public void SetImageActive(bool isActive)
         {
             _image.enabled = isActive;
+        }
+
+        public void SetImage(Sprite sprite)
+        {
+            _image.sprite = sprite;
         }
 
         public void SetPosition(int row, int column)

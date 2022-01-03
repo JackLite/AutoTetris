@@ -502,6 +502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efc990f54bb4f259c3304f2acae1d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cellSprite: {fileID: 21300000, guid: 505b40ea5a2dc704cad4ce7b3b293685, type: 3}
   rotations:
   - rotationObject: {fileID: 6224403979935336060}
     rotations: 00000000

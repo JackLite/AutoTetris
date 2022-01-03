@@ -89,8 +89,10 @@ namespace Core.Cells
                     if (!isFill)
                         continue;
 
+                    var sprite = _cellsArray[row, column].CellSprite;
                     _cellsArray[row, column].SetEmpty();
                     _grid.FillMatrix[row, column] = false;
+                    _cellsArray[row - 1, column].SetImage(sprite);
                     _cellsArray[row - 1, column].SetImageActive(true);
                     _grid.FillMatrix[row - 1, column] = true;
                 }

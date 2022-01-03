@@ -62,6 +62,20 @@ namespace Core.Figures.FigureAlgorithms
             algorithm.CheckAndUpdateCell(figure, cell);
         }
 
+        public static bool IsFigureAtCell(in Figure figure, in Cell cell)
+        {
+            var algorithm = _algorithms[figure.Type];
+
+            var positions = algorithm.GetPositions(figure.Position, figure.Rotation);
+            foreach (var position in positions)
+            {
+                if (position == cell.Position)
+                    return true;
+            }
+
+            return false;
+        }
+
         public static void LightUpCellByFigure(
             in Figure figure,
             in Cell cell,

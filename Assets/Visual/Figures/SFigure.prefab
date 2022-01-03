@@ -314,6 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efc990f54bb4f259c3304f2acae1d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cellSprite: {fileID: 21300000, guid: 3ba32f8597dea2342b87c650dcc9a42f, type: 3}
   rotations:
   - rotationObject: {fileID: 7920421294952068519}
     rotations: 00000000b4000000

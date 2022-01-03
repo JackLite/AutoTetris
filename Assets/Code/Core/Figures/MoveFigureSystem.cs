@@ -73,6 +73,7 @@ namespace Core.Figures
                 _fallCounter = _currentSpeed;
                 return;
             }
+
             if (figureFinish.Actions.All(a => a == PathActions.MoveDown))
                 _fallCounter = SPEED_FALL;
             else
@@ -95,7 +96,7 @@ namespace Core.Figures
                     var aiDecision = GetAiDecision(_inputSignal.Direction);
                     figure.Rotation = aiDecision.Rotation;
                     var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
-                    var finishComponent = new FigureFinishComponent { Actions = new Stack<PathAction>(path) };
+                    var finishComponent = new FigureFinishComponent {Actions = new Stack<PathAction>(path)};
                     _activeFigureFilter.GetEntity(0).Replace(finishComponent);
                     _fallCounter = _currentSpeed / 5f;
                     _inputSignal = null;
@@ -131,6 +132,7 @@ namespace Core.Figures
 
                 return aiDecision;
             }
+
             return AiDecision.Zero;
         }
 
@@ -150,10 +152,11 @@ namespace Core.Figures
                 _eventTable.AddEvent<GameOverSignal>();
                 return;
             }
+
             _playedData.Scores += 1;
             _eventTable.AddEvent<FigureSpawnSignal>();
 
-            CreateSingleFigures();
+            CreateSingleFigures(figure);
 
             figure.Mono.Delete();
             if (_activeFigureFilter.GetEntitiesCount() != 0)
@@ -163,12 +166,14 @@ namespace Core.Figures
             _currentSpeed *= 1 - SPEED_VELOCITY;
         }
 
-        private void CreateSingleFigures()
+        private void CreateSingleFigures(in Figure figure)
         {
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
                 cell.View.LightDown();
+                if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell))
+                    cell.View.SetImage(figure.Mono.CellSprite);
                 cell.View.SetImageActive(_grid.FillMatrix[cell.Row, cell.Column]);
             }
         }
