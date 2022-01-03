@@ -94,7 +94,7 @@ namespace Core.Figures.FigureAlgorithms
             return algorithm.GetRotationVariants();
         }
 
-        public static int CalculateSome(bool[,] fillMatrix, Figure figure, GridPosition place, Func<bool[,], int> calc)
+        public static int CalculateNew(bool[,] fillMatrix, Figure figure, GridPosition place, Func<bool[,], int> calc)
         {
             var algorithm = _algorithms[figure.Type];
 

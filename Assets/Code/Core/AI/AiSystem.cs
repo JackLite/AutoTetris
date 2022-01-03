@@ -190,16 +190,17 @@ namespace Core.AI
                         Column = column, Row = row, Rotation = figure.Rotation
                     };
 
-                    var aggregateHeight = FigureAlgorithmFacade.CalculateSome(fillMatrix,
+                    var completeLines = FigureAlgorithmFacade.HowManyRowsWillFill(fillMatrix, figure, place);
+                    var newFieldState = GridService.CalculateFieldStateAfterCheckLines(fillMatrix);
+                    var aggregateHeight = FigureAlgorithmFacade.CalculateNew(newFieldState,
                         figure,
                         place,
                         GridService.CalculateAggregateHeight);
-                    var completeLines = FigureAlgorithmFacade.HowManyRowsWillFill(fillMatrix, figure, place);
-                    var holes = FigureAlgorithmFacade.CalculateSome(fillMatrix,
+                    var holes = FigureAlgorithmFacade.CalculateNew(newFieldState,
                         figure,
                         place,
                         GridService.CalculateHoles);
-                    var bumpiness = FigureAlgorithmFacade.CalculateSome(fillMatrix,
+                    var bumpiness = FigureAlgorithmFacade.CalculateNew(newFieldState,
                         figure,
                         place,
                         GridService.CalculateBumpiness);

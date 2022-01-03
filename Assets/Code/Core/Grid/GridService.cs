@@ -59,6 +59,7 @@ namespace Core.Grid
                     }
                 }
             }
+
             return result;
         }
 
@@ -77,10 +78,12 @@ namespace Core.Grid
                         startCount = true;
                         continue;
                     }
+
                     if (!fillMatrix[row, column] && startCount)
                         result++;
                 }
             }
+
             return result;
         }
 
@@ -101,13 +104,97 @@ namespace Core.Grid
                             prev = row;
                             break;
                         }
+
                         result += Math.Abs(prev - row);
                         prev = row;
                         break;
                     }
                 }
             }
+
             return result;
+        }
+
+        /// <summary>
+        /// Рассчитывает новое состояние игрового поля после проверки линий
+        /// Это нужно, чтобы корректно вычислять эффективность хода
+        /// </summary>
+        public static bool[,] CalculateFieldStateAfterCheckLines(bool[,] fillMatrix)
+        {
+            var newState = new bool[fillMatrix.GetLength(0), fillMatrix.GetLength(1)];
+            Array.Copy(fillMatrix, newState, fillMatrix.Length);
+            var fullRows = GetFullRowsIndexes(newState);
+            if (fullRows.Count == 0)
+                return newState;
+
+            foreach (var row in fullRows)
+            {
+                for (var column = 0; column < fillMatrix.GetLength(1); ++column)
+                    newState[row, column] = false;
+            }
+            
+            var topNotEmptyRow = FindTopNotEmptyRow(newState);
+            var bottomRow = FindFirstEmptyRowUnder(topNotEmptyRow, newState);
+            
+            if (topNotEmptyRow == -1 || bottomRow == -1)
+                return newState;
+
+            var moveCount = 0;
+            for (var row = 0; row < newState.GetLength(0); ++row)
+            {
+                for (var column = 0; column < newState.GetLength(1); ++column)
+                {
+                    if (IsEmptyRow(row, newState))
+                        moveCount++;
+
+                    newState[row - moveCount, column] = newState[row, column];
+                }
+            }
+
+            return newState;
+        }
+
+        private static bool IsEmptyRow(int row, bool[,] fillMatrix)
+        {
+            var columns = fillMatrix.GetLength(1);
+
+            for (var column = 0; column < columns; column++)
+            {
+                if (fillMatrix[row, column])
+                    return false;
+            }
+
+            return true;
+        }
+
+        public static int FindTopNotEmptyRow(bool[,] fillMatrix)
+        {
+            var topNotEmptyRow = -1;
+            var rows = fillMatrix.GetLength(0);
+            for (var row = rows - 1; row > 0; row--)
+            {
+                if (IsEmptyRow(row, fillMatrix))
+                    continue;
+                topNotEmptyRow = row;
+
+                break;
+            }
+
+            return topNotEmptyRow;
+        }
+
+
+        public static int FindFirstEmptyRowUnder(int underRow, bool[,] fillMatrix)
+        {
+            for (var row = 0; row < underRow; row++)
+            {
+                if (!IsEmptyRow(row, fillMatrix))
+                    continue;
+
+                return row;
+            }
+
+            return -1;
         }
     }
 }

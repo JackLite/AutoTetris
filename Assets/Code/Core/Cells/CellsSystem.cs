@@ -62,8 +62,8 @@ namespace Core.Cells
             if (_checkSpeed > 0)
                 return;
 
-            var topNotEmptyRow = GetTopNotEmptyRow();
-            var bottomRow = GetBottomEmptyRow(topNotEmptyRow);
+            var topNotEmptyRow = GridService.FindTopNotEmptyRow(_grid.FillMatrix);
+            var bottomRow = GridService.FindFirstEmptyRowUnder(topNotEmptyRow, _grid.FillMatrix);
 
             if (topNotEmptyRow == -1 || bottomRow == -1)
             {
@@ -102,57 +102,6 @@ namespace Core.Cells
             _grid.IsNeedCheckPieces = false;
             _eventTable.AddEvent<CheckLinesSignal>();
             _checkSpeed = FIRST_DELAY;
-        }
-
-        private int GetBottomEmptyRow(int topNotEmptyRow)
-        {
-            for (var row = 0; row < topNotEmptyRow; row++)
-            {
-                var isEmptyRow = true;
-
-                for (var column = 0; column < _grid.Columns; column++)
-                {
-                    if (!_grid.FillMatrix[row, column])
-                        continue;
-                    isEmptyRow = false;
-
-                    break;
-                }
-
-                if (!isEmptyRow)
-                    continue;
-
-                return row;
-            }
-
-            return -1;
-        }
-
-        private int GetTopNotEmptyRow()
-        {
-            var topNotEmptyRow = -1;
-
-            for (var row = _grid.Rows - 1; row > 0; row--)
-            {
-                var isEmptyRow = true;
-
-                for (var column = 0; column < _grid.Columns; column++)
-                {
-                    if (!_grid.FillMatrix[row, column])
-                        continue;
-                    isEmptyRow = false;
-
-                    break;
-                }
-
-                if (isEmptyRow)
-                    continue;
-                topNotEmptyRow = row;
-
-                break;
-            }
-
-            return topNotEmptyRow;
         }
 
         public void Destroy()
