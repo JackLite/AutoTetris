@@ -1,4 +1,5 @@
-﻿using Core.Pause;
+﻿using Core.Moving;
+using Core.Pause;
 using Core.Scores;
 using Core.UI;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace Core
     {
         public RectTransform grid;
 
+        public MovingData movingData;
+        
         [field:SerializeField]
         public ScoreView ScoreView { get; private set; }
 

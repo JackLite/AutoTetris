@@ -2,6 +2,7 @@
 using System.Linq;
 using Core.AI;
 using Core.Cells;
+using Core.Figures;
 using Core.Figures.FigureAlgorithms;
 using Core.Figures.FigureAlgorithms.Path;
 using Core.Grid;
@@ -12,16 +13,12 @@ using Global.GameOver;
 using Leopotam.Ecs;
 using UnityEngine;
 
-namespace Core.Figures
+namespace Core.Moving
 {
     [EcsSystem(typeof(CoreModule))]
     public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
-        private const float START_DELAY = .5f;
-        private const float SPEED_VELOCITY = .005f;
-        private const float SPEED_FALL = .020f;
         private float _fallCounter;
-        private float _currentSpeed;
         private EcsFilter<Figure>.Exclude<FigureFinishComponent> _activeFigureFilter;
         private EcsFilter<Figure, FigureFinishComponent> _finishFigureFilter;
         private EcsFilter<AiDecision> _decisionsFilter;
@@ -33,11 +30,11 @@ namespace Core.Figures
         private EcsEventTable _eventTable;
         private EcsWorld _world;
         private InputSignal _inputSignal;
+        private MovingData _movingData;
 
         public void Init()
         {
             EcsWorldEventsBlackboard.AddEventHandler<InputSignal>(SaveInputSignal);
-            _currentSpeed = START_DELAY;
         }
 
         private void SaveInputSignal(InputSignal signal)
@@ -70,14 +67,14 @@ namespace Core.Figures
             if (figureFinish.Actions.Count == 0)
             {
                 FinishMove(figure);
-                _fallCounter = _currentSpeed;
+                _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
                 return;
             }
 
             if (figureFinish.Actions.All(a => a == PathActions.MoveDown))
-                _fallCounter = SPEED_FALL;
+                _fallCounter = CalculateFallSpeed(_movingData.finishMoveSpeed);
             else
-                _fallCounter = _currentSpeed / 5f;
+                _fallCounter =  CalculateFallSpeed(_movingData.manipulationSpeed);
 
             var nextAction = figureFinish.Actions.Pop();
             nextAction.Invoke(ref figure);
@@ -98,7 +95,7 @@ namespace Core.Figures
                     var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
                     var finishComponent = new FigureFinishComponent {Actions = new Stack<PathAction>(path)};
                     _activeFigureFilter.GetEntity(0).Replace(finishComponent);
-                    _fallCounter = _currentSpeed / 5f;
+                    _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
                     _inputSignal = null;
 
                     return;
@@ -119,7 +116,7 @@ namespace Core.Figures
                 FinishMove(figure);
             }
 
-            _fallCounter = _currentSpeed;
+            _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
         }
 
         private AiDecision GetAiDecision(in Direction direction)
@@ -138,6 +135,7 @@ namespace Core.Figures
 
         private void FinishMove(Figure figure)
         {
+            _playedData.Scores += 1;
             _eventTable.AddEvent<CheckLinesSignal>();
 
             FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
@@ -153,7 +151,6 @@ namespace Core.Figures
                 return;
             }
 
-            _playedData.Scores += 1;
             _eventTable.AddEvent<FigureSpawnSignal>();
 
             CreateSingleFigures(figure);
@@ -163,7 +160,6 @@ namespace Core.Figures
                 _activeFigureFilter.GetEntity(0).Destroy();
             if (_finishFigureFilter.GetEntitiesCount() != 0)
                 _finishFigureFilter.GetEntity(0).Destroy();
-            _currentSpeed *= 1 - SPEED_VELOCITY;
         }
 
         private void CreateSingleFigures(in Figure figure)
@@ -181,6 +177,11 @@ namespace Core.Figures
         private static bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             return FigureAlgorithmFacade.IsFall(fillMatrix, figure);
+        }
+
+        private static float CalculateFallSpeed(float speed)
+        {
+            return 1f / speed;
         }
 
         public void Destroy()

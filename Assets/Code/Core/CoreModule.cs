@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Grid;
+using Core.Moving;
 using EcsCore;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -27,6 +28,8 @@ namespace Core
             _dependencies[typeof(MainScreenMono)] = mainScreen;
             _dependencies[typeof(GridData)] = new GridData();
             _dependencies[typeof(CoreState)] = new CoreState();
+            _dependencies[typeof(MovingData)] = new MovingData();
+            mainScreen.movingData = (MovingData)_dependencies[typeof(MovingData)];
         }
 
         protected override Dictionary<Type, object> GetDependencies()
