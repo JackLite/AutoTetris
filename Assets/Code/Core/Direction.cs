@@ -1,10 +1,13 @@
-﻿namespace Core
+﻿using System;
+
+namespace Core
 {
+    [Flags]
     public enum Direction
     {
-        Left,
-        Down,
-        Right, 
-        Top
+        Top = 1,
+        Left = 2,
+        Down = 4,
+        Right = 8
     }
 }
