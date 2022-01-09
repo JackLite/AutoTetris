@@ -90,8 +90,7 @@ namespace Core.Figures.FigureAlgorithms
             if (!IsFigureAtCell(place, cell, figure))
                 return;
 
-            cell.View.LightUp();
-            cell.View.SetDirection(aiDecisionDirection);
+            cell.View.LightUp(figure, aiDecisionDirection);
         }
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)

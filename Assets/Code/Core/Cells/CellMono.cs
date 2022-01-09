@@ -1,6 +1,4 @@
-﻿using System;
-using Core.AI;
-using Core.Figures;
+﻿using Core.Figures;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,26 +7,19 @@ namespace Core.Cells
     [RequireComponent(typeof(Image))]
     public class CellMono : MonoBehaviour
     {
-        [SerializeField]
-        private float maxOpacity = .7f;
+        [SerializeField] 
+        private float lightUpOpacity = .5f;
 
-        [SerializeField]
-        private float minOpacity = .4f;
-
-        [SerializeField]
-        private float speed = .1f;
-
-        [SerializeField]
+        [SerializeField] 
         private Color color;
 
-        [SerializeField]
-        private RectTransform arrowTransform;
+        [SerializeField] 
+        private CellArrowsMono cellArrows;
 
         private RectTransform _rect;
         private Image _image;
-        private bool _isLightUp;
-        private float _currentOpacity;
         private bool _isOpacityGrow;
+
 
         public Sprite CellSprite => _image.sprite;
 
@@ -36,12 +27,6 @@ namespace Core.Cells
         {
             _rect = GetComponent<RectTransform>();
             _image = GetComponent<Image>();
-        }
-
-        private void Start()
-        {
-            _currentOpacity = minOpacity;
-            arrowTransform.gameObject.SetActive(false);
         }
 
         public void SetImageActive(bool isActive)
@@ -59,64 +44,23 @@ namespace Core.Cells
             _rect.anchoredPosition = new Vector2(column * FigureMono.CELL_SIZE, row * FigureMono.CELL_SIZE);
         }
 
-        public void LightUp()
+        public void LightUp(in Figure figure, Direction direction)
         {
-            _image.enabled = true;
-            _isLightUp = true;
-            _currentOpacity = maxOpacity;
-            arrowTransform.gameObject.SetActive(true);
+            SetImage(figure.Mono.CellSprite);
+            SetImageActive(true);
+            ChangeOpacity(lightUpOpacity);
+            cellArrows.LightUp(direction);
         }
 
-        private void Update()
+        private void ChangeOpacity(float opacity)
         {
-            if (!_isLightUp)
-                return;
-
-            UpdateOpacityValue();
-
-            UpdateImage();
-        }
-
-        private void UpdateImage()
-        {
-            _image.color = new Color(color.r, color.g, color.b, _currentOpacity);
-        }
-
-        private void UpdateOpacityValue()
-        {
-            if (_isOpacityGrow)
-                _currentOpacity += speed * Time.deltaTime;
-            else
-                _currentOpacity -= speed * Time.deltaTime;
-
-            if (_currentOpacity < minOpacity && !_isOpacityGrow)
-            {
-                _isOpacityGrow = true;
-                _currentOpacity = minOpacity;
-            }
-            else if (_currentOpacity > maxOpacity && _isOpacityGrow)
-            {
-                _isOpacityGrow = false;
-                _currentOpacity = maxOpacity;
-            }
+            _image.color = new Color(color.r, color.g, color.b, opacity);
         }
 
         public void LightDown()
         {
             _image.color = Color.white;
-            arrowTransform.gameObject.SetActive(false);
-            _isLightUp = false;
-        }
-
-        public void SetDirection(Direction direction)
-        {
-            float angle = direction switch
-            {
-                Direction.Left   => 180,
-                Direction.Down => -90,
-                Direction.Right  => 0
-            };
-            arrowTransform.localRotation = Quaternion.Euler(0, 0, angle);
+            cellArrows.LightDown();
         }
 
         public void SetEmpty()
