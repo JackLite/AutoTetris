@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Core.Cells;
 using Core.Figures;
@@ -8,7 +7,6 @@ using Core.Figures.FigureAlgorithms.Path;
 using Core.Grid;
 using EcsCore;
 using Leopotam.Ecs;
-using Unity.Collections;
 using UnityEngine;
 
 namespace Core.AI
@@ -41,7 +39,7 @@ namespace Core.AI
 
             if (_filter.GetEntitiesCount() == 0 || _decisionsFilter.GetEntitiesCount() > 0)
             {
-                _timer = .25f;
+                _timer = .1f;
                 return;
             }
 

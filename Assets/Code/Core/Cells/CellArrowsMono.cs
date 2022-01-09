@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Core.Cells
 {
@@ -85,7 +86,8 @@ namespace Core.Cells
             {
                 Direction.Left  => 180,
                 Direction.Down  => -90,
-                Direction.Right => 0
+                Direction.Right => 0,
+                _               => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
             };
         }
 
@@ -96,7 +98,8 @@ namespace Core.Cells
             {
                 Direction.Left  => Vector2.left,
                 Direction.Down  => Vector2.down,
-                Direction.Right => Vector2.right
+                Direction.Right => Vector2.right,
+                _               => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
             };
         }
 
