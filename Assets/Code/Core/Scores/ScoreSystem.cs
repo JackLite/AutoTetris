@@ -6,11 +6,17 @@ using Utilities;
 namespace Core.Scores
 {
     [EcsSystem(typeof(CoreModule))]
-    public class ScoreSystem : IEcsRunSystem
+    public class ScoreSystem : IEcsInitSystem, IEcsRunSystem
     {
         private MainScreenMono mainScreenMono;
         private PlayerData playerData;
         private int _lastScores = -1;
+
+        public void Init()
+        {
+            playerData.Scores = 0;
+            _lastScores = -1;
+        }
 
         public void Run()
         {
