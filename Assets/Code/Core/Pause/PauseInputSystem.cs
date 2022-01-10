@@ -5,12 +5,12 @@ using UnityEngine;
 namespace Core.Pause
 {
     [EcsSystem(typeof(CoreModule))]
-    public class PauseSystem : IEcsInitSystem, IEcsDestroySystem
+    public class PauseInputSystem : IEcsInitSystem, IEcsDestroySystem
     {
         private MainScreenMono _mainScreenMono;
         private EcsWorld _world;
-        private CoreState _coreState;
-        
+        private EcsEventTable _eventTable;
+
         public void Init()
         {
             _mainScreenMono.PauseButton.onClick.AddListener(OnPause);
@@ -19,16 +19,12 @@ namespace Core.Pause
 
         private void OnPause()
         {
-            _coreState.IsPaused = true;
-            Time.timeScale = 0;
-            _mainScreenMono.PauseScreen.SetActive(true);
+            _eventTable.AddEvent<PauseSignal>();
         }
 
         private void OnUnPause()
         {
-            _coreState.IsPaused = false;
-            Time.timeScale = 1;
-            _mainScreenMono.PauseScreen.SetActive(false);
+            _eventTable.AddEvent<UnpauseSignal>();
         }
 
         public void Destroy()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EcsCore;
+using Global.Ads;
 using MainMenu;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -26,6 +27,7 @@ namespace Global
             _startScreen = handler.Result;
             _dependencies.Add(typeof(StartScreenMono), _startScreen.GetComponent<StartScreenMono>());
             _dependencies.Add(typeof(PlayerData), new PlayerData());
+            _dependencies.Add(typeof(AdsService), new AdsService());
         }
 
         protected override Dictionary<Type, object> GetDependencies()

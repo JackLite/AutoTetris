@@ -31,10 +31,11 @@ namespace Core.AI
         private GridData _gridData;
         private EcsWorld _world;
         private float _timer;
+        private CoreState _coreState;
 
         public void Run()
         {
-            if (!_gridData.IsGridStable)
+            if (!_gridData.IsGridStable || _coreState.IsPaused)
                 return;
 
             if (_filter.GetEntitiesCount() == 0 || _decisionsFilter.GetEntitiesCount() > 0)
