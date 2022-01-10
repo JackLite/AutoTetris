@@ -9,8 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d347f620a874bb89d6089b2a482be90, type: 3}
-  m_Name: CellConfig
+  m_Script: {fileID: 11500000, guid: d5a679b8640d04834b4f09b8c6adec7a, type: 3}
+  m_Name: IronSourceMediationSettings
   m_EditorClassIdentifier: 
-  <MoveSpeed>k__BackingField: 150
-  <Distance>k__BackingField: 9.5
+  AndroidAppKey: 
+  IOSAppKey: 
+  EnableIronsourceSDKInitAPI: 0
+  AddIronsourceSkadnetworkID: 0
+  EnableAdapterDebug: 0
+  EnableIntegrationHelper: 0
