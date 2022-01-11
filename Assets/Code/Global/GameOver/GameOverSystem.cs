@@ -1,5 +1,6 @@
 ﻿using Core;
 using Core.Ads;
+using Core.Figures;
 using Core.Pause;
 using EcsCore;
 using Leopotam.Ecs;
@@ -17,17 +18,18 @@ namespace Global.GameOver
 
         public void Run()
         {
-            if (_eventTable.IsEventExist<GameOverSignal>())
+            if (_eventTable.Has<GameOverSignal>())
             {
                 CreateGameOverScreen();
                 _eventTable.AddEvent<PauseSignal>();
                 return;
             }
 
-            if (_eventTable.IsEventExist<ContinueForAdsSignal>())
+            if (_eventTable.Has<ContinueForAdsSignal>())
             {
                 DestroyGameOverScreen();
                 _eventTable.AddEvent<UnpauseSignal>();
+                _eventTable.AddEvent<FigureSpawnSignal>();
             }
         }
 

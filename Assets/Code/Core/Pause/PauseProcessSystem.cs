@@ -8,16 +8,14 @@ namespace Core.Pause
     public class PauseProcessSystem : IEcsRunSystem
     {
         private CoreState _coreState;
-
         private MainScreenMono _mainScreenMono;
-
         private EcsEventTable _eventTable;
 
         public void Run()
         {
-            if (_eventTable.IsEventExist<PauseSignal>())
+            if (_eventTable.Has<PauseSignal>())
                 Pause();
-            if (_eventTable.IsEventExist<UnpauseSignal>())
+            if (_eventTable.Has<UnpauseSignal>())
                 Unpause();
         }
 

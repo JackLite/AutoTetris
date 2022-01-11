@@ -15,7 +15,7 @@ namespace Core.Grid
 
         public void Run()
         {
-            if (!_eventTable.IsEventExist<CheckLinesSignal>())
+            if (!_eventTable.Has<CheckLinesSignal>())
                 return;
 
             var fullRows = GridService.GetFullRowsIndexes(_grid.FillMatrix);

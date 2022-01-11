@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efc990f54bb4f259c3304f2acae1d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellSprite: {fileID: 21300000, guid: 83ae1117a12fafb45ba06007431a0029, type: 3}
+  <CellSprite>k__BackingField: {fileID: 21300000, guid: 83ae1117a12fafb45ba06007431a0029, type: 3}
   rotations:
   - rotationObject: {fileID: 1015595363362885470}
     rotations: 00000000b4000000

@@ -74,7 +74,7 @@ namespace Core.Moving
             if (figureFinish.Actions.All(a => a == PathActions.MoveDown))
                 _fallCounter = CalculateFallSpeed(_movingData.finishMoveSpeed);
             else
-                _fallCounter =  CalculateFallSpeed(_movingData.manipulationSpeed);
+                _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
 
             var nextAction = figureFinish.Actions.Pop();
             nextAction.Invoke(ref figure);
@@ -86,6 +86,9 @@ namespace Core.Moving
         {
             ref var figure = ref _activeFigureFilter.Get1(0);
 
+            if (IsFall(_grid.FillMatrix, figure))
+                return;
+
             if (figure.Column > 0 && _decisionsFilter.GetEntitiesCount() > 0)
             {
                 if (_inputSignal != null)
@@ -93,7 +96,7 @@ namespace Core.Moving
                     var aiDecision = GetAiDecision(_inputSignal.Direction);
                     figure.Rotation = aiDecision.Rotation;
                     var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
-                    var finishComponent = new FigureFinishComponent {Actions = new Stack<PathAction>(path)};
+                    var finishComponent = new FigureFinishComponent { Actions = new Stack<PathAction>(path) };
                     _activeFigureFilter.GetEntity(0).Replace(finishComponent);
                     _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
                     _inputSignal = null;
@@ -145,14 +148,6 @@ namespace Core.Moving
                 _decisionsFilter.GetEntity(i).Destroy();
             }
 
-            if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
-            {
-                _eventTable.AddEvent<GameOverSignal>();
-                return;
-            }
-
-            _eventTable.AddEvent<FigureSpawnSignal>();
-
             CreateSingleFigures(figure);
 
             figure.Mono.Delete();
@@ -160,6 +155,14 @@ namespace Core.Moving
                 _activeFigureFilter.GetEntity(0).Destroy();
             if (_finishFigureFilter.GetEntitiesCount() != 0)
                 _finishFigureFilter.GetEntity(0).Destroy();
+
+            if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
+            {
+                _eventTable.AddEvent<GameOverSignal>();
+                return;
+            }
+
+            _eventTable.AddEvent<FigureSpawnSignal>();
         }
 
         private void CreateSingleFigures(in Figure figure)

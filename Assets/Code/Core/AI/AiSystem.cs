@@ -67,6 +67,8 @@ namespace Core.AI
         {
             foreach (var decision in aiDecisions)
             {
+                if (decision.Direction == Direction.None)
+                    continue;
                 figure.Rotation = decision.Rotation;
                 var position = new GridPosition(decision.Row, decision.Column);
 

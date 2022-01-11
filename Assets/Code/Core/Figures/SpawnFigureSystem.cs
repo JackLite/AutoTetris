@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Figures.FigureAlgorithms;
 using Core.Grid;
+using Core.Pause;
 using EcsCore;
+using Global.GameOver;
 using Leopotam.Ecs;
 using UnityEngine.AddressableAssets;
 using Utilities;
@@ -34,7 +37,10 @@ namespace Core.Figures
 
         public void Run()
         {
-            if (!_eventTable.IsEventExist<FigureSpawnSignal>() || _coreState.IsPaused)
+            if (!_eventTable.Has<FigureSpawnSignal>())
+                return;
+
+            if (_coreState.IsPaused && !_eventTable.Has<UnpauseSignal>())
                 return;
 
             if (GridService.IsFillSomeAtTopRow(_gridData.FillMatrix))
@@ -53,17 +59,24 @@ namespace Core.Figures
             var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
             await task;
             var mono = task.Result.GetComponent<FigureMono>();
-            var startRow = _gridData.FillMatrix.GetLength(0) - 5;
+            var startRow = _gridData.FillMatrix.GetLength(0) - 4;
             var startColumn = _gridData.FillMatrix.GetLength(1) / 2 - 1;
             mono.SetGridPosition(startRow, startColumn);
             var entity = EcsWorldContainer.World.NewEntity();
 
-            entity.Replace(new Figure
+            var figure = new Figure
             {
                 Type = type, Mono = mono, Row = startRow, Column = startColumn
-            });
-            
+            };
+            entity.Replace(figure);
+
             _mainScreen.NextFigure.ShowNext(_figureBag.Peek());
+            if (FigureAlgorithmFacade.IsFall(_gridData.FillMatrix, figure))
+            {
+                _eventTable.AddEvent<GameOverSignal>();
+                figure.Mono.Delete();
+                entity.Destroy();
+            }
         }
 
         private void FillBag(Stack<FigureType> figureBag)

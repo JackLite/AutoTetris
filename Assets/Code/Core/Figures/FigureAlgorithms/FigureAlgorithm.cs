@@ -95,11 +95,6 @@ namespace Core.Figures.FigureAlgorithms
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            var rows = fillMatrix.GetLength(0);
-
-            if (figure.Row >= rows)
-                return false;
-
             if (figure.Row == 0)
                 return true;
 
