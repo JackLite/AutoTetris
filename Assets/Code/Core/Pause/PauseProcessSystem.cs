@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Core.Pause
 {
     [EcsSystem(typeof(CoreModule))]
-    public class PauseProcessSystem : IEcsRunSystem
+    public class PauseProcessSystem : IEcsRunSystem, IEcsDestroySystem
     {
         private CoreState _coreState;
         private MainScreenMono _mainScreenMono;
@@ -31,6 +31,10 @@ namespace Core.Pause
             _coreState.IsPaused = false;
             Time.timeScale = 1;
             _mainScreenMono.PauseScreen.SetActive(false);
+        }
+        public void Destroy()
+        {
+            Unpause();
         }
     }
 }

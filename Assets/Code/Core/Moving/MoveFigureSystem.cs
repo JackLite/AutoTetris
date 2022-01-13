@@ -5,11 +5,11 @@ using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
 using Core.Figures.FigureAlgorithms.Path;
+using Core.GameOver;
 using Core.Grid;
 using Core.Input;
 using EcsCore;
 using Global;
-using Global.GameOver;
 using Leopotam.Ecs;
 using UnityEngine;
 

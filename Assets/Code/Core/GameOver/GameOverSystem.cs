@@ -1,20 +1,22 @@
-﻿using Core;
-using Core.Ads;
+﻿using Core.Ads;
 using Core.Figures;
 using Core.Pause;
 using EcsCore;
+using Global;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Global.GameOver
+namespace Core.GameOver
 {
-    [EcsSystem(typeof(MainModule))]
+    [EcsSystem(typeof(CoreModule))]
     public class GameOverSystem : IEcsRunSystem
     {
         private EcsWorld _world;
         private EcsEventTable _eventTable;
         private GameObject _gameOverScreen;
+        private GameOverMono _gameOverMono;
+        private PlayerData _playerData;
 
         public void Run()
         {
@@ -38,8 +40,10 @@ namespace Global.GameOver
             var handle = Addressables.InstantiateAsync("GameOverScreen");
             await handle.Task;
             _gameOverScreen = handle.Result;
-            _gameOverScreen.GetComponent<GameOverMono>().OnTryAgain += StartGame;
-            _gameOverScreen.GetComponent<GameOverMono>().OnAdContinue += OnAdContinueClick;
+            _gameOverMono = _gameOverScreen.GetComponent<GameOverMono>();
+            _gameOverMono.OnTryAgain += RestartGame;
+            _gameOverMono.OnAdContinue += OnAdContinueClick;
+            _gameOverMono.SetAdsBtnActive(!_playerData.AdsWasUsedInCore);
         }
 
         private void OnAdContinueClick()
@@ -47,11 +51,10 @@ namespace Global.GameOver
             _eventTable.AddEvent<GameOverAdsSignal>();
         }
 
-        private void StartGame()
+        private void RestartGame()
         {
+            _eventTable.AddEvent<StartCoreSignal>();
             _world.DeactivateModule<CoreModule>();
-            _world.ActivateModule<CoreModule>();
-            _eventTable.AddEvent<UnpauseSignal>();
             DestroyGameOverScreen();
         }
 

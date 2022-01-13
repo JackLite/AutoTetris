@@ -3,6 +3,7 @@ using Core.Cells;
 using Core.Figures;
 using Core.Grid;
 using EcsCore;
+using Global;
 using Global.Ads;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Core.Ads
         private readonly Action _onSuccess;
         private EcsFilter<Cell> _cells;
         private GridData _gridData;
+        private PlayerData _playerData;
 
         public GameOverAdsSystem()
         {
@@ -49,6 +51,7 @@ namespace Core.Ads
                 }
             }
             _eventTable.AddEvent<ContinueForAdsSignal>();
+            _playerData.AdsWasUsedInCore = true;
         }
     }
 }

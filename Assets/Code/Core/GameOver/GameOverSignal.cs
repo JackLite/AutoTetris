@@ -1,7 +1,7 @@
-﻿namespace Global.GameOver
+﻿namespace Core.GameOver
 {
     public struct GameOverSignal
     {
-        
+
     }
 }

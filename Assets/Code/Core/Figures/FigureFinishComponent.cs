@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Generic;
 using Core.Figures.FigureAlgorithms.Path;
 
 namespace Core.Figures

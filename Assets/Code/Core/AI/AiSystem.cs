@@ -109,6 +109,7 @@ namespace Core.AI
                 if (count == 0)
                 {
                     result[count++] = CreateDecision(variant);
+                    Debug.Log(variant.ToString());
                     continue;
                 }
 
@@ -125,6 +126,7 @@ namespace Core.AI
 
                 if (isIntersects)
                     continue;
+                Debug.Log(variant.ToString());
                 result[count++] = decision;
                 
                 if (count >= MOVES_COUNT)
@@ -205,7 +207,9 @@ namespace Core.AI
                         figure,
                         place,
                         GridService.CalculateBumpiness);
-
+                    variant.AH = aggregateHeight;
+                    variant.H = holes;
+                    variant.B = bumpiness;
                     variant.Weight = aggregateHeight * AHM + completeLines * CLM + holes * HM + bumpiness * BM;
                     variants.Add(variant);
                 }

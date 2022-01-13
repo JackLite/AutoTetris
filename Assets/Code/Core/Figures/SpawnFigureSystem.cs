@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Figures.FigureAlgorithms;
+using Core.GameOver;
 using Core.Grid;
 using Core.Pause;
 using EcsCore;
-using Global.GameOver;
 using Leopotam.Ecs;
 using UnityEngine.AddressableAssets;
 using Utilities;
