@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Core.Grid;
 
-namespace Core.Figures.FigureAlgorithms.Path
+namespace Core.Path
 {
     public struct PathNode
     {

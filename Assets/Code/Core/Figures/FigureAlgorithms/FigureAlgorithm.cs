@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using Core.AI;
 using Core.Cells;
 using Core.Grid;
-using UnityEngine;
 
 namespace Core.Figures.FigureAlgorithms
 {
@@ -51,7 +49,7 @@ namespace Core.Figures.FigureAlgorithms
             cell.View.SetImageActive(true);
         }
 
-        private bool IsFigureAtCell(in GridPosition place, in Cell cell, in Figure figure)
+        public bool IsFigureAtCell(in GridPosition place, in Cell cell, in Figure figure)
         {
             foreach (var pos in GetPositions(place, figure))
             {
@@ -79,18 +77,6 @@ namespace Core.Figures.FigureAlgorithms
             }
 
             return true;
-        }
-
-        public void LightUpCellByFigure(
-            in Cell cell,
-            in Figure figure,
-            in GridPosition place,
-            Direction aiDecisionDirection)
-        {
-            if (!IsFigureAtCell(place, cell, figure))
-                return;
-
-            cell.View.LightUp(figure, aiDecisionDirection);
         }
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)

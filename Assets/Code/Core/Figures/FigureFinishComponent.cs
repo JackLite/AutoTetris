@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Core.Figures.FigureAlgorithms.Path;
+using Core.Path;
 
 namespace Core.Figures
 {

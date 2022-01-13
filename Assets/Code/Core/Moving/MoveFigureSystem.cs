@@ -4,10 +4,10 @@ using Core.AI;
 using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
-using Core.Figures.FigureAlgorithms.Path;
 using Core.GameOver;
 using Core.Grid;
 using Core.Input;
+using Core.Path;
 using EcsCore;
 using Global;
 using Leopotam.Ecs;
@@ -115,11 +115,17 @@ namespace Core.Moving
             figure.Mono.SetGridPosition(figure.Row, figure.Column);
 
             if (IsFall(_grid.FillMatrix, figure))
-            {
                 FinishMove(figure);
-            }
+            else
+                ClearDecisions();
 
             _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
+        }
+
+        private void ClearDecisions()
+        {
+            foreach (var i in _decisionsFilter)
+                _decisionsFilter.GetEntity(i).Destroy();
         }
 
         private AiDecision GetAiDecision(in Direction direction)
@@ -143,10 +149,7 @@ namespace Core.Moving
 
             FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
 
-            foreach (var i in _decisionsFilter)
-            {
-                _decisionsFilter.GetEntity(i).Destroy();
-            }
+            ClearDecisions();
 
             CreateSingleFigures(figure);
 

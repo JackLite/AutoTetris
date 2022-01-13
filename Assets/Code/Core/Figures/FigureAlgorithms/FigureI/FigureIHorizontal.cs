@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms.FigureI
 {
     public class FigureIHorizontal : IRotatedFigure
     {
+        private readonly GridPosition[] _positions;
+        public FigureIHorizontal()
+        {
+            _positions = new GridPosition[4];
+        }
         public bool CheckBordersForPlaceFigure(in bool[,] fillMatrix, in GridPosition position)
         {
             var row = position.Row;
@@ -27,10 +31,11 @@ namespace Core.Figures.FigureAlgorithms.FigureI
 
         public IEnumerable<GridPosition> GetPositions(in GridPosition position)
         {
-            return new[]
-            {
-                position, position.Right(), position.Right().Right(), position.Right().Right().Right()
-            };
+            _positions[0] = position;
+            _positions[1] = position.Right();
+            _positions[2] = position.Right().Right();
+            _positions[3] = position.Right().Right().Right();
+            return _positions;
         }
     }
 }

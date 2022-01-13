@@ -76,15 +76,10 @@ namespace Core.Figures.FigureAlgorithms
             return false;
         }
 
-        public static void LightUpCellByFigure(
-            in Figure figure,
-            in Cell cell,
-            in GridPosition place,
-            Direction aiDecisionDirection)
+        public static bool IsFigureAtCell(in Figure figure, in Cell cell, in GridPosition figurePosition)
         {
             var algorithm = _algorithms[figure.Type];
-
-            algorithm.LightUpCellByFigure(cell, figure, place, aiDecisionDirection);
+            return algorithm.IsFigureAtCell(figurePosition, cell, figure);
         }
 
         public static bool IsFall(in bool[,] fillMatrix, in Figure figure)

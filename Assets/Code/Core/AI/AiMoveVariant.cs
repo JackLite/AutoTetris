@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Core.Figures;
-using Core.Figures.FigureAlgorithms.Path;
 using Core.Grid;
 using Unity.Collections;
 

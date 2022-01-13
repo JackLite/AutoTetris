@@ -1,69 +1,104 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Core.Figures;
+using Core.Figures.FigureAlgorithms;
 using Core.Grid;
 
-namespace Core.Figures.FigureAlgorithms.Path
+namespace Core.Path
 {
     public static class Pathfinder
     {
+        private static List<GridPosition> _checkedPositions = new List<GridPosition>(240);
+        private static List<GridPosition> _positions = new List<GridPosition>(240);
+        private static LinkedList<PathNode> _nodes = new LinkedList<PathNode>();
+        private static LinkedList<PathAction> _actions = new LinkedList<PathAction>();
+
+        public static bool IsPathExist(in GridPosition from,
+            in GridPosition to,
+            bool[,] fillMatrix,
+            in Figure figure)
+        {
+            _checkedPositions.Clear();
+            _nodes.Clear();
+            var startNode = new PathNode(to);
+            _nodes.AddLast(startNode);
+            var iterations = 1000;
+            while (_nodes.Count > 0)
+            {
+                if (iterations < 0)
+                    break;
+                iterations--;
+                if (!_nodes.Last.Value.IsSomeDirectionsLeft())
+                {
+                    _nodes.RemoveLast();
+                    continue;
+                }
+
+                var position = _nodes.Last.Value.PopNextVariant();
+                if (_checkedPositions.Contains(position))
+                    continue;
+                if (FigureAlgorithmFacade.IsHasSpaceForFigure(fillMatrix, figure, position))
+                {
+                    _checkedPositions.Add(position);
+                    _nodes.AddLast(new PathNode(position));
+                    if (position == from)
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
         public static LinkedList<PathAction> FindPath(
             in GridPosition from,
             in GridPosition to,
             bool[,] fillMatrix,
             in Figure figure)
         {
-            return CheckPath(from, to, fillMatrix, figure);;
-        }
-
-        private static LinkedList<PathAction> CheckPath(
-            in GridPosition from,
-            in GridPosition to,
-            bool[,] fillMatrix,
-            in Figure figure)
-        {
-            var positions = new List<GridPosition>();
+            _checkedPositions.Clear();
+            _positions.Clear();
+            _nodes.Clear();
+            _actions.Clear();
             var startNode = new PathNode(to);
-            var checkedPositions = new List<GridPosition>();
-            var nodes = new LinkedList<PathNode>();
-            var actions = new LinkedList<PathAction>();
-            nodes.AddLast(startNode);
+            _nodes.AddLast(startNode);
             var iterations = 1000;
             // берём следующую позицию рядом
-            while (nodes.Count > 0)
+            while (_nodes.Count > 0)
             {
                 if (iterations < 0)
                     break;
                 iterations--;
-                if (!nodes.Last.Value.IsSomeDirectionsLeft())
+                if (!_nodes.Last.Value.IsSomeDirectionsLeft())
                 {
-                    nodes.RemoveLast();
-                    if(actions.Count > 0)
-                        actions.RemoveLast();
+                    _nodes.RemoveLast();
+                    if (_actions.Count > 0)
+                        _actions.RemoveLast();
                     continue;
                 }
-                var position = nodes.Last.Value.PopNextVariant();
-                if (checkedPositions.Contains(position))
+
+                var position = _nodes.Last.Value.PopNextVariant();
+                if (_checkedPositions.Contains(position))
                     continue;
                 if (FigureAlgorithmFacade.IsHasSpaceForFigure(fillMatrix, figure, position))
                 {
-                    checkedPositions.Add(position);
-                    actions.AddLast(ConvertToAction(nodes.Last.Value.Place, position));
-                    nodes.AddLast(new PathNode(position));
+                    _checkedPositions.Add(position);
+                    _actions.AddLast(ConvertToAction(_nodes.Last.Value.Place, position));
+                    _nodes.AddLast(new PathNode(position));
                     if (position == from)
                         break;
                 }
             }
-            if (nodes.Count > 0)
+
+            if (_nodes.Count > 0)
             {
-                foreach (var node in nodes)
+                foreach (var node in _nodes)
                 {
-                    positions.Add(node.Place);
+                    _positions.Add(node.Place);
                 }
             }
             // если позиция не занята - добавляем в список проверенных позиций и обновляем текущую
 
-            return actions;
+            return _actions;
         }
 
         private static PathAction ConvertToAction(in GridPosition from, in GridPosition to)

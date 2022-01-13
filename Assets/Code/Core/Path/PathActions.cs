@@ -1,4 +1,6 @@
-﻿namespace Core.Figures.FigureAlgorithms.Path
+﻿using Core.Figures;
+
+namespace Core.Path
 {
     public delegate void PathAction(ref Figure figure);
     public static class PathActions

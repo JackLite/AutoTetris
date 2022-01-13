@@ -3,8 +3,8 @@ using System.Linq;
 using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
-using Core.Figures.FigureAlgorithms.Path;
 using Core.Grid;
+using Core.Path;
 using EcsCore;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -19,12 +19,14 @@ namespace Core.AI
         private const float CLM = 0.760066f;
         private const float HM = -0.35663f;
         private const float BM = -0.184483f;
+
         private static readonly Dictionary<int, Direction> Directions = new Dictionary<int, Direction>
         {
-            { 0, Direction.Left },
-            { 1, Direction.Down },
-            { 2, Direction.Right },
+            {0, Direction.Left},
+            {1, Direction.Down},
+            {2, Direction.Right},
         };
+
         private EcsFilter<Figure> _filter;
         private EcsFilter<AiDecision> _decisionsFilter;
         private EcsFilter<Cell> _cells;
@@ -40,7 +42,7 @@ namespace Core.AI
 
             if (_filter.GetEntitiesCount() == 0 || _decisionsFilter.GetEntitiesCount() > 0)
             {
-                _timer = .1f;
+                _timer = .06f;
                 return;
             }
 
@@ -50,6 +52,7 @@ namespace Core.AI
 
                 return;
             }
+
             ref var figure = ref _filter.Get1(0);
 
             if (figure.Row > 20)
@@ -60,27 +63,34 @@ namespace Core.AI
             {
                 _world.NewEntity().Replace(decision);
             }
+
             LightUpMoves(figure, aiDecisions);
         }
 
         private void LightUpMoves(Figure figure, in IEnumerable<AiDecision> aiDecisions)
         {
-            foreach (var decision in aiDecisions)
+            foreach (var i in _cells)
             {
-                if (decision.Direction == Direction.None)
-                    continue;
-                figure.Rotation = decision.Rotation;
-                var position = new GridPosition(decision.Row, decision.Column);
+                ref var cell = ref _cells.Get1(i);
+                cell.View.LightDown();
 
-                foreach (var i in _cells)
+                foreach (var decision in aiDecisions)
                 {
-                    ref var cell = ref _cells.Get1(i);
-                    FigureAlgorithmFacade.LightUpCellByFigure(figure, cell, position, decision.Direction);
+                    if (decision.Direction == Direction.None)
+                        continue;
+                    figure.Rotation = decision.Rotation;
+                    var position = new GridPosition(decision.Row, decision.Column);
+
+                    if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell, position))
+                    {
+                        cell.View.LightUp(figure, decision.Direction);
+                        break;
+                    }
                 }
             }
         }
 
-        private static IEnumerable<AiDecision> FindBetterMoves(in bool[,] fillMatrix, ref Figure figure)
+        private IEnumerable<AiDecision> FindBetterMoves(in bool[,] fillMatrix, ref Figure figure)
         {
             var comparer = new AiMoveVariantComparer();
             var variants = new List<AiMoveVariant>();
@@ -90,22 +100,26 @@ namespace Core.AI
                 figure.Rotation = rotation;
                 Analyze(fillMatrix, figure, variants);
             }
+
             variants.Sort(comparer);
 
             figure.Rotation = currentRotation;
 
             if (variants.Count == 0)
                 return Enumerable.Repeat(AiDecision.Zero, MOVES_COUNT);
-            
+
             return ChooseBetterMoves(variants, figure);
         }
 
-        private static IEnumerable<AiDecision> ChooseBetterMoves(List<AiMoveVariant> variants, Figure figure)
+        private IEnumerable<AiDecision> ChooseBetterMoves(List<AiMoveVariant> variants, Figure figure)
         {
             var result = new AiDecision[MOVES_COUNT];
             var count = 0;
             foreach (var variant in variants)
             {
+                var targetPoint = new GridPosition(variant.Row, variant.Column);
+                if (!Pathfinder.IsPathExist(figure.Position, targetPoint, _gridData.FillMatrix, figure))
+                    continue;
                 if (count == 0)
                 {
                     result[count++] = CreateDecision(variant);
@@ -128,7 +142,7 @@ namespace Core.AI
                     continue;
                 Debug.Log(variant.ToString());
                 result[count++] = decision;
-                
+
                 if (count >= MOVES_COUNT)
                     break;
             }
@@ -176,18 +190,6 @@ namespace Core.AI
 
                     if (!FigureAlgorithmFacade.IsCanPlaceFigure(fillMatrix, figure, place))
                         continue;
-                    var actions = Pathfinder.FindPath(figure.Position, place, fillMatrix, figure);
-                    if (actions.Count == 0)
-                        continue;
-                    if (figure.Rotation == FigureRotation.Mirror)
-                        actions.AddFirst(PathActions.RotateMirror);
-
-                    if (figure.Rotation == FigureRotation.ClockWise)
-                        actions.AddFirst(PathActions.RotateClockwise);
-
-                    if (figure.Rotation == FigureRotation.CounterClockwise)
-                        actions.AddFirst(PathActions.RotateCounterClockwise);
-
                     var variant = new AiMoveVariant
                     {
                         Column = column, Row = row, Rotation = figure.Rotation
