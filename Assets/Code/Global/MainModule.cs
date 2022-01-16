@@ -28,6 +28,7 @@ namespace Global
             _dependencies.Add(typeof(StartScreenMono), _startScreen.GetComponent<StartScreenMono>());
             _dependencies.Add(typeof(PlayerData), new PlayerData());
             _dependencies.Add(typeof(AdsService), new AdsService());
+            _dependencies.Add(typeof(CoreConfig), new CoreConfig());
         }
 
         protected override Dictionary<Type, object> GetDependencies()

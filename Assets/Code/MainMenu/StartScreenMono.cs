@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace MainMenu
 {
@@ -6,5 +7,8 @@ namespace MainMenu
     {
         [field:SerializeField]
         public StartGameButton StartGameButton { get; private set; }
+        
+        [field:SerializeField]
+        public Button StartDebugButton { get; private set; }
     }
 }

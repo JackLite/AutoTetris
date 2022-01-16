@@ -1,4 +1,5 @@
-﻿using EcsCore;
+﻿using Core.Pause.Signals;
+using EcsCore;
 using Leopotam.Ecs;
 using UnityEngine;
 

@@ -1,4 +1,5 @@
-﻿using Core.Figures;
+﻿using System;
+using Core.Figures;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,17 +17,22 @@ namespace Core.Cells
         [SerializeField] 
         private CellArrowsMono cellArrows;
 
+        [SerializeField]
+        private Button cellButton;
+
         private RectTransform _rect;
         private Image _image;
         private bool _isOpacityGrow;
 
-
         public Sprite CellSprite => _image.sprite;
 
+        public event Action DebugCellClick;
+        
         private void Awake()
         {
             _rect = GetComponent<RectTransform>();
             _image = GetComponent<Image>();
+            cellButton.onClick.AddListener(() => DebugCellClick?.Invoke());
         }
 
         public void SetImageActive(bool isActive)
@@ -67,6 +73,11 @@ namespace Core.Cells
         {
             LightDown();
             SetImageActive(false);
+        }
+
+        public void SetButtonState(bool isBtnActive)
+        {
+            cellButton.interactable = isBtnActive;
         }
     }
 }

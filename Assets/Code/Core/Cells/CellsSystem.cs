@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using Core.Figures;
 using Core.Grid;
 using EcsCore;
+using Global;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -23,6 +21,8 @@ namespace Core.Cells
         private EcsFilter<Cell> _cells;
         private float _checkSpeed;
         private CellMono[,] _cellsArray;
+        private CoreConfig _coreConfig;
+        private GridData _gridData;
 
         public void Init()
         {
@@ -49,6 +49,8 @@ namespace Core.Cells
             _world.NewEntity().Replace(cell);
             cellMono.SetPosition(row, column);
             cellMono.SetEmpty();
+            cellMono.SetButtonState(_coreConfig.IsDebug);
+            cellMono.DebugCellClick += () => OnCellClick(cell.Position);
             _cellsArray[row, column] = cellMono;
         }
 
@@ -104,6 +106,19 @@ namespace Core.Cells
             _grid.IsNeedCheckPieces = false;
             _eventTable.AddEvent<CheckLinesSignal>();
             _checkSpeed = FIRST_DELAY;
+        }
+        
+        private void OnCellClick(in GridPosition position)
+        {
+            _gridData.FillMatrix[position.Row, position.Column] = _gridData.FillMatrix[position.Row, position.Column];
+            foreach (var i in _cells)
+            {
+                ref var cell = ref _cells.Get1(i);
+                if (cell.Position != position) continue;
+                
+                cell.View.SetImageActive(_gridData.FillMatrix[position.Row, position.Column]);
+                break;
+            }
         }
 
         public void Destroy()

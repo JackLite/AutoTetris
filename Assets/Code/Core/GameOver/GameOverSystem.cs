@@ -1,6 +1,7 @@
 ﻿using Core.Ads;
 using Core.Figures;
 using Core.Pause;
+using Core.Pause.Signals;
 using EcsCore;
 using Global;
 using Leopotam.Ecs;

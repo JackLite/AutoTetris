@@ -1,4 +1,5 @@
-﻿using EcsCore;
+﻿using Core.Pause.Signals;
+using EcsCore;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -8,7 +9,6 @@ namespace Core.Pause
     public class PauseProcessSystem : IEcsRunSystem, IEcsDestroySystem
     {
         private CoreState _coreState;
-        private MainScreenMono _mainScreenMono;
         private EcsEventTable _eventTable;
 
         public void Run()
@@ -23,14 +23,12 @@ namespace Core.Pause
         {
             _coreState.IsPaused = true;
             Time.timeScale = 0;
-            _mainScreenMono.PauseScreen.SetActive(true);
         }
 
         private void Unpause()
         {
             _coreState.IsPaused = false;
             Time.timeScale = 1;
-            _mainScreenMono.PauseScreen.SetActive(false);
         }
         public void Destroy()
         {

@@ -1,4 +1,4 @@
-﻿namespace Core.Pause
+﻿namespace Core.Pause.Signals
 {
     public struct PauseSignal
     {
