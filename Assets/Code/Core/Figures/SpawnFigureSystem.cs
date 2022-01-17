@@ -88,7 +88,7 @@ namespace Core.Figures
 
         private void FillBag(Stack<FigureType> figureBag)
         {
-            var variants = Enum.GetValues(typeof(FigureType)).Cast<FigureType>().ToArray();
+            var variants = Enum.GetValues(typeof(FigureType)).Cast<FigureType>().Where(f => f > 0).ToArray();
             _random.Shuffle(variants);
 
             foreach (var type in variants)
