@@ -2,6 +2,7 @@
 {
     public enum FigureType
     {
+        None = 0,
         I,
         O,
         T,

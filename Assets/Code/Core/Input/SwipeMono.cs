@@ -80,5 +80,9 @@ namespace Core.Input
 
             return distance > swipeThreshold * .01;
         }
+        public void SetActive(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+        }
     }
 }

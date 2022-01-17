@@ -24,10 +24,12 @@ namespace Core.Cells
         private CoreConfig _coreConfig;
         private GridData _gridData;
 
+        private int _remainCreate;
         public void Init()
         {
             _cellsArray = new CellMono[_grid.Rows, _grid.Columns];
             _checkSpeed = FIRST_DELAY;
+            _remainCreate = _grid.Rows * _grid.Columns;
             for (var row = 0; row < _grid.Rows; row++)
             {
                 for (var column = 0; column < _grid.Columns; column++)
@@ -49,9 +51,10 @@ namespace Core.Cells
             _world.NewEntity().Replace(cell);
             cellMono.SetPosition(row, column);
             cellMono.SetEmpty();
-            cellMono.SetButtonState(_coreConfig.IsDebug);
-            cellMono.DebugCellClick += () => OnCellClick(cell.Position);
             _cellsArray[row, column] = cellMono;
+            _remainCreate--;
+            if (_remainCreate == 0)
+                _eventTable.AddEvent<CellsCreatedSignal>();
         }
 
         public void Run()
@@ -106,19 +109,6 @@ namespace Core.Cells
             _grid.IsNeedCheckPieces = false;
             _eventTable.AddEvent<CheckLinesSignal>();
             _checkSpeed = FIRST_DELAY;
-        }
-        
-        private void OnCellClick(in GridPosition position)
-        {
-            _gridData.FillMatrix[position.Row, position.Column] = _gridData.FillMatrix[position.Row, position.Column];
-            foreach (var i in _cells)
-            {
-                ref var cell = ref _cells.Get1(i);
-                if (cell.Position != position) continue;
-                
-                cell.View.SetImageActive(_gridData.FillMatrix[position.Row, position.Column]);
-                break;
-            }
         }
 
         public void Destroy()

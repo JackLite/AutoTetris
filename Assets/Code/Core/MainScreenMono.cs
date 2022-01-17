@@ -1,4 +1,6 @@
-﻿using Core.Moving;
+﻿using Core.CoreDebug;
+using Core.Input;
+using Core.Moving;
 using Core.Pause;
 using Core.Scores;
 using Core.UI;
@@ -27,5 +29,11 @@ namespace Core
 
         [field:SerializeField]
         public NextFigureUI NextFigure { get; private set; }
+        
+        [field:SerializeField]
+        public SwipeMono SwipeMono { get; private set; }
+        
+        [field:SerializeField]
+        public DebugMono DebugMono { get; private set; }
     }
 }

@@ -58,7 +58,7 @@ namespace Core.Cells
             cellArrows.LightUp(direction);
         }
 
-        private void ChangeOpacity(float opacity)
+        public void ChangeOpacity(float opacity)
         {
             _image.color = new Color(color.r, color.g, color.b, opacity);
         }
@@ -78,6 +78,8 @@ namespace Core.Cells
         public void SetButtonState(bool isBtnActive)
         {
             cellButton.interactable = isBtnActive;
+            SetImageActive(true);
+            ChangeOpacity(.5f);
         }
     }
 }

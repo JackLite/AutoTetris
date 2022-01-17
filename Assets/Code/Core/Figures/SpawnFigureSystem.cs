@@ -50,11 +50,7 @@ namespace Core.Figures
 
         private async void CreateFigure()
         {
-            var type = _figureBag.Pop();
-
-            if (_figureBag.Count == 0)
-                FillBag(_figureBag);
-
+            var type = GetFigureType();
             var name = FiguresUtility.GetFigureAddress(type);
             var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
             await task;
@@ -77,6 +73,17 @@ namespace Core.Figures
                 figure.Mono.Delete();
                 entity.Destroy();
             }
+        }
+        private FigureType GetFigureType()
+        {
+            if (_figureBag.Count == 0)
+                FillBag(_figureBag);
+            if (_coreState.NextFigure == FigureType.None)
+                return _figureBag.Pop();
+
+            var type = _coreState.NextFigure;
+            _coreState.NextFigure = FigureType.None;
+            return type;
         }
 
         private void FillBag(Stack<FigureType> figureBag)
