@@ -23,7 +23,7 @@ namespace Core.AI
         private static readonly Dictionary<int, Direction> Directions = new Dictionary<int, Direction>
         {
             {0, Direction.Left},
-            {1, Direction.Down},
+            {1, Direction.Bottom},
             {2, Direction.Right},
         };
 
@@ -84,6 +84,8 @@ namespace Core.AI
                     if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell, position))
                     {
                         cell.View.LightUp(figure, decision.Direction);
+                        var directionMask = FigureAlgorithmFacade.GetBorderDirectionsForCell(figure, cell, position);
+                        cell.View.ShowBorders(directionMask);
                         break;
                     }
                 }
@@ -170,7 +172,7 @@ namespace Core.AI
                 Column = variant.Column,
                 Row = variant.Row,
                 Rotation = variant.Rotation,
-                Direction = Direction.Down
+                Direction = Direction.Bottom
             };
         }
 

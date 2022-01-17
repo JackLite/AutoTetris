@@ -38,5 +38,10 @@ namespace Core.Figures.FigureAlgorithms.FigureS
             _positions[3] = position.Right().Right().Above();
             return _positions;
         }
+
+        public Direction GetBorderDirectionsForCell(in GridPosition cellPosition, in GridPosition position)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -33,5 +33,16 @@ namespace Core.Figures.FigureAlgorithms.FigureI
             _positions[3] = position.Above().Above().Above();
             return _positions;
         }
+
+        public Direction GetBorderDirectionsForCell(in GridPosition cellPosition, in GridPosition position)
+        {
+            var positions = GetPositions(position);
+            var result = Direction.Left | Direction.Right;
+            if (cellPosition == positions[0])
+                result |= Direction.Bottom;
+            if (cellPosition == positions[3])
+                result |= Direction.Top;
+            return result;
+        }
     }
 }

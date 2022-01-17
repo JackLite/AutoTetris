@@ -101,5 +101,11 @@ namespace Core.Figures.FigureAlgorithms
         {
             return RotatedFigures[rotation].GetPositions(place);
         }
+
+        public Direction GetBorderDirectionsForCell(in Figure figure, in Cell cell, in GridPosition position)
+        {
+            var cellPosition = cell.Position;
+            return RotatedFigures[figure.Rotation].GetBorderDirectionsForCell(cellPosition, position);
+        }
     }
 }

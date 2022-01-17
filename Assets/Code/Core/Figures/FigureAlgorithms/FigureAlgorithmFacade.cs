@@ -160,5 +160,11 @@ namespace Core.Figures.FigureAlgorithms
 
             return res;
         }
+
+        public static Direction GetBorderDirectionsForCell(in Figure figure, in Cell cell, in GridPosition position)
+        {
+            var algorithm = _algorithms[figure.Type];
+            return algorithm.GetBorderDirectionsForCell(figure, cell, position);
+        }
     }
 }

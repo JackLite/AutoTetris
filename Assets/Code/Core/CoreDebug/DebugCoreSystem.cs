@@ -27,7 +27,7 @@ namespace Core.CoreDebug
             _mainScreenMono.SwipeMono.SetActive(false);
             _mainScreenMono.DebugMono.gameObject.SetActive(true);
             _mainScreenMono.DebugMono.OnStartClick += StartGame;
-            _coreState.NextFigure = FigureType.S;
+            _coreState.NextFigure = FigureType.I;
         }
 
         private void StartGame()

@@ -1,4 +1,5 @@
-﻿using Core.Grid;
+﻿using Core.Cells.Visual;
+using Core.Grid;
 
 namespace Core.Cells
 {

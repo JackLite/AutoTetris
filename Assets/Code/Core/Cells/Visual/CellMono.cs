@@ -3,22 +3,20 @@ using Core.Figures;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.Cells
+namespace Core.Cells.Visual
 {
     [RequireComponent(typeof(Image))]
     public class CellMono : MonoBehaviour
     {
-        [SerializeField] 
-        private float lightUpOpacity = .5f;
+        [SerializeField] private float lightUpOpacity = .5f;
 
-        [SerializeField] 
-        private Color color;
+        [SerializeField] private Color color;
 
-        [SerializeField] 
-        private CellArrowsMono cellArrows;
+        [SerializeField] private CellArrowsMono cellArrows;
 
-        [SerializeField]
-        private Button cellButton;
+        [SerializeField] private Button cellButton;
+
+        [SerializeField] private CellBorder[] borders;
 
         private RectTransform _rect;
         private Image _image;
@@ -27,7 +25,7 @@ namespace Core.Cells
         public Sprite CellSprite => _image.sprite;
 
         public event Action DebugCellClick;
-        
+
         private void Awake()
         {
             _rect = GetComponent<RectTransform>();
@@ -67,6 +65,7 @@ namespace Core.Cells
         {
             _image.color = Color.white;
             cellArrows.LightDown();
+            ShowBorders(Direction.None);
         }
 
         public void SetEmpty()
@@ -80,6 +79,12 @@ namespace Core.Cells
             cellButton.interactable = isBtnActive;
             SetImageActive(true);
             ChangeOpacity(.5f);
+        }
+
+        public void ShowBorders(Direction directionMask)
+        {
+            foreach (var border in borders)
+                border.borderObject.SetActive((directionMask & border.direction) > 0);
         }
     }
 }

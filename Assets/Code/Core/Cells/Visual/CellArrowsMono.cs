@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Core.Cells
+namespace Core.Cells.Visual
 {
     /// <summary>
     /// Отвечает за стрелки при подсветке хода
@@ -18,7 +18,7 @@ namespace Core.Cells
         [SerializeField]
         private CellConfig cellConfig;
 
-        private Direction _currentDirection = Direction.Down;
+        private Direction _currentDirection = Direction.Bottom;
         private float _thresholdSqr;
         private Vector2 _cellSize;
 
@@ -85,7 +85,7 @@ namespace Core.Cells
             return direction switch
             {
                 Direction.Left  => 180,
-                Direction.Down  => -90,
+                Direction.Bottom  => -90,
                 Direction.Right => 0,
                 _               => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
             };
@@ -97,7 +97,7 @@ namespace Core.Cells
             return direction switch
             {
                 Direction.Left  => Vector2.left,
-                Direction.Down  => Vector2.down,
+                Direction.Bottom  => Vector2.down,
                 Direction.Right => Vector2.right,
                 _               => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
             };

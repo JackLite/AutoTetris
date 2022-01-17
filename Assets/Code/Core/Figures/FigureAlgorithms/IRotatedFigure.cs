@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
+using Core.Cells;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms
@@ -14,5 +14,8 @@ namespace Core.Figures.FigureAlgorithms
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         GridPosition[] GetPositions(in GridPosition position);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        Direction GetBorderDirectionsForCell(in GridPosition cellPosition, in GridPosition position);
     }
 }

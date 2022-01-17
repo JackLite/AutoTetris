@@ -29,7 +29,7 @@ namespace Core.Input
 
             if (CheckDownSwipe(eventData.position))
             {
-                EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Down });
+                EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Bottom });
                 return;
             }
             

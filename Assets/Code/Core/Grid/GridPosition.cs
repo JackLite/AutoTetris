@@ -46,7 +46,7 @@ namespace Core.Grid
             return direction switch
             {
                 Direction.Left  => Left(),
-                Direction.Down  => Under(),
+                Direction.Bottom  => Under(),
                 Direction.Right => Right(),
                 Direction.Top   => Above(),
                 _               => throw new ArgumentOutOfRangeException(nameof(direction), direction, null)
