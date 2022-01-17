@@ -10,6 +10,8 @@ namespace Core.Figures.FigureAlgorithms.FigureS
     /// </summary>
     public class FigureSRotationClockwise : IRotatedFigure
     {
+        private readonly GridPosition[] _positions = new GridPosition[4];
+
         public bool CheckBordersForPlaceFigure (in bool[,] fillMatrix, in GridPosition position)
         {
             var rows = fillMatrix.GetLength (0);
@@ -27,14 +29,13 @@ namespace Core.Figures.FigureAlgorithms.FigureS
                    || fillMatrix[figure.Row - 2, figure.Column + 1];
         }
 
-        public IEnumerable<GridPosition> GetPositions (in GridPosition position)
+        public GridPosition[] GetPositions (in GridPosition position)
         {
-            return new[] {
-                position,
-                position.Above(),
-                position.Right(),
-                position.Right().Under()
-            };
+            _positions[0] = position;
+            _positions[1] = position.Above();
+            _positions[2] = position.Right();
+            _positions[3] = position.Right().Under();
+            return _positions;
         }
     }
 }

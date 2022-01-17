@@ -13,6 +13,6 @@ namespace Core.Figures.FigureAlgorithms
         bool IsFall(in bool[,] fillMatrix, in Figure figure);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        IEnumerable<GridPosition> GetPositions(in GridPosition position);
+        GridPosition[] GetPositions(in GridPosition position);
     }
 }

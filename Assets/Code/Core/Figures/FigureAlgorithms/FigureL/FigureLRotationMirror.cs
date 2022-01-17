@@ -10,6 +10,8 @@ namespace Core.Figures.FigureAlgorithms.FigureL
     /// </summary>
     public class FigureLRotationMirror : IRotatedFigure
     {
+        private readonly GridPosition[] _positions = new GridPosition[4];
+
         public bool CheckBordersForPlaceFigure(in bool[,] fillMatrix, in GridPosition position)
         {
             var rows = fillMatrix.GetLength(0);
@@ -27,15 +29,13 @@ namespace Core.Figures.FigureAlgorithms.FigureL
                    || fillMatrix[figure.Row - 3, figure.Column + 1];
         }
 
-        public IEnumerable<GridPosition> GetPositions(in GridPosition position)
+        public GridPosition[] GetPositions(in GridPosition position)
         {
-            return new[]
-            {
-                position, 
-                position.Right(),
-                position.Right().Under(),
-                position.Right().Under().Under()
-            };
+            _positions[0] = position;
+            _positions[1] = position.Right();
+            _positions[2] = position.Right().Under();
+            _positions[3] = position.Right().Under().Under();
+            return _positions;
         }
     }
 }

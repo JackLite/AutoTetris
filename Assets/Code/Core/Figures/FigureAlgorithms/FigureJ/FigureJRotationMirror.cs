@@ -10,6 +10,8 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
     /// </summary>
     public class FigureJRotationMirror : IRotatedFigure
     {
+        private readonly GridPosition[] _positions = new GridPosition[4];
+
         public bool CheckBordersForPlaceFigure(in bool[,] fillMatrix, in GridPosition position)
         {
             var rows = fillMatrix.GetLength(0);
@@ -23,16 +25,16 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            return fillMatrix[figure.Row - 1, figure.Column] 
-                   || fillMatrix[figure.Row + 1, figure.Column + 1];
+            return fillMatrix[figure.Row - 1, figure.Column] || fillMatrix[figure.Row + 1, figure.Column + 1];
         }
 
-        public IEnumerable<GridPosition> GetPositions(in GridPosition position)
+        public GridPosition[] GetPositions(in GridPosition position)
         {
-            return new[]
-            {
-                position, position.Above(), position.Above().Above(), position.Above().Above().Right()
-            };
+            _positions[0] = position;
+            _positions[1] = position.Above();
+            _positions[2] = position.Above().Above();
+            _positions[3] = position.Above().Above().Right();
+            return _positions;
         }
     }
 }

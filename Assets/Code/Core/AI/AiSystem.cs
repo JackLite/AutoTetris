@@ -118,12 +118,12 @@ namespace Core.AI
             foreach (var variant in variants)
             {
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
-                if (!Pathfinder.IsPathExist(figure.Position, targetPoint, _gridData.FillMatrix, figure))
+                if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 if (count == 0)
                 {
                     result[count++] = CreateDecision(variant);
-                    Debug.Log(variant.ToString());
+                    // Debug.Log(variant.ToString());
                     continue;
                 }
 
@@ -140,7 +140,7 @@ namespace Core.AI
 
                 if (isIntersects)
                     continue;
-                Debug.Log(variant.ToString());
+                // Debug.Log(variant.ToString());
                 result[count++] = decision;
 
                 if (count >= MOVES_COUNT)

@@ -5,6 +5,8 @@ namespace Core.Figures.FigureAlgorithms.FigureO
 {
     public class FigureOAlgorithm : FigureAlgorithm, IRotatedFigure
     {
+        private readonly GridPosition[] _positions = new GridPosition[4];
+
         public FigureOAlgorithm()
         {
             RotatedFigures.Add(FigureRotation.Zero, this);
@@ -39,12 +41,13 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             return isFillUnder || isFillRightUnder;
         }
 
-        public IEnumerable<GridPosition> GetPositions(in GridPosition position)
+        public GridPosition[] GetPositions(in GridPosition position)
         {
-            return new[]
-            {
-                position, position.Right(), position.Above(), position.Right().Above()
-            };
+            _positions[0] = position;
+            _positions[1] = position.Right();
+            _positions[2] = position.Above();
+            _positions[3] = position.Right().Above();
+            return _positions;
         }
     }
 }

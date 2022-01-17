@@ -4,7 +4,6 @@ using System.Linq;
 using Core.Figures.FigureAlgorithms;
 using Core.GameOver;
 using Core.Grid;
-using Core.Pause;
 using Core.Pause.Signals;
 using EcsCore;
 using Leopotam.Ecs;

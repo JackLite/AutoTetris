@@ -65,8 +65,10 @@ namespace Core.Figures.FigureAlgorithms
             if (!RotatedFigures[figure.Rotation].CheckBordersForPlaceFigure(fillMatrix, place))
                 return false;
 
-            foreach (var pos in GetPositions(place, figure))
+            var positions = GetPositions(place, figure);
+            for (var i = 0; i < positions.Length; ++i)
             {
+                var pos = positions[i];
                 if (pos.Row < 0
                     || pos.Column < 0
                     || pos.Row >= fillMatrix.GetLength(0)
@@ -90,7 +92,7 @@ namespace Core.Figures.FigureAlgorithms
             return RotatedFigures[figure.Rotation].IsFall(fillMatrix, figure);
         }
 
-        private IEnumerable<GridPosition> GetPositions(in GridPosition place, in Figure figure)
+        private GridPosition[] GetPositions(in GridPosition place, in Figure figure)
         {
             return RotatedFigures[figure.Rotation].GetPositions(place);
         }

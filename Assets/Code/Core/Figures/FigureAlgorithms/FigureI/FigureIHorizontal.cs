@@ -5,11 +5,8 @@ namespace Core.Figures.FigureAlgorithms.FigureI
 {
     public class FigureIHorizontal : IRotatedFigure
     {
-        private readonly GridPosition[] _positions;
-        public FigureIHorizontal()
-        {
-            _positions = new GridPosition[4];
-        }
+        private readonly GridPosition[] _positions = new GridPosition[4];
+
         public bool CheckBordersForPlaceFigure(in bool[,] fillMatrix, in GridPosition position)
         {
             var row = position.Row;
@@ -29,7 +26,7 @@ namespace Core.Figures.FigureAlgorithms.FigureI
                    || fillMatrix[figure.Row - 1, figure.Column + 3];
         }
 
-        public IEnumerable<GridPosition> GetPositions(in GridPosition position)
+        public GridPosition[] GetPositions(in GridPosition position)
         {
             _positions[0] = position;
             _positions[1] = position.Right();
