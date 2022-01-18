@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms.FigureS
@@ -26,7 +26,7 @@ namespace Core.Figures.FigureAlgorithms.FigureS
         public bool IsFall (in bool[,] fillMatrix, in Figure figure)
         {
             return fillMatrix[figure.Row - 1, figure.Column]
-                   || fillMatrix[figure.Row - 2, figure.Column + 1];
+                   || (figure.Row > 1 && fillMatrix[figure.Row - 1, figure.Column + 1]);
         }
 
         public GridPosition[] GetPositions (in GridPosition position)
@@ -40,7 +40,16 @@ namespace Core.Figures.FigureAlgorithms.FigureS
 
         public Direction GetBorderDirectionsForCell(in GridPosition cellPosition, in GridPosition position)
         {
-            throw new System.NotImplementedException();
+            var positions = GetPositions(position);
+            if (cellPosition == positions[0])
+                return Direction.Bottom | Direction.Left;
+            if (cellPosition == positions[1])
+                return Direction.Top | Direction.Left | Direction.Right;
+            if (cellPosition == positions[2])
+                return Direction.Top | Direction.Right;
+            if (cellPosition == positions[3])
+                return Direction.Left | Direction.Bottom | Direction.Right;
+            throw new ArgumentException("Wrong position: " + cellPosition);
         }
     }
 }

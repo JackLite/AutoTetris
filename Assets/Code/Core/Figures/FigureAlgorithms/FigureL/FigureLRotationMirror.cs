@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms.FigureL
@@ -40,7 +40,16 @@ namespace Core.Figures.FigureAlgorithms.FigureL
 
         public Direction GetBorderDirectionsForCell(in GridPosition cellPosition, in GridPosition position)
         {
-            throw new System.NotImplementedException();
+            var positions = GetPositions(position);
+            if (cellPosition == positions[0])
+                return Direction.Bottom | Direction.Left | Direction.Top;
+            if (cellPosition == positions[1])
+                return Direction.Top | Direction.Right;
+            if (cellPosition == positions[2])
+                return Direction.Left | Direction.Right;
+            if (cellPosition == positions[3])
+                return Direction.Left | Direction.Bottom | Direction.Right;
+            throw new ArgumentException("Wrong position: " + cellPosition);
         }
     }
 }

@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms.FigureO
 {
+    /// <summary>
+    /// [ ] [ ] [ ]
+    /// [*] [*] [ ]
+    /// [X] [*] [ ]
+    /// </summary>
     public class FigureOAlgorithm : FigureAlgorithm, IRotatedFigure
     {
         private readonly GridPosition[] _positions = new GridPosition[4];
@@ -52,7 +57,16 @@ namespace Core.Figures.FigureAlgorithms.FigureO
 
         public Direction GetBorderDirectionsForCell(in GridPosition cellPosition, in GridPosition position)
         {
-            throw new System.NotImplementedException();
+            var positions = GetPositions(position);
+            if (cellPosition == positions[0])
+                return Direction.Bottom | Direction.Left;
+            if (cellPosition == positions[1])
+                return Direction.Right | Direction.Bottom;
+            if (cellPosition == positions[2])
+                return Direction.Top | Direction.Left;
+            if (cellPosition == positions[3])
+                return Direction.Top | Direction.Right;
+            throw new ArgumentException("Wrong position: " + cellPosition);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Core.Cells;
-using Core.Grid;
+﻿using Core.Grid;
 
 namespace Core.Figures.FigureAlgorithms.FigureI
 {
