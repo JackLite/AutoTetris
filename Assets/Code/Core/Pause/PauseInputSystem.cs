@@ -21,11 +21,13 @@ namespace Core.Pause
         private void OnPause()
         {
             _eventTable.AddEvent<PauseSignal>();
+            _eventTable.AddEvent<ShowPauseScreenSignal>();
         }
 
         private void OnUnPause()
         {
             _eventTable.AddEvent<UnpauseSignal>();
+            _eventTable.AddEvent<HidePauseScreenSignal>();
         }
 
         public void Destroy()

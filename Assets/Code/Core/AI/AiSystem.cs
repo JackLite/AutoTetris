@@ -72,8 +72,7 @@ namespace Core.AI
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
-                cell.View.LightDown();
-
+                var needLightDown = true;
                 foreach (var decision in aiDecisions)
                 {
                     if (decision.Direction == Direction.None)
@@ -86,9 +85,12 @@ namespace Core.AI
                         cell.View.LightUp(figure, decision.Direction);
                         var directionMask = FigureAlgorithmFacade.GetBorderDirectionsForCell(figure, cell, position);
                         cell.View.ShowBorders(directionMask);
+                        needLightDown = false;
                         break;
                     }
                 }
+                if (needLightDown)
+                    cell.View.LightDown();
             }
         }
 
@@ -120,12 +122,12 @@ namespace Core.AI
             foreach (var variant in variants)
             {
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
+                figure.Rotation = variant.Rotation;
                 if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 if (count == 0)
                 {
                     result[count++] = CreateDecision(variant);
-                    // Debug.Log(variant.ToString());
                     continue;
                 }
 
@@ -133,6 +135,8 @@ namespace Core.AI
                 var isIntersects = false;
                 foreach (var aiDecision in result)
                 {
+                    if (aiDecision.Direction == Direction.None)
+                        continue;
                     if (IsIntersects(figure, aiDecision, decision))
                     {
                         isIntersects = true;
@@ -142,12 +146,12 @@ namespace Core.AI
 
                 if (isIntersects)
                     continue;
-                // Debug.Log(variant.ToString());
                 result[count++] = decision;
 
                 if (count >= MOVES_COUNT)
                     break;
             }
+            figure.Rotation = FigureRotation.Zero;
 
             var temp = result.OrderBy(d => FigureAlgorithmFacade.GetMostLeft(figure, d.Position, d.Rotation)).ToArray();
 

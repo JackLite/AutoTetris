@@ -50,7 +50,7 @@ namespace Core.Figures
 
         private async void CreateFigure()
         {
-            var type = GetFigureType();
+            var type = PopFigureType();
             var name = FiguresUtility.GetFigureAddress(type);
             var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
             await task;
@@ -66,7 +66,7 @@ namespace Core.Figures
             };
             entity.Replace(figure);
 
-            _mainScreen.NextFigure.ShowNext(_figureBag.Peek());
+            _mainScreen.NextFigure.ShowNext(PeekFigureType());
             if (FigureAlgorithmFacade.IsFall(_gridData.FillMatrix, figure))
             {
                 _eventTable.AddEvent<GameOverSignal>();
@@ -74,7 +74,7 @@ namespace Core.Figures
                 entity.Destroy();
             }
         }
-        private FigureType GetFigureType()
+        private FigureType PopFigureType()
         {
             if (_figureBag.Count == 0)
                 FillBag(_figureBag);
@@ -84,6 +84,13 @@ namespace Core.Figures
             var type = _coreState.NextFigure;
             _coreState.NextFigure = FigureType.None;
             return type;
+        }
+
+        private FigureType PeekFigureType()
+        {
+            if (_figureBag.Count == 0)
+                FillBag(_figureBag);
+            return _figureBag.Peek();
         }
 
         private void FillBag(Stack<FigureType> figureBag)

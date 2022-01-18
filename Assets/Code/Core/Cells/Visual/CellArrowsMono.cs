@@ -31,6 +31,8 @@ namespace Core.Cells.Visual
 
         private void Update()
         {
+            if (_currentDirection == Direction.None)
+                return;
             var delta = cellConfig.MoveSpeed * Time.deltaTime;
             MoveArrow(firstArrowTransform, GetVDirection(_currentDirection), delta);
             MoveArrow(secondArrowTransform, GetVDirection(_currentDirection), delta);
@@ -47,6 +49,8 @@ namespace Core.Cells.Visual
 
         public void LightUp(Direction direction)
         {
+            if (_currentDirection == direction)
+                return;
             _currentDirection = direction;
 
             SetArrowRotation(firstArrowTransform, direction);
@@ -66,6 +70,7 @@ namespace Core.Cells.Visual
 
         public void LightDown()
         {
+            _currentDirection = Direction.None;
             SetArrowsActive(false);
         }
 

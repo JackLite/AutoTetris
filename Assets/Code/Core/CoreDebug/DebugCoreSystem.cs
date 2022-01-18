@@ -20,14 +20,14 @@ namespace Core.CoreDebug
 
         public void Init()
         {
+            _mainScreenMono.DebugMono.gameObject.SetActive(_coreConfig.IsDebug);
             if (!_coreConfig.IsDebug)
                 return;
 
             _eventTable.AddEvent<PauseSignal>();
             _mainScreenMono.SwipeMono.SetActive(false);
-            _mainScreenMono.DebugMono.gameObject.SetActive(true);
             _mainScreenMono.DebugMono.OnStartClick += StartGame;
-            _coreState.NextFigure = FigureType.I;
+            _coreState.NextFigure = FigureType.T;
         }
 
         private void StartGame()
@@ -63,7 +63,7 @@ namespace Core.CoreDebug
         }
         public void Run()
         {
-            if (_eventTable.Has<CellsCreatedSignal>())
+            if (_eventTable.Has<CellsCreatedSignal>() && _coreConfig.IsDebug)
             {
                 foreach (var i in _cells)
                 {
