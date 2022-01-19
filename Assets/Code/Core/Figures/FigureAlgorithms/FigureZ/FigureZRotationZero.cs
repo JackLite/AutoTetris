@@ -5,8 +5,8 @@ namespace Core.Figures.FigureAlgorithms.FigureZ
 {
     /// <summary>
     /// [ ] [ ] [ ]
-    /// [X] [*] [ ]
-    /// [ ] [*] [*]
+    /// [*] [*] [ ]
+    /// [X] [*] [*]
     /// </summary>
     public class FigureZRotationZero : IRotatedFigure
     {
@@ -17,7 +17,7 @@ namespace Core.Figures.FigureAlgorithms.FigureZ
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
 
-            if (position.Row == 1 || position.Row > rows - 1 || position.Column > columns - 3)
+            if (position.Row > rows - 2 || position.Column > columns - 3)
                 return false;
 
             return true;
@@ -25,20 +25,17 @@ namespace Core.Figures.FigureAlgorithms.FigureZ
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            if (figure.Row == 1)
-                return true;
-
-            return fillMatrix[figure.Row - 1, figure.Column]
-                   || fillMatrix[figure.Row - 2, figure.Column + 1]
-                   || fillMatrix[figure.Row - 2, figure.Column + 2];
+            return fillMatrix[figure.Row, figure.Column]
+                   || fillMatrix[figure.Row - 1, figure.Column + 1]
+                   || fillMatrix[figure.Row - 1, figure.Column + 2];
         }
 
         public GridPosition[] GetPositions(in GridPosition position)
         {
-            _positions[0] = position;
-            _positions[1] = position.Right();
-            _positions[2] = position.Right().Under();
-            _positions[3] = position.Right().Right().Under();
+            _positions[0] = position.Above();
+            _positions[1] = _positions[0].Right();
+            _positions[2] = _positions[1].Under();
+            _positions[3] = _positions[2].Right();
             return _positions;
         }
 

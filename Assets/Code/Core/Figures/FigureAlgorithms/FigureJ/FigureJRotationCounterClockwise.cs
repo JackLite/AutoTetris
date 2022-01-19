@@ -5,8 +5,8 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
 {
     /// <summary>
     /// [ ] [ ] [ ]
-    /// [X] [*] [*]
-    /// [ ] [ ] [*]
+    /// [*] [*] [*]
+    /// [X] [ ] [*]
     /// </summary>
     public class FigureJRotationCounterClockwise : IRotatedFigure
     {
@@ -17,7 +17,7 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
 
-            if (position.Row < 2 || position.Row > rows - 1 || position.Column > columns - 3)
+            if (position.Row > rows - 2 || position.Column > columns - 3)
                 return false;
 
             return true;
@@ -25,17 +25,17 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            return fillMatrix[figure.Row - 1, figure.Column]
-                   || fillMatrix[figure.Row - 1, figure.Column + 1]
-                   || fillMatrix[figure.Row - 2, figure.Column + 2];
+            return fillMatrix[figure.Row, figure.Column]
+                   || fillMatrix[figure.Row, figure.Column + 1]
+                   || fillMatrix[figure.Row - 1, figure.Column + 2];
         }
 
         public GridPosition[] GetPositions(in GridPosition position)
         {
-            _positions[0] = position;
-            _positions[1] = position.Right();
-            _positions[2] = position.Right().Right();
-            _positions[3] = position.Right().Right().Under();
+            _positions[0] = position.Above();
+            _positions[1] = _positions[0].Right();
+            _positions[2] = _positions[1].Right();
+            _positions[3] = _positions[3].Under();
             return _positions;
         }
 

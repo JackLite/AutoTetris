@@ -32,8 +32,8 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
         {
             _positions[0] = position;
             _positions[1] = position.Above();
-            _positions[2] = position.Above().Above();
-            _positions[3] = position.Above().Above().Right();
+            _positions[2] = _positions[1].Above();
+            _positions[3] = _positions[2].Right();
             return _positions;
         }
 

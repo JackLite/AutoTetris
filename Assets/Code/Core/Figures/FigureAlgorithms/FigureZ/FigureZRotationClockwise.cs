@@ -33,8 +33,8 @@ namespace Core.Figures.FigureAlgorithms.FigureZ
         {
             _positions[0] = position;
             _positions[1] = position.Above();
-            _positions[2] = position.Right().Above();
-            _positions[3] = position.Right().Above().Above();
+            _positions[2] = _positions[1].Right();
+            _positions[3] = _positions[2].Above();
             return _positions;
         }
 

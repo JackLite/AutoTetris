@@ -4,7 +4,6 @@ using Core.AI;
 using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
-using Core.GameOver;
 using Core.Grid;
 using Core.Input;
 using Core.Path;
@@ -19,8 +18,9 @@ namespace Core.Moving
     public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
         private float _fallCounter;
-        private EcsFilter<Figure>.Exclude<FigureFinishComponent> _activeFigureFilter;
-        private EcsFilter<Figure, FigureFinishComponent> _finishFigureFilter;
+        private EcsFilter<Figure>.Exclude<FigureMoveChosen> _activeFigureFilter;
+        private EcsFilter<Figure, FigureMoveChosen> _finishFigureFilter;
+        private EcsFilter<Figure>.Exclude<FinalFigureComponent> _notFinalFigureFilter;
         private EcsFilter<AiDecision> _decisionsFilter;
         private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
@@ -29,23 +29,23 @@ namespace Core.Moving
         private PlayerData _playedData;
         private EcsEventTable _eventTable;
         private EcsWorld _world;
-        private InputSignal _inputSignal;
+        private InputEvent _inputEvent;
         private MovingData _movingData;
 
         public void Init()
         {
-            EcsWorldEventsBlackboard.AddEventHandler<InputSignal>(SaveInputSignal);
+            EcsWorldEventsBlackboard.AddEventHandler<InputEvent>(SaveInputSignal);
         }
 
-        private void SaveInputSignal(InputSignal signal)
+        private void SaveInputSignal(InputEvent inputEvent)
         {
             if (_activeFigureFilter.GetEntitiesCount() > 0)
-                _inputSignal = signal;
+                _inputEvent = inputEvent;
         }
 
         public void Run()
         {
-            if (_coreState.IsPaused)
+            if (_coreState.IsPaused || _notFinalFigureFilter.GetEntitiesCount() == 0)
                 return;
 
             if (_finishFigureFilter.GetEntitiesCount() != 0)
@@ -66,7 +66,7 @@ namespace Core.Moving
 
             if (figureFinish.Actions.Count == 0)
             {
-                FinishMove(figure);
+                FinishMove();
                 _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
                 return;
             }
@@ -91,15 +91,15 @@ namespace Core.Moving
 
             if (figure.Column > 0 && _decisionsFilter.GetEntitiesCount() > 0)
             {
-                if (_inputSignal != null)
+                if (_inputEvent != null)
                 {
-                    var aiDecision = GetAiDecision(_inputSignal.Direction);
+                    var aiDecision = GetAiDecision(_inputEvent.Direction);
                     figure.Rotation = aiDecision.Rotation;
                     var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
-                    var finishComponent = new FigureFinishComponent { Actions = new Stack<PathAction>(path) };
-                    _activeFigureFilter.GetEntity(0).Replace(finishComponent);
+                    var moveChosen = new FigureMoveChosen { Actions = new Stack<PathAction>(path) };
+                    _activeFigureFilter.GetEntity(0).Replace(moveChosen);
                     _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
-                    _inputSignal = null;
+                    _inputEvent = null;
 
                     return;
                 }
@@ -115,11 +115,15 @@ namespace Core.Moving
             figure.Mono.SetGridPosition(figure.Row, figure.Column);
 
             if (IsFall(_grid.FillMatrix, figure))
-                FinishMove(figure);
-            else
-                ClearDecisions();
+                FinishMove();
+
+            ClearDecisions();
 
             _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
+        }
+        private void FinishMove()
+        {
+            _notFinalFigureFilter.GetEntity(0).Replace(new FinalFigureComponent());
         }
 
         private void ClearDecisions()
@@ -142,44 +146,6 @@ namespace Core.Moving
             return AiDecision.Zero;
         }
 
-        private void FinishMove(Figure figure)
-        {
-            _playedData.Scores += 1;
-            _eventTable.AddEvent<CheckLinesSignal>();
-
-            FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
-
-            ClearDecisions();
-
-            CreateSingleFigures(figure);
-
-            figure.Mono.Delete();
-            if (_activeFigureFilter.GetEntitiesCount() != 0)
-                _activeFigureFilter.GetEntity(0).Destroy();
-            if (_finishFigureFilter.GetEntitiesCount() != 0)
-                _finishFigureFilter.GetEntity(0).Destroy();
-
-            if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
-            {
-                _eventTable.AddEvent<GameOverSignal>();
-                return;
-            }
-
-            _eventTable.AddEvent<FigureSpawnSignal>();
-        }
-
-        private void CreateSingleFigures(in Figure figure)
-        {
-            foreach (var i in _cells)
-            {
-                ref var cell = ref _cells.Get1(i);
-                cell.View.LightDown();
-                if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell))
-                    cell.View.SetImage(figure.Mono.CellSprite);
-                cell.View.SetImageActive(_grid.FillMatrix[cell.Row, cell.Column]);
-            }
-        }
-
         private static bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             return FigureAlgorithmFacade.IsFall(fillMatrix, figure);
@@ -192,7 +158,7 @@ namespace Core.Moving
 
         public void Destroy()
         {
-            EcsWorldEventsBlackboard.RemoveEventHandler<InputSignal>(SaveInputSignal);
+            EcsWorldEventsBlackboard.RemoveEventHandler<InputEvent>(SaveInputSignal);
 
             foreach (var i in _activeFigureFilter)
             {

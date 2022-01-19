@@ -4,9 +4,9 @@ using Core.Grid;
 namespace Core.Figures.FigureAlgorithms.FigureL
 {
     /// <summary>
+    /// [*] [*] [ ]
+    /// [ ] [*] [ ]
     /// [X] [*] [ ]
-    /// [ ] [*] [ ]
-    /// [ ] [*] [ ]
     /// </summary>
     public class FigureLRotationMirror : IRotatedFigure
     {
@@ -17,7 +17,7 @@ namespace Core.Figures.FigureAlgorithms.FigureL
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
 
-            if (position.Row < 3 || position.Row > rows - 1 || position.Column > columns - 2)
+            if (position.Row > rows - 3 || position.Column > columns - 2)
                 return false;
 
             return true;
@@ -26,15 +26,15 @@ namespace Core.Figures.FigureAlgorithms.FigureL
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
             return fillMatrix[figure.Row - 1, figure.Column] 
-                   || fillMatrix[figure.Row - 3, figure.Column + 1];
+                   || fillMatrix[figure.Row - 1, figure.Column + 1];
         }
 
         public GridPosition[] GetPositions(in GridPosition position)
         {
-            _positions[0] = position;
-            _positions[1] = position.Right();
-            _positions[2] = position.Right().Under();
-            _positions[3] = position.Right().Under().Under();
+            _positions[0] = position.Right();
+            _positions[1] = _positions[0].Above();
+            _positions[2] = _positions[1].Above();
+            _positions[3] = _positions[2].Left();
             return _positions;
         }
 
@@ -42,13 +42,13 @@ namespace Core.Figures.FigureAlgorithms.FigureL
         {
             var positions = GetPositions(position);
             if (cellPosition == positions[0])
-                return Direction.Bottom | Direction.Left | Direction.Top;
+                return Direction.Bottom | Direction.Left | Direction.Right;
             if (cellPosition == positions[1])
-                return Direction.Top | Direction.Right;
+                return Direction.Right | Direction.Left;
             if (cellPosition == positions[2])
-                return Direction.Left | Direction.Right;
+                return Direction.Left | Direction.Right | Direction.Top;
             if (cellPosition == positions[3])
-                return Direction.Left | Direction.Bottom | Direction.Right;
+                return Direction.Left | Direction.Bottom | Direction.Top;
             throw new ArgumentException("Wrong position: " + cellPosition);
         }
     }

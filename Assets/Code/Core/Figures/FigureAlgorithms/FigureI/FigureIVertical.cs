@@ -28,8 +28,8 @@ namespace Core.Figures.FigureAlgorithms.FigureI
         {
             _positions[0] = position;
             _positions[1] = position.Above();
-            _positions[2] = position.Above().Above();
-            _positions[3] = position.Above().Above().Above();
+            _positions[2] = _positions[1].Above();
+            _positions[3] = _positions[2].Above();
             return _positions;
         }
 

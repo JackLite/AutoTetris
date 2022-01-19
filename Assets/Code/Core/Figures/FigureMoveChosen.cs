@@ -6,7 +6,7 @@ namespace Core.Figures
     /// <summary>
     /// Обозначает что фигура движется в выбранное место
     /// </summary>
-    public struct FigureFinishComponent
+    public struct FigureMoveChosen
     {
         public Stack<PathAction> Actions;
     }

@@ -29,8 +29,8 @@ namespace Core.Figures.FigureAlgorithms.FigureI
         {
             _positions[0] = position;
             _positions[1] = position.Right();
-            _positions[2] = position.Right().Right();
-            _positions[3] = position.Right().Right().Right();
+            _positions[2] = _positions[1].Right();
+            _positions[3] = _positions[2].Right();
             return _positions;
         }
 

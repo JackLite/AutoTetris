@@ -29,19 +29,19 @@ namespace Core.Input
 
             if (CheckDownSwipe(eventData.position))
             {
-                EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Bottom });
+                EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Bottom });
                 return;
             }
             
             if (CheckLeftSwipe(eventData.position))
             {
-                EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Left });
+                EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Left });
                 return;
             }
             
             if (CheckRightSwipe(eventData.position))
             {
-                EcsWorldEventsBlackboard.AddEvent(new InputSignal { Direction = Direction.Right });
+                EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Right });
                 return;
             }
         }

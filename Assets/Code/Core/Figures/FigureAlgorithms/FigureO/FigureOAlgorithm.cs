@@ -37,9 +37,6 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             if (figure.Row >= rows)
                 return false;
 
-            if (figure.Row == 0)
-                return true;
-
             var isFillUnder = fillMatrix[figure.Row - 1, figure.Column];
             var isFillRightUnder = fillMatrix[figure.Row - 1, figure.Column + 1];
 
@@ -51,7 +48,7 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             _positions[0] = position;
             _positions[1] = position.Right();
             _positions[2] = position.Above();
-            _positions[3] = position.Right().Above();
+            _positions[3] = _positions[1].Above();
             return _positions;
         }
 

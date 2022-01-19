@@ -25,16 +25,15 @@ namespace Core.Figures.FigureAlgorithms.FigureT
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            return fillMatrix[figure.Row - 1, figure.Column]
-                   || fillMatrix[figure.Row, figure.Column + 1];
+            return fillMatrix[figure.Row - 1, figure.Column] || fillMatrix[figure.Row, figure.Column + 1];
         }
 
         public GridPosition[] GetPositions(in GridPosition position)
         {
             _positions[0] = position;
             _positions[1] = position.Above();
-            _positions[2] = position.Above().Above();
-            _positions[3] = position.Right().Above();
+            _positions[2] = _positions[1].Above();
+            _positions[3] = _positions[1].Right();
             return _positions;
         }
 
