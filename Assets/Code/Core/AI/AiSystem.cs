@@ -61,6 +61,8 @@ namespace Core.AI
             var aiDecisions = FindBetterMoves(_gridData.FillMatrix, ref figure).ToArray();
             foreach (var decision in aiDecisions)
             {
+                if (decision.Direction == Direction.None)
+                    continue;
                 _world.NewEntity().Replace(decision);
             }
 
@@ -115,6 +117,89 @@ namespace Core.AI
             return ChooseBetterMoves(variants, figure);
         }
 
+        private IEnumerable<AiDecision> ChooseBetterMoves2(List<AiMoveVariant> variants, Figure figure)
+        {
+            var result = new AiDecision[MOVES_COUNT];
+            var count = 0;
+            foreach (var variant in variants)
+            {
+                if (variant.Column > 2)
+                    continue;
+                var targetPoint = new GridPosition(variant.Row, variant.Column);
+                figure.Rotation = variant.Rotation;
+                if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
+                    continue;
+                result[count++] = CreateDecision(variant);
+                break;
+            }
+            
+            foreach (var variant in variants)
+            {
+                if (variant.Column < 3 ||variant.Column > 6)
+                    continue;
+                var targetPoint = new GridPosition(variant.Row, variant.Column);
+                figure.Rotation = variant.Rotation;
+                if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
+                    continue;
+                var decision = CreateDecision(variant);
+                var isIntersects = false;
+                foreach (var aiDecision in result)
+                {
+                    if (aiDecision.Direction == Direction.None)
+                        continue;
+                    if (IsIntersects(figure, aiDecision, decision))
+                    {
+                        isIntersects = true;
+                        break;
+                    }
+                }
+
+                if (isIntersects)
+                    continue;
+                result[count++] = decision;
+                break;
+            }
+            
+            foreach (var variant in variants)
+            {
+                if (variant.Column < 7)
+                    continue;
+                var targetPoint = new GridPosition(variant.Row, variant.Column);
+                figure.Rotation = variant.Rotation;
+                if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
+                    continue;
+                var decision = CreateDecision(variant);
+                var isIntersects = false;
+                foreach (var aiDecision in result)
+                {
+                    if (aiDecision.Direction == Direction.None)
+                        continue;
+                    if (IsIntersects(figure, aiDecision, decision))
+                    {
+                        isIntersects = true;
+                        break;
+                    }
+                }
+
+                if (isIntersects)
+                    continue;
+                result[count] = decision;
+                break;
+            }
+            
+            figure.Rotation = FigureRotation.Zero;
+
+
+            for (var i = 0; i < result.Length; ++i)
+            {
+                ref var decision = ref result[i];
+                if (decision.Direction == Direction.None)
+                    continue;
+                decision.Direction = Directions[i];
+            }
+            return result;
+        }
+        
         private IEnumerable<AiDecision> ChooseBetterMoves(List<AiMoveVariant> variants, Figure figure)
         {
             var result = new AiDecision[MOVES_COUNT];
@@ -158,6 +243,8 @@ namespace Core.AI
             for (var i = 0; i < temp.Length; ++i)
             {
                 ref var decision = ref temp[i];
+                if (decision.Direction == Direction.None)
+                    continue;
                 decision.Direction = Directions[i];
             }
 

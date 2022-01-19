@@ -94,11 +94,15 @@ namespace Core.Moving
                 if (_inputEvent != null)
                 {
                     var aiDecision = GetAiDecision(_inputEvent.Direction);
-                    figure.Rotation = aiDecision.Rotation;
-                    var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
-                    var moveChosen = new FigureMoveChosen { Actions = new Stack<PathAction>(path) };
-                    _activeFigureFilter.GetEntity(0).Replace(moveChosen);
-                    _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
+                    if (aiDecision.Direction != Direction.None)
+                    {
+                        figure.Rotation = aiDecision.Rotation;
+                        var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
+                        var moveChosen = new FigureMoveChosen { Actions = new Stack<PathAction>(path) };
+                        _activeFigureFilter.GetEntity(0).Replace(moveChosen);
+                        _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
+                    }
+                    
                     _inputEvent = null;
 
                     return;
