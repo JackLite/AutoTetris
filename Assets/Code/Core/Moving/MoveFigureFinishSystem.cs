@@ -39,7 +39,7 @@ namespace Core.Moving
         {
             _isActive = true;
             _processTime = Time.time + WAIT_TIME;
-            _playerData.Scores += 1;
+            _playerData.CurrentScores += 1;
             LightDownMoves();
         }
 

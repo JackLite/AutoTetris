@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,9 @@ namespace Core.GameOver
 
         [SerializeField]
         private Button adContinueBtn;
+
+        [field:SerializeField]
+        public GameOverScoresMono Scores { get; private set; }
 
         public event Action OnTryAgain;
         public event Action OnAdContinue;

@@ -41,7 +41,7 @@ namespace Core.Grid
 
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
-            _playerData.Scores += fullRows.Count * 10;
+            _playerData.CurrentScores += fullRows.Count * 10;
         }
     }
 }

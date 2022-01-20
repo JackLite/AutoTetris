@@ -45,6 +45,15 @@ namespace Core.GameOver
             _gameOverMono.OnTryAgain += RestartGame;
             _gameOverMono.OnAdContinue += OnAdContinueClick;
             _gameOverMono.SetAdsBtnActive(!_playerData.AdsWasUsedInCore);
+
+            _gameOverMono.Scores.SetScores(_playerData.CurrentScores);
+            if (_playerData.MaxScores > _playerData.CurrentScores)
+            {
+                var percent = (float) _playerData.CurrentScores / _playerData.MaxScores;
+                _gameOverMono.Scores.SetPercentState(percent * 100);
+            }
+            else
+                _gameOverMono.Scores.SetNewMaxState();
         }
 
         private void OnAdContinueClick()
@@ -55,6 +64,7 @@ namespace Core.GameOver
         private void RestartGame()
         {
             _eventTable.AddEvent<StartCoreSignal>();
+            _eventTable.AddEvent<RestartCoreSignal>();
             _world.DeactivateModule<CoreModule>();
             DestroyGameOverScreen();
         }
@@ -64,4 +74,5 @@ namespace Core.GameOver
             Addressables.ReleaseInstance(_gameOverScreen);
         }
     }
+
 }
