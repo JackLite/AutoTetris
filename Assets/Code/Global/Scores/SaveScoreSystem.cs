@@ -1,7 +1,7 @@
 ﻿using Core.GameOver;
 using EcsCore;
+using Global.Saving;
 using Leopotam.Ecs;
-using Utilities;
 
 namespace Global.Scores
 {
@@ -10,11 +10,11 @@ namespace Global.Scores
     {
         private PlayerData _playerData;
         private EcsEventTable _eventTable;
-        private const string SAVE_MAX_SCORES_KEY = "player.max_scores";
+        private SaveService _saveService;
 
         public void Init()
         {
-            _playerData.MaxScores = SaveUtility.GetInt(SAVE_MAX_SCORES_KEY);
+            _playerData.MaxScores = _saveService.LoadMaxScores();
         }
 
         public void Run()
@@ -26,7 +26,7 @@ namespace Global.Scores
                 return;
 
             _playerData.MaxScores = _playerData.CurrentScores;
-            SaveUtility.SaveInt(SAVE_MAX_SCORES_KEY, _playerData.MaxScores);
+            _saveService.SaveMaxScores(_playerData.MaxScores);
         }
     }
 }

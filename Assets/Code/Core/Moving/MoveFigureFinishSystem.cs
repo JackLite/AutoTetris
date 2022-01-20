@@ -6,6 +6,7 @@ using Core.GameOver;
 using Core.Grid;
 using EcsCore;
 using Global;
+using Global.Saving;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -23,6 +24,7 @@ namespace Core.Moving
         private EcsFilter<AiDecision> _decisionsFilter;
         private bool _isActive;
         private float _processTime;
+        private SaveService _saveService;
 
         public void Run()
         {
@@ -64,7 +66,8 @@ namespace Core.Moving
             _eventTable.AddEvent<CheckLinesSignal>();
 
             FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
-
+            _saveService.SaveFillMatrix(_grid.FillMatrix);
+            _saveService.Flush();
             CreateSingleFigures(figure);
             ClearDecisions();
             figure.Mono.Delete();

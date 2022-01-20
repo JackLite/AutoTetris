@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EcsCore;
 using Global.Ads;
+using Global.Saving;
 using MainMenu;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -29,6 +30,7 @@ namespace Global
             _dependencies.Add(typeof(PlayerData), new PlayerData());
             _dependencies.Add(typeof(AdsService), new AdsService());
             _dependencies.Add(typeof(CoreConfig), new CoreConfig());
+            _dependencies.Add(typeof(SaveService), new SaveService());
         }
 
         protected override Dictionary<Type, object> GetDependencies()

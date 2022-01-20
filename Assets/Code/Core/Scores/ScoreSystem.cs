@@ -1,8 +1,7 @@
-﻿using Core.GameOver;
-using EcsCore;
+﻿using EcsCore;
 using Global;
+using Global.Saving;
 using Leopotam.Ecs;
-using Utilities;
 
 namespace Core.Scores
 {
@@ -12,8 +11,8 @@ namespace Core.Scores
         private MainScreenMono _mainScreenMono;
         private PlayerData _playerData;
         private EcsEventTable _eventTable;
+        private SaveService _saveService;
         private int _lastScores = -1;
-        private const string SAVE_SCORES_KEY = "player.scores";
 
         public void Init()
         {
@@ -29,7 +28,7 @@ namespace Core.Scores
 
             _mainScreenMono.ScoreView.UpdateScores(_playerData.CurrentScores);
             _lastScores = _playerData.CurrentScores;
-            SaveUtility.SaveInt(SAVE_SCORES_KEY, _lastScores);
+            _saveService.SaveScores(_lastScores);
         }
     }
 }
