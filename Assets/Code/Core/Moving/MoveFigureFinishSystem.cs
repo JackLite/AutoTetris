@@ -70,7 +70,7 @@ namespace Core.Moving
             _saveService.Flush();
             CreateSingleFigures(figure);
             ClearDecisions();
-            figure.Mono.Delete();
+            figure.mono.Delete();
             _filter.GetEntity(0).Destroy();
 
             if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
@@ -88,7 +88,7 @@ namespace Core.Moving
             {
                 ref var cell = ref _cells.Get1(i);
                 if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell))
-                    cell.View.SetImage(figure.Mono.CellSprite);
+                    cell.View.SetImage(figure.mono.CellSprite);
                 cell.View.SetImageActive(_grid.FillMatrix[cell.Row, cell.Column]);
             }
         }

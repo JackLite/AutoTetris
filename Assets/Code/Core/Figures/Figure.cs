@@ -1,23 +1,17 @@
-﻿using Core.Grid;
-using UnityEngine;
+﻿using System;
+using Core.Grid;
 
 namespace Core.Figures
 {
+    [Serializable]
     public struct Figure
     {
-        public FigureType Type;
+        public FigureType type;
+        public int row;
+        public int column;
+        public FigureRotation rotation;
+        public FigureMono mono;
 
-        /// <summary>
-        /// Позиция нижнего левой нижней точки в координатах сетки независимо от поворота
-        /// </summary>
-        public int Row;
-
-        public int Column;
-
-        public FigureRotation Rotation;
-
-        public FigureMono Mono;
-
-        public GridPosition Position => new GridPosition(Row, Column);
+        public GridPosition Position => new GridPosition(row, column);
     }
 }

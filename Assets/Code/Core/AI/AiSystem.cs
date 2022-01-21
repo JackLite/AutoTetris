@@ -55,7 +55,7 @@ namespace Core.AI
 
             ref var figure = ref _filter.Get1(0);
 
-            if (figure.Row > 20)
+            if (figure.row > 20)
                 return;
 
             var aiDecisions = FindBetterMoves(_gridData.FillMatrix, ref figure).ToArray();
@@ -79,7 +79,7 @@ namespace Core.AI
                 {
                     if (decision.Direction == Direction.None)
                         continue;
-                    figure.Rotation = decision.Rotation;
+                    figure.rotation = decision.Rotation;
                     var position = new GridPosition(decision.Row, decision.Column);
 
                     if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell, position))
@@ -100,16 +100,16 @@ namespace Core.AI
         {
             var comparer = new AiMoveVariantComparer();
             var variants = new List<AiMoveVariant>();
-            var currentRotation = figure.Rotation;
+            var currentRotation = figure.rotation;
             foreach (var rotation in FigureAlgorithmFacade.GetRotationVariants(figure))
             {
-                figure.Rotation = rotation;
+                figure.rotation = rotation;
                 Analyze(fillMatrix, figure, variants);
             }
 
             variants.Sort(comparer);
 
-            figure.Rotation = currentRotation;
+            figure.rotation = currentRotation;
 
             if (variants.Count == 0)
                 return Enumerable.Repeat(AiDecision.Zero, MOVES_COUNT);
@@ -126,7 +126,7 @@ namespace Core.AI
                 if (variant.Column > 2)
                     continue;
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
-                figure.Rotation = variant.Rotation;
+                figure.rotation = variant.Rotation;
                 if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 result[count++] = CreateDecision(variant);
@@ -138,7 +138,7 @@ namespace Core.AI
                 if (variant.Column < 3 ||variant.Column > 6)
                     continue;
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
-                figure.Rotation = variant.Rotation;
+                figure.rotation = variant.Rotation;
                 if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 var decision = CreateDecision(variant);
@@ -165,7 +165,7 @@ namespace Core.AI
                 if (variant.Column < 7)
                     continue;
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
-                figure.Rotation = variant.Rotation;
+                figure.rotation = variant.Rotation;
                 if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 var decision = CreateDecision(variant);
@@ -187,7 +187,7 @@ namespace Core.AI
                 break;
             }
             
-            figure.Rotation = FigureRotation.Zero;
+            figure.rotation = FigureRotation.Zero;
 
 
             for (var i = 0; i < result.Length; ++i)
@@ -207,7 +207,7 @@ namespace Core.AI
             foreach (var variant in variants)
             {
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
-                figure.Rotation = variant.Rotation;
+                figure.rotation = variant.Rotation;
                 if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 if (count == 0)
@@ -236,7 +236,7 @@ namespace Core.AI
                 if (count >= MOVES_COUNT)
                     break;
             }
-            figure.Rotation = FigureRotation.Zero;
+            figure.rotation = FigureRotation.Zero;
 
             var temp = result.OrderBy(d => FigureAlgorithmFacade.GetMostLeft(figure, d.Position, d.Rotation)).ToArray();
 
@@ -285,7 +285,7 @@ namespace Core.AI
                         continue;
                     var variant = new AiMoveVariant
                     {
-                        Column = column, Row = row, Rotation = figure.Rotation
+                        Column = column, Row = row, Rotation = figure.rotation
                     };
 
                     var completeLines = FigureAlgorithmFacade.HowManyRowsWillFill(fillMatrix, figure, place);

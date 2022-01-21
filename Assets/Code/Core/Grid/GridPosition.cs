@@ -18,8 +18,8 @@ namespace Core.Grid
 
         public GridPosition(Figure figure)
         {
-            Row = figure.Row;
-            Column = figure.Column;
+            Row = figure.row;
+            Column = figure.column;
         }
 
         public GridPosition Above()

@@ -1,5 +1,6 @@
 ﻿using EcsCore;
 using Global;
+using Global.Saving;
 using Leopotam.Ecs;
 using UnityEngine.AddressableAssets;
 
@@ -12,11 +13,20 @@ namespace MainMenu
         private EcsWorld _world;
         private EcsEventTable _eventTable;
         private CoreConfig _coreConfig;
+        private SaveService _saveService;
 
         public void Init()
         {
             _startScreenMono.StartGameButton.OnClick += StartGame;
-            _startScreenMono.StartDebugButton.onClick.AddListener(StartDebug);
+            _startScreenMono.ContinueGameButton.onClick.AddListener(StartDebug);
+            _startScreenMono.StartDebugButton.onClick.AddListener(ContinueGame);
+            if (_saveService.HasGame())
+                _startScreenMono.ContinueGameButton.gameObject.SetActive(true);
+        }
+        private void ContinueGame()
+        {
+            Addressables.ReleaseInstance(_startScreenMono.gameObject);
+            _world.NewEntity().Replace(new StartCoreComponent { isContinue = true });
         }
 
         private void StartGame()
@@ -34,7 +44,7 @@ namespace MainMenu
         private void Start()
         {
             Addressables.ReleaseInstance(_startScreenMono.gameObject);
-            _eventTable.AddEvent<StartCoreSignal>();
+            _world.NewEntity().Replace(new StartCoreComponent());
         }
     }
 }

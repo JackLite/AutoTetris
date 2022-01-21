@@ -31,42 +31,42 @@ namespace Core.Figures.FigureAlgorithms
 
         public static bool IsCanPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
             var figureAtPlace = new Figure
             {
-                Column = place.Column,
-                Rotation = figure.Rotation,
-                Row = place.Row,
-                Type = figure.Type
+                column = place.Column,
+                rotation = figure.rotation,
+                row = place.Row,
+                type = figure.type
             };
             return IsHasSpaceForFigure(fillMatrix, figure, place) && algorithm.IsFall(fillMatrix, figureAtPlace);
         }
 
         public static bool IsHasSpaceForFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
             return algorithm.IsCanPlaceFigure(fillMatrix, figure, place);
         }
 
         public static void FillGrid(in bool[,] fillMatrix, in Figure figure)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
 
             algorithm.FillGrid(fillMatrix, figure);
         }
 
         public static void UpdateFillCell(in Figure figure, in Cell cell)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
 
             algorithm.CheckAndUpdateCell(figure, cell);
         }
 
         public static bool IsFigureAtCell(in Figure figure, in Cell cell)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
 
-            var positions = algorithm.GetPositions(figure.Position, figure.Rotation);
+            var positions = algorithm.GetPositions(figure.Position, figure.rotation);
             foreach (var position in positions)
             {
                 if (position == cell.Position)
@@ -78,34 +78,34 @@ namespace Core.Figures.FigureAlgorithms
 
         public static bool IsFigureAtCell(in Figure figure, in Cell cell, in GridPosition figurePosition)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
             return algorithm.IsFigureAtCell(figurePosition, cell, figure);
         }
 
         public static bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
 
             return algorithm.IsFall(fillMatrix, figure);
         }
 
         public static int HowManyRowsWillFill(in bool[,] fillMatrix, in Figure figure, in GridPosition pos)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
 
             return algorithm.HowManyRowsWillFill(fillMatrix, figure, pos);
         }
 
         public static IEnumerable<FigureRotation> GetRotationVariants(in Figure figure)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
 
             return algorithm.GetRotationVariants();
         }
 
         public static int CalculateNew(bool[,] fillMatrix, Figure figure, GridPosition place, Func<bool[,], int> calc)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
 
             algorithm.SetMatrixValue(fillMatrix, figure, place, true);
             var res = calc(fillMatrix);
@@ -121,7 +121,7 @@ namespace Core.Figures.FigureAlgorithms
             FigureRotation secondRotation,
             in GridPosition secondPlace)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
             var firstPositions = algorithm.GetPositions(firstPlace, firstRotation).ToArray();
             foreach (var pos in algorithm.GetPositions(secondPlace, secondRotation))
             {
@@ -137,7 +137,7 @@ namespace Core.Figures.FigureAlgorithms
 
         public static int GetMostLeft(in Figure figure, in GridPosition pos, FigureRotation rotation)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
             var res = 100;
             foreach (var position in algorithm.GetPositions(pos, rotation))
             {
@@ -150,7 +150,7 @@ namespace Core.Figures.FigureAlgorithms
         
         public static int GetMostRight(in Figure figure, in GridPosition pos, FigureRotation rotation)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
             var res = 0;
             foreach (var position in algorithm.GetPositions(pos, rotation))
             {
@@ -163,7 +163,7 @@ namespace Core.Figures.FigureAlgorithms
 
         public static Direction GetBorderDirectionsForCell(in Figure figure, in Cell cell, in GridPosition position)
         {
-            var algorithm = _algorithms[figure.Type];
+            var algorithm = _algorithms[figure.type];
             return algorithm.GetBorderDirectionsForCell(figure, cell, position);
         }
     }

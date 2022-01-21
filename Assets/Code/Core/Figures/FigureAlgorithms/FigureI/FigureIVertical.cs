@@ -19,7 +19,7 @@ namespace Core.Figures.FigureAlgorithms.FigureI
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            var isFillUnder = fillMatrix[figure.Row - 1, figure.Column];
+            var isFillUnder = fillMatrix[figure.row - 1, figure.column];
 
             return isFillUnder;
         }

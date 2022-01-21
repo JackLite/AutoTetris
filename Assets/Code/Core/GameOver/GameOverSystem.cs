@@ -4,6 +4,7 @@ using Core.Pause;
 using Core.Pause.Signals;
 using EcsCore;
 using Global;
+using Global.Saving;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -18,6 +19,7 @@ namespace Core.GameOver
         private GameObject _gameOverScreen;
         private GameOverMono _gameOverMono;
         private PlayerData _playerData;
+        private SaveService _saveService;
 
         public void Run()
         {
@@ -25,6 +27,8 @@ namespace Core.GameOver
             {
                 CreateGameOverScreen();
                 _eventTable.AddEvent<PauseSignal>();
+                if (!_playerData.AdsWasUsedInCore)
+                    _saveService.SetHasGame(false);
                 return;
             }
 

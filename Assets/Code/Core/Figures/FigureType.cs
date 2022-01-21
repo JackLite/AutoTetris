@@ -1,5 +1,8 @@
-﻿namespace Core.Figures
+﻿using System;
+
+namespace Core.Figures
 {
+    [Serializable]
     public enum FigureType
     {
         None = 0,

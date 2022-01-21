@@ -25,7 +25,7 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            return fillMatrix[figure.Row - 1, figure.Column] || fillMatrix[figure.Row - 1, figure.Column + 1];
+            return fillMatrix[figure.row - 1, figure.column] || fillMatrix[figure.row - 1, figure.column + 1];
         }
 
         public GridPosition[] GetPositions(in GridPosition position)

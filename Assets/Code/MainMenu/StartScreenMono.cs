@@ -9,6 +9,9 @@ namespace MainMenu
         public StartGameButton StartGameButton { get; private set; }
         
         [field:SerializeField]
+        public Button ContinueGameButton { get; private set; }
+        
+        [field:SerializeField]
         public Button StartDebugButton { get; private set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Core.Figures;
 using UnityEngine;
@@ -14,7 +13,18 @@ namespace Global.Saving
         private const string FILL_MATRIX_KEY = "core.fill_matrix";
         private const string FIGURE_KEY = "core.current_figure";
         private const string FIGURE_BAG_KEY = "core.figure_bag";
+        private const string UNFINISHED_GAME = "core.has_saved_game";
 
+        public void SetHasGame(bool isHasGame)
+        {
+            SaveUtility.SaveInt(UNFINISHED_GAME, isHasGame ? 1 : 0, true);
+        }
+
+        public bool HasGame()
+        {
+            return SaveUtility.LoadInt(UNFINISHED_GAME) > 0;
+        }
+        
         public void SaveScores(int scores)
         {
             SaveUtility.SaveInt(SCORES_KEY, scores);
@@ -22,7 +32,7 @@ namespace Global.Saving
 
         public int LoadScores()
         {
-            return SaveUtility.GetInt(SCORES_KEY);
+            return SaveUtility.LoadInt(SCORES_KEY);
         }
 
         public void SaveMaxScores(int maxScores)
@@ -32,7 +42,7 @@ namespace Global.Saving
 
         public int LoadMaxScores()
         {
-            return SaveUtility.GetInt(MAX_SCORES_KEY);
+            return SaveUtility.LoadInt(MAX_SCORES_KEY);
         }
 
 
@@ -50,7 +60,7 @@ namespace Global.Saving
 
         public bool[,] LoadFillMatrix(int l1, int l2)
         {
-            var bytes = SaveUtility.GetBytes(FILL_MATRIX_KEY);
+            var bytes = SaveUtility.LoadBytes(FILL_MATRIX_KEY);
             var fillMatrix = new bool[l1, l2];
             var i = 0;
             for (var k = 0; k < l1; ++k)
@@ -61,20 +71,33 @@ namespace Global.Saving
 
         public void SaveCurrentFigure(in Figure figure)
         {
+            var saved = JsonUtility.ToJson(figure);
+            SaveUtility.SaveString(FIGURE_KEY, saved);
         }
 
         public Figure LoadFigure()
         {
-            return new Figure();
+            var serialized = SaveUtility.LoadString(FIGURE_KEY);
+            return JsonUtility.FromJson<Figure>(serialized);
         }
 
         public void SaveFigureBag(Stack<FigureType> bag)
         {
+            var bytes = new byte[bag.Count];
+            var i = 0;
+            while (bag.Count > 0)
+                bytes[i++] = (byte) bag.Pop();
+
+            SaveUtility.SaveBytes(FIGURE_BAG_KEY, bytes);
         }
 
         public Stack<FigureType> LoadFigureBag()
         {
-            return new Stack<FigureType>();
+            var bytes = SaveUtility.LoadBytes(FIGURE_BAG_KEY);
+            var bag = new Stack<FigureType>();
+            for (var i = bytes.Length - 1; i >= 0; i++)
+                bag.Push((FigureType) bytes[i]);
+            return bag;
         }
 
         public void Flush()

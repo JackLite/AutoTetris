@@ -50,7 +50,7 @@ namespace Core.Cells.Visual
 
         public void LightUp(in Figure figure, Direction direction)
         {
-            SetImage(figure.Mono.CellSprite);
+            SetImage(figure.mono.CellSprite);
             SetImageActive(true);
             ChangeOpacity(lightUpOpacity);
             cellArrows.LightUp(direction);

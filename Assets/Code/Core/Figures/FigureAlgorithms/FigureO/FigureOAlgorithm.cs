@@ -34,11 +34,11 @@ namespace Core.Figures.FigureAlgorithms.FigureO
         {
             var rows = fillMatrix.GetLength(0);
 
-            if (figure.Row >= rows)
+            if (figure.row >= rows)
                 return false;
 
-            var isFillUnder = fillMatrix[figure.Row - 1, figure.Column];
-            var isFillRightUnder = fillMatrix[figure.Row - 1, figure.Column + 1];
+            var isFillUnder = fillMatrix[figure.row - 1, figure.column];
+            var isFillRightUnder = fillMatrix[figure.row - 1, figure.column + 1];
 
             return isFillUnder || isFillRightUnder;
         }

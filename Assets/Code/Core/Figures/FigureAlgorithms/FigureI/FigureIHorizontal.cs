@@ -19,10 +19,10 @@ namespace Core.Figures.FigureAlgorithms.FigureI
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            return fillMatrix[figure.Row - 1, figure.Column]
-                   || fillMatrix[figure.Row - 1, figure.Column + 1]
-                   || fillMatrix[figure.Row - 1, figure.Column + 2]
-                   || fillMatrix[figure.Row - 1, figure.Column + 3];
+            return fillMatrix[figure.row - 1, figure.column]
+                   || fillMatrix[figure.row - 1, figure.column + 1]
+                   || fillMatrix[figure.row - 1, figure.column + 2]
+                   || fillMatrix[figure.row - 1, figure.column + 3];
         }
 
         public GridPosition[] GetPositions(in GridPosition position)

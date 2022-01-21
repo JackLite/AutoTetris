@@ -78,8 +78,8 @@ namespace Core.Moving
 
             var nextAction = figureFinish.Actions.Pop();
             nextAction.Invoke(ref figure);
-            figure.Mono.Rotate(figure.Rotation);
-            figure.Mono.SetGridPosition(figure.Row, figure.Column);
+            figure.mono.Rotate(figure.rotation);
+            figure.mono.SetGridPosition(figure.row, figure.column);
         }
 
         private void ProcessMoving()
@@ -89,14 +89,14 @@ namespace Core.Moving
             if (IsFall(_grid.FillMatrix, figure))
                 return;
 
-            if (figure.Column > 0 && _decisionsFilter.GetEntitiesCount() > 0)
+            if (figure.column > 0 && _decisionsFilter.GetEntitiesCount() > 0)
             {
                 if (_inputEvent != null)
                 {
                     var aiDecision = GetAiDecision(_inputEvent.Direction);
                     if (aiDecision.Direction != Direction.None)
                     {
-                        figure.Rotation = aiDecision.Rotation;
+                        figure.rotation = aiDecision.Rotation;
                         var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
                         var moveChosen = new FigureMoveChosen { Actions = new Stack<PathAction>(path) };
                         _activeFigureFilter.GetEntity(0).Replace(moveChosen);
@@ -114,9 +114,9 @@ namespace Core.Moving
             if (_fallCounter >= 0)
                 return;
 
-            if (figure.Row > 0 && !IsFall(_grid.FillMatrix, figure))
-                figure.Row--;
-            figure.Mono.SetGridPosition(figure.Row, figure.Column);
+            if (figure.row > 0 && !IsFall(_grid.FillMatrix, figure))
+                figure.row--;
+            figure.mono.SetGridPosition(figure.row, figure.column);
 
             if (IsFall(_grid.FillMatrix, figure))
                 FinishMove();

@@ -15,7 +15,7 @@ namespace Utilities
                 PlayerPrefs.Save();
         }
 
-        public static int GetInt(string key)
+        public static int LoadInt(string key)
         {
             return PlayerPrefs.HasKey(key) ? PlayerPrefs.GetInt(key) : 0;
         }
@@ -28,11 +28,25 @@ namespace Utilities
                 PlayerPrefs.Save();
         }
 
-        public static byte[] GetBytes(string key)
+        public static byte[] LoadBytes(string key)
         {
             if (PlayerPrefs.HasKey(key))
                 return Convert.FromBase64String(PlayerPrefs.GetString(key));
             return Array.Empty<byte>();
+        }
+
+        public static void SaveString(string key, string value, bool saveImmediate = false)
+        {
+            PlayerPrefs.SetString(key, value);
+            if (saveImmediate)
+                PlayerPrefs.Save();
+        }
+
+        public static string LoadString(string key)
+        {
+            if (PlayerPrefs.HasKey(key))
+                return PlayerPrefs.GetString(key);
+            return string.Empty;
         }
     }
 }

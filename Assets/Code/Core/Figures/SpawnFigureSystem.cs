@@ -62,7 +62,7 @@ namespace Core.Figures
 
             var figure = new Figure
             {
-                Type = type, Mono = mono, Row = startRow, Column = startColumn
+                type = type, mono = mono, row = startRow, column = startColumn
             };
             entity.Replace(figure);
 
@@ -70,7 +70,7 @@ namespace Core.Figures
             if (FigureAlgorithmFacade.IsFall(_gridData.FillMatrix, figure))
             {
                 _eventTable.AddEvent<GameOverSignal>();
-                figure.Mono.Delete();
+                figure.mono.Delete();
                 entity.Destroy();
             }
         }

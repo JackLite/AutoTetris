@@ -41,7 +41,7 @@ namespace Core.Figures.FigureAlgorithms
 
         public void CheckAndUpdateCell(in Figure figure, in Cell cell)
         {
-            var position = new GridPosition(figure.Row, figure.Column);
+            var position = new GridPosition(figure.row, figure.column);
 
             if (!IsFigureAtCell(position, cell, figure))
                 return;
@@ -62,7 +62,7 @@ namespace Core.Figures.FigureAlgorithms
 
         public bool IsCanPlaceFigure(in bool[,] fillMatrix, in Figure figure, in GridPosition place)
         {
-            if (!RotatedFigures[figure.Rotation].CheckBordersForPlaceFigure(fillMatrix, place))
+            if (!RotatedFigures[figure.rotation].CheckBordersForPlaceFigure(fillMatrix, place))
                 return false;
 
             var positions = GetPositions(place, figure);
@@ -83,18 +83,18 @@ namespace Core.Figures.FigureAlgorithms
 
         public bool IsFall(in bool[,] fillMatrix, in Figure figure)
         {
-            if (figure.Row == 0)
+            if (figure.row == 0)
                 return true;
 
-            if (!RotatedFigures[figure.Rotation].CheckBordersForPlaceFigure(fillMatrix, new GridPosition(figure)))
+            if (!RotatedFigures[figure.rotation].CheckBordersForPlaceFigure(fillMatrix, new GridPosition(figure)))
                 return false;
 
-            return RotatedFigures[figure.Rotation].IsFall(fillMatrix, figure);
+            return RotatedFigures[figure.rotation].IsFall(fillMatrix, figure);
         }
 
         private GridPosition[] GetPositions(in GridPosition place, in Figure figure)
         {
-            return RotatedFigures[figure.Rotation].GetPositions(place);
+            return RotatedFigures[figure.rotation].GetPositions(place);
         }
         
         public IEnumerable<GridPosition> GetPositions(in GridPosition place, FigureRotation rotation)
@@ -105,7 +105,7 @@ namespace Core.Figures.FigureAlgorithms
         public Direction GetBorderDirectionsForCell(in Figure figure, in Cell cell, in GridPosition position)
         {
             var cellPosition = cell.Position;
-            return RotatedFigures[figure.Rotation].GetBorderDirectionsForCell(cellPosition, position);
+            return RotatedFigures[figure.rotation].GetBorderDirectionsForCell(cellPosition, position);
         }
     }
 }
