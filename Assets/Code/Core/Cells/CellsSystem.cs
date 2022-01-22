@@ -3,6 +3,7 @@ using Core.Cells.Visual;
 using Core.Grid;
 using EcsCore;
 using Global;
+using Global.Saving;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -24,10 +25,15 @@ namespace Core.Cells
         private CellMono[,] _cellsArray;
         private CoreConfig _coreConfig;
         private GridData _gridData;
+        private SaveService _saveService;
 
         private int _remainCreate;
         public void Init()
         {
+            if (_coreConfig.isContinue)
+            {
+                _grid.FillMatrix = _saveService.LoadFillMatrix(_grid.Rows, _grid.Columns);
+            }
             _cellsArray = new CellMono[_grid.Rows, _grid.Columns];
             _checkSpeed = FIRST_DELAY;
             _remainCreate = _grid.Rows * _grid.Columns;
@@ -47,12 +53,16 @@ namespace Core.Cells
             var cellMono = handle.Result.GetComponent<CellMono>();
             var cell = new Cell
             {
-                Column = column, Row = row, State = CellState.Empty, View = cellMono
+                Column = column, Row = row, View = cellMono
             };
             _world.NewEntity().Replace(cell);
             cellMono.SetPosition(row, column);
             cellMono.SetEmpty();
             _cellsArray[row, column] = cellMono;
+            if (_grid.FillMatrix[row, column])
+            {
+                cellMono.SetImageActive(true);
+            }
             _remainCreate--;
             if (_remainCreate == 0)
                 _eventTable.AddEvent<CellsCreatedSignal>();

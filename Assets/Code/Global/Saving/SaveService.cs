@@ -13,7 +13,8 @@ namespace Global.Saving
         private const string FILL_MATRIX_KEY = "core.fill_matrix";
         private const string FIGURE_KEY = "core.current_figure";
         private const string FIGURE_BAG_KEY = "core.figure_bag";
-        private const string UNFINISHED_GAME = "core.has_saved_game";
+        private const string UNFINISHED_GAME = "core.has_figure";
+        private const string HAS_FIGURE_KEY = "core.has_saved_game";
 
         public void SetHasGame(bool isHasGame)
         {
@@ -24,7 +25,18 @@ namespace Global.Saving
         {
             return SaveUtility.LoadInt(UNFINISHED_GAME) > 0;
         }
-        
+
+        public void SetHasFigure(bool isHasGame)
+        {
+            SaveUtility.SaveInt(HAS_FIGURE_KEY, isHasGame ? 1 : 0, true);
+        }
+
+        public bool HasFigure()
+        {
+            return SaveUtility.LoadInt(HAS_FIGURE_KEY) > 0;
+        }
+
+
         public void SaveScores(int scores)
         {
             SaveUtility.SaveInt(SCORES_KEY, scores);
@@ -44,7 +56,6 @@ namespace Global.Saving
         {
             return SaveUtility.LoadInt(MAX_SCORES_KEY);
         }
-
 
         public void SaveFillMatrix(bool[,] fillMatrix)
         {
@@ -69,8 +80,9 @@ namespace Global.Saving
             return fillMatrix;
         }
 
-        public void SaveCurrentFigure(in Figure figure)
+        public void SaveCurrentFigure(Figure figure)
         {
+            figure.mono = null;
             var saved = JsonUtility.ToJson(figure);
             SaveUtility.SaveString(FIGURE_KEY, saved);
         }
@@ -85,8 +97,10 @@ namespace Global.Saving
         {
             var bytes = new byte[bag.Count];
             var i = 0;
-            while (bag.Count > 0)
-                bytes[i++] = (byte) bag.Pop();
+            foreach (var type in bag)
+            {
+                bytes[i++] = (byte) type;
+            }
 
             SaveUtility.SaveBytes(FIGURE_BAG_KEY, bytes);
         }
@@ -95,7 +109,7 @@ namespace Global.Saving
         {
             var bytes = SaveUtility.LoadBytes(FIGURE_BAG_KEY);
             var bag = new Stack<FigureType>();
-            for (var i = bytes.Length - 1; i >= 0; i++)
+            for (var i = bytes.Length - 1; i >= 0; --i)
                 bag.Push((FigureType) bytes[i]);
             return bag;
         }

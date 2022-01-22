@@ -70,6 +70,7 @@ namespace Core.Moving
             _saveService.Flush();
             CreateSingleFigures(figure);
             ClearDecisions();
+            _saveService.SetHasFigure(false);
             figure.mono.Delete();
             _filter.GetEntity(0).Destroy();
 

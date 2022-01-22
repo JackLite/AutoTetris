@@ -18,33 +18,33 @@ namespace MainMenu
         public void Init()
         {
             _startScreenMono.StartGameButton.OnClick += StartGame;
-            _startScreenMono.ContinueGameButton.onClick.AddListener(StartDebug);
-            _startScreenMono.StartDebugButton.onClick.AddListener(ContinueGame);
-            if (_saveService.HasGame())
-                _startScreenMono.ContinueGameButton.gameObject.SetActive(true);
+            _startScreenMono.ContinueGameButton.onClick.AddListener(ContinueGame);
+            _startScreenMono.StartDebugButton.onClick.AddListener(StartDebug);
+            _startScreenMono.ContinueGameButton.gameObject.SetActive(_saveService.HasGame());
         }
         private void ContinueGame()
         {
-            Addressables.ReleaseInstance(_startScreenMono.gameObject);
-            _world.NewEntity().Replace(new StartCoreComponent { isContinue = true });
+            _coreConfig.isContinue = true;
+            _coreConfig.isDebug = false;
+            Start();
         }
 
         private void StartGame()
         {
-            _coreConfig.IsDebug = false;
+            _coreConfig.isDebug = false;
             Start();
         }
 
         private void StartDebug()
         {
-            _coreConfig.IsDebug = true;
+            _coreConfig.isDebug = true;
             Start();
         }
 
         private void Start()
         {
             Addressables.ReleaseInstance(_startScreenMono.gameObject);
-            _world.NewEntity().Replace(new StartCoreComponent());
+            _eventTable.AddEvent<StartCoreSignal>();
         }
     }
 }

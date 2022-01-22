@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <StartGameButton>k__BackingField: {fileID: 3420212173512344321}
-  <ContinueGameButton>k__BackingField: {fileID: 0}
+  <ContinueGameButton>k__BackingField: {fileID: 820663561601847616}
   <StartDebugButton>k__BackingField: {fileID: 720133565822915380}
 --- !u!1 &3290943542701558627
 GameObject:

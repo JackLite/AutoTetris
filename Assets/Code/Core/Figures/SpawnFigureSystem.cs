@@ -6,6 +6,8 @@ using Core.GameOver;
 using Core.Grid;
 using Core.Pause.Signals;
 using EcsCore;
+using Global;
+using Global.Saving;
 using Leopotam.Ecs;
 using UnityEngine.AddressableAssets;
 using Utilities;
@@ -21,8 +23,10 @@ namespace Core.Figures
         private EcsEventTable _eventTable;
         private EcsWorld _world;
         private CoreState _coreState;
+        private CoreConfig _coreConfig;
+        private SaveService _saveService;
         private readonly Random _random;
-        private readonly Stack<FigureType> _figureBag = new Stack<FigureType>();
+        private Stack<FigureType> _figureBag = new Stack<FigureType>();
 
         public SpawnFigureSystem()
         {
@@ -31,8 +35,24 @@ namespace Core.Figures
 
         public void Init()
         {
-            _eventTable.AddEvent<FigureSpawnSignal>();
-            FillBag(_figureBag);
+            if (_coreConfig.isContinue)
+            {
+                _figureBag = _saveService.LoadFigureBag();
+                if (!_saveService.HasFigure())
+                {
+                    _eventTable.AddEvent<FigureSpawnSignal>();
+                }
+                else
+                {
+                    var figure = _saveService.LoadFigure();
+                    CreateFigure(figure.type);
+                }
+            }
+            else
+            {
+                FillBag(_figureBag);
+                _eventTable.AddEvent<FigureSpawnSignal>();
+            }
         }
 
         public void Run()
@@ -45,12 +65,13 @@ namespace Core.Figures
 
             if (GridService.IsFillSomeAtTopRow(_gridData.FillMatrix))
                 return;
-            CreateFigure();
+            
+            _saveService.SetHasFigure(true);
+            CreateFigure(PopFigureType());
         }
 
-        private async void CreateFigure()
+        private async void CreateFigure(FigureType type)
         {
-            var type = PopFigureType();
             var name = FiguresUtility.GetFigureAddress(type);
             var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
             await task;
@@ -65,11 +86,12 @@ namespace Core.Figures
                 type = type, mono = mono, row = startRow, column = startColumn
             };
             entity.Replace(figure);
-
+            _saveService.SaveCurrentFigure(figure);
             _mainScreen.NextFigure.ShowNext(PeekFigureType());
             if (FigureAlgorithmFacade.IsFall(_gridData.FillMatrix, figure))
             {
                 _eventTable.AddEvent<GameOverSignal>();
+                _saveService.SetHasFigure(false);
                 figure.mono.Delete();
                 entity.Destroy();
             }
@@ -79,8 +101,11 @@ namespace Core.Figures
             if (_figureBag.Count == 0)
                 FillBag(_figureBag);
             if (_coreState.NextFigure == FigureType.None)
-                return _figureBag.Pop();
-
+            {
+                var figureType = _figureBag.Pop();
+                _saveService.SaveFigureBag(_figureBag);
+                return figureType;
+            }
             var type = _coreState.NextFigure;
             _coreState.NextFigure = FigureType.None;
             return type;

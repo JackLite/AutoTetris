@@ -20,8 +20,8 @@ namespace Core.CoreDebug
 
         public void Init()
         {
-            _mainScreenMono.DebugMono.gameObject.SetActive(_coreConfig.IsDebug);
-            if (!_coreConfig.IsDebug)
+            _mainScreenMono.DebugMono.gameObject.SetActive(_coreConfig.isDebug);
+            if (!_coreConfig.isDebug)
                 return;
 
             _eventTable.AddEvent<PauseSignal>();
@@ -63,12 +63,12 @@ namespace Core.CoreDebug
         }
         public void Run()
         {
-            if (_eventTable.Has<CellsCreatedSignal>() && _coreConfig.IsDebug)
+            if (_eventTable.Has<CellsCreatedSignal>() && _coreConfig.isDebug)
             {
                 foreach (var i in _cells)
                 {
                     ref var cell = ref _cells.Get1(i);
-                    cell.View.SetButtonState(_coreConfig.IsDebug);
+                    cell.View.SetButtonState(_coreConfig.isDebug);
                     var pos = cell.Position;
                     cell.View.DebugCellClick += () => OnCellClick(pos);
                 }

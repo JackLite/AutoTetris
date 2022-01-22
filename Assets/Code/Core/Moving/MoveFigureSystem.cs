@@ -9,6 +9,7 @@ using Core.Input;
 using Core.Path;
 using EcsCore;
 using Global;
+using Global.Saving;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -31,6 +32,7 @@ namespace Core.Moving
         private EcsWorld _world;
         private InputEvent _inputEvent;
         private MovingData _movingData;
+        private SaveService _saveService;
 
         public void Init()
         {
@@ -120,6 +122,8 @@ namespace Core.Moving
 
             if (IsFall(_grid.FillMatrix, figure))
                 FinishMove();
+            else
+                _saveService.SaveCurrentFigure(figure);
 
             ClearDecisions();
 

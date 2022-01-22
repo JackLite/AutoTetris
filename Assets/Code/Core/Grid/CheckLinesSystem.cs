@@ -1,6 +1,7 @@
 ﻿using Core.Cells;
 using EcsCore;
 using Global;
+using Global.Saving;
 using Leopotam.Ecs;
 
 namespace Core.Grid
@@ -12,6 +13,7 @@ namespace Core.Grid
         private EcsFilter<Cell> _cells;
         private GridData _grid;
         private PlayerData _playerData;
+        private SaveService _saveService;
 
         public void Run()
         {
@@ -42,6 +44,7 @@ namespace Core.Grid
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
             _playerData.CurrentScores += fullRows.Count * 10;
+            _saveService.SaveFillMatrix(_grid.FillMatrix);
         }
     }
 }

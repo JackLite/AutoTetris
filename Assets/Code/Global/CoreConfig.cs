@@ -5,6 +5,7 @@
     /// </summary>
     public class CoreConfig
     {
-        public bool IsDebug;
+        public bool isDebug;
+        public bool isContinue;
     }
 }
