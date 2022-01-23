@@ -29,7 +29,7 @@ namespace Global
             _dependencies.Add(typeof(StartScreenMono), _startScreen.GetComponent<StartScreenMono>());
             _dependencies.Add(typeof(PlayerData), new PlayerData());
             _dependencies.Add(typeof(AdsService), new AdsService());
-            _dependencies.Add(typeof(CoreConfig), new CoreConfig());
+            _dependencies.Add(typeof(StartCoreSettings), new StartCoreSettings());
             _dependencies.Add(typeof(SaveService), new SaveService());
         }
 

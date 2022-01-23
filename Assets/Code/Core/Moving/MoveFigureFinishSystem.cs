@@ -89,8 +89,8 @@ namespace Core.Moving
             {
                 ref var cell = ref _cells.Get1(i);
                 if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell))
-                    cell.View.SetImage(figure.mono.CellSprite);
-                cell.View.SetImageActive(_grid.FillMatrix[cell.Row, cell.Column]);
+                    cell.view.SetImage(figure.mono.CellSprite);
+                cell.view.SetImageActive(_grid.FillMatrix[cell.row, cell.column]);
             }
         }
 
@@ -99,8 +99,8 @@ namespace Core.Moving
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
-                cell.View.LightDown();
-                cell.View.SetImageActive(_grid.FillMatrix[cell.Row, cell.Column]);
+                cell.view.LightDown();
+                cell.view.SetImageActive(_grid.FillMatrix[cell.row, cell.column]);
             }
         }
     }

@@ -23,7 +23,7 @@ namespace Core.Figures
         private EcsEventTable _eventTable;
         private EcsWorld _world;
         private CoreState _coreState;
-        private CoreConfig _coreConfig;
+        private StartCoreSettings startCoreSettings;
         private SaveService _saveService;
         private readonly Random _random;
         private Stack<FigureType> _figureBag = new Stack<FigureType>();
@@ -35,7 +35,7 @@ namespace Core.Figures
 
         public void Init()
         {
-            if (_coreConfig.isContinue)
+            if (startCoreSettings.isContinue)
             {
                 _figureBag = _saveService.LoadFigureBag();
                 if (!_saveService.HasFigure())

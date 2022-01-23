@@ -84,15 +84,15 @@ namespace Core.AI
 
                     if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell, position))
                     {
-                        cell.View.LightUp(figure, decision.Direction);
+                        cell.view.LightUp(figure, decision.Direction);
                         var directionMask = FigureAlgorithmFacade.GetBorderDirectionsForCell(figure, cell, position);
-                        cell.View.ShowBorders(directionMask);
+                        cell.view.ShowBorders(directionMask);
                         needLightDown = false;
                         break;
                     }
                 }
                 if (needLightDown)
-                    cell.View.LightDown();
+                    cell.view.LightDown();
             }
         }
 

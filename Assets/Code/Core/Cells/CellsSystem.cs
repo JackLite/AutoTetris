@@ -2,71 +2,25 @@
 using Core.Cells.Visual;
 using Core.Grid;
 using EcsCore;
-using Global;
-using Global.Saving;
 using Leopotam.Ecs;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace Core.Cells
 {
     [EcsSystem(typeof(CoreModule))]
-    public class CellsSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
+    public class CellsSystem : IEcsRunSystem, IEcsDestroySystem
     {
         private const float FIRST_DELAY = .2f;
         private const float DELAY = .1f;
-        private GridData _grid;
-        private MainScreenMono _mainScreen;
-        private CoreState _coreState;
         private EcsEventTable _eventTable;
         private EcsWorld _world;
         private EcsFilter<Cell> _cells;
+        
+        private GridData _grid;
+        private CoreState _coreState;
+        private CellsViewProvider _cellsViewProvider;
+        
         private float _checkSpeed;
-        private CellMono[,] _cellsArray;
-        private CoreConfig _coreConfig;
-        private GridData _gridData;
-        private SaveService _saveService;
-
-        private int _remainCreate;
-        public void Init()
-        {
-            if (_coreConfig.isContinue)
-            {
-                _grid.FillMatrix = _saveService.LoadFillMatrix(_grid.Rows, _grid.Columns);
-            }
-            _cellsArray = new CellMono[_grid.Rows, _grid.Columns];
-            _checkSpeed = FIRST_DELAY;
-            _remainCreate = _grid.Rows * _grid.Columns;
-            for (var row = 0; row < _grid.Rows; row++)
-            {
-                for (var column = 0; column < _grid.Columns; column++)
-                {
-                    CreateCell(row, column);
-                }
-            }
-        }
-
-        private async void CreateCell(int row, int column)
-        {
-            var handle = Addressables.InstantiateAsync("Cell", _mainScreen.grid);
-            await handle.Task;
-            var cellMono = handle.Result.GetComponent<CellMono>();
-            var cell = new Cell
-            {
-                Column = column, Row = row, View = cellMono
-            };
-            _world.NewEntity().Replace(cell);
-            cellMono.SetPosition(row, column);
-            cellMono.SetEmpty();
-            _cellsArray[row, column] = cellMono;
-            if (_grid.FillMatrix[row, column])
-            {
-                cellMono.SetImageActive(true);
-            }
-            _remainCreate--;
-            if (_remainCreate == 0)
-                _eventTable.AddEvent<CellsCreatedSignal>();
-        }
 
         public void Run()
         {
@@ -105,11 +59,13 @@ namespace Core.Cells
                     if (!isFill)
                         continue;
 
-                    var sprite = _cellsArray[row, column].CellSprite;
-                    _cellsArray[row, column].SetEmpty();
+                    var cell = _cellsViewProvider.GetCell(row, column);
+                    var cellUnder = _cellsViewProvider.GetCell(row - 1, column);
+                    var sprite = cell.CellSprite;
+                    cell.SetEmpty();
                     _grid.FillMatrix[row, column] = false;
-                    _cellsArray[row - 1, column].SetImage(sprite);
-                    _cellsArray[row - 1, column].SetImageActive(true);
+                    cellUnder.SetImage(sprite);
+                    cellUnder.SetImageActive(true);
                     _grid.FillMatrix[row - 1, column] = true;
                 }
             }

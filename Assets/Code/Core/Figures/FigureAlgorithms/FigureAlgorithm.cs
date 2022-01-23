@@ -46,14 +46,14 @@ namespace Core.Figures.FigureAlgorithms
             if (!IsFigureAtCell(position, cell, figure))
                 return;
 
-            cell.View.SetImageActive(true);
+            cell.view.SetImageActive(true);
         }
 
         public bool IsFigureAtCell(in GridPosition place, in Cell cell, in Figure figure)
         {
             foreach (var pos in GetPositions(place, figure))
             {
-                if (pos.Row == cell.Row && pos.Column == cell.Column)
+                if (pos.Row == cell.row && pos.Column == cell.column)
                     return true;
             }
 

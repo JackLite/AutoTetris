@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Cells;
+using Core.Cells.Visual;
 using Core.Grid;
 using Core.Moving;
 using EcsCore;
@@ -29,6 +31,7 @@ namespace Core
             _dependencies[typeof(GridData)] = new GridData();
             _dependencies[typeof(CoreState)] = new CoreState();
             _dependencies[typeof(MovingData)] = new MovingData();
+            _dependencies[typeof(CellsViewProvider)] = new CellsViewProvider(mainScreen);
             mainScreen.movingData = (MovingData)_dependencies[typeof(MovingData)];
         }
 

@@ -5,10 +5,10 @@ namespace Core.Cells
 {
     public struct Cell
     {
-        public int Row;
-        public int Column;
-        public CellMono View;
+        public int row;
+        public int column;
+        public CellMono view;
 
-        public GridPosition Position => new GridPosition(Row, Column);
+        public GridPosition Position => new GridPosition(row, column);
     }
 }

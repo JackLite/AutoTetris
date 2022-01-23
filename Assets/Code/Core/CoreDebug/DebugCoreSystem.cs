@@ -9,25 +9,32 @@ using Leopotam.Ecs;
 namespace Core.CoreDebug
 {
     [EcsSystem(typeof(CoreModule))]
-    public class DebugCoreSystem : IEcsInitSystem, IEcsRunSystem
+    public class DebugCoreSystem : IEcsInitSystem
     {
         private EcsEventTable _eventTable;
         private CoreState _coreState;
-        private CoreConfig _coreConfig;
+        private StartCoreSettings startCoreSettings;
         private MainScreenMono _mainScreenMono;
         private GridData _gridData;
         private EcsFilter<Cell> _cells;
 
         public void Init()
         {
-            _mainScreenMono.DebugMono.gameObject.SetActive(_coreConfig.isDebug);
-            if (!_coreConfig.isDebug)
+            _mainScreenMono.DebugMono.gameObject.SetActive(startCoreSettings.isDebug);
+            if (!startCoreSettings.isDebug)
                 return;
 
             _eventTable.AddEvent<PauseSignal>();
             _mainScreenMono.SwipeMono.SetActive(false);
             _mainScreenMono.DebugMono.OnStartClick += StartGame;
             _coreState.NextFigure = FigureType.T;
+            foreach (var i in _cells)
+            {
+                ref var cell = ref _cells.Get1(i);
+                cell.view.SetButtonState(startCoreSettings.isDebug);
+                var pos = cell.Position;
+                cell.view.DebugCellClick += () => OnCellClick(pos);
+            }
         }
 
         private void StartGame()
@@ -39,8 +46,8 @@ namespace Core.CoreDebug
                 if (cell.Position != position)
                     continue;
                 var isFill = _gridData.FillMatrix[position.Row, position.Column];
-                cell.View.ChangeOpacity(1);
-                cell.View.SetImageActive(isFill);
+                cell.view.ChangeOpacity(1);
+                cell.view.SetImageActive(isFill);
             }
             _eventTable.AddEvent<UnpauseSignal>();
             _eventTable.AddEvent<FigureSpawnSignal>();
@@ -57,21 +64,8 @@ namespace Core.CoreDebug
                 if (cell.Position != position)
                     continue;
                 var isFill = _gridData.FillMatrix[position.Row, position.Column];
-                cell.View.ChangeOpacity(isFill ? 1 : 0.5f);
+                cell.view.ChangeOpacity(isFill ? 1 : 0.5f);
                 break;
-            }
-        }
-        public void Run()
-        {
-            if (_eventTable.Has<CellsCreatedSignal>() && _coreConfig.isDebug)
-            {
-                foreach (var i in _cells)
-                {
-                    ref var cell = ref _cells.Get1(i);
-                    cell.View.SetButtonState(_coreConfig.isDebug);
-                    var pos = cell.Position;
-                    cell.View.DebugCellClick += () => OnCellClick(pos);
-                }
             }
         }
     }

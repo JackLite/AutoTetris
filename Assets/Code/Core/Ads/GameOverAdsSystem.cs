@@ -44,10 +44,10 @@ namespace Core.Ads
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
-                if (cell.Row >= rowIndex)
+                if (cell.row >= rowIndex)
                 {
-                    Debug.Log("Clear cell at row " + cell.Row);
-                    cell.View.SetEmpty();
+                    Debug.Log("Clear cell at row " + cell.row);
+                    cell.view.SetEmpty();
                 }
             }
             _eventTable.AddEvent<ContinueForAdsSignal>();

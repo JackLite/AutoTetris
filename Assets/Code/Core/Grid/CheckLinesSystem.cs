@@ -35,9 +35,9 @@ namespace Core.Grid
                 ref var cell = ref _cells.Get1(i);
                 foreach (var rowIndex in fullRows)
                 {
-                    if (cell.Row != rowIndex)
+                    if (cell.row != rowIndex)
                         continue;
-                    cell.View.SetEmpty();
+                    cell.view.SetEmpty();
                 }
             }
 
