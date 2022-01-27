@@ -21,7 +21,7 @@ namespace Core.Moving
 
             _lastScore = _playerData.CurrentScores;
             var factor = _lastScore / 100;
-            _movingData.currentFallSpeed = _movingData.startFallSpeed * (1 + factor * .5f);
+            //_movingData.currentFallSpeed = _movingData.startFallSpeed * (1 + factor * .5f);
         }
     }
 }

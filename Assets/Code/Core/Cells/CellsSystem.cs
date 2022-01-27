@@ -10,8 +10,8 @@ namespace Core.Cells
     [EcsSystem(typeof(CoreModule))]
     public class CellsSystem : IEcsRunSystem, IEcsDestroySystem
     {
-        private const float FIRST_DELAY = .2f;
-        private const float DELAY = .1f;
+        private const float FIRST_DELAY = .002f;
+        private const float DELAY = .001f;
         private EcsEventTable _eventTable;
         private EcsWorld _world;
         private EcsFilter<Cell> _cells;

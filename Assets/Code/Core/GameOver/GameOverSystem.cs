@@ -25,7 +25,7 @@ namespace Core.GameOver
         {
             if (_eventTable.Has<GameOverSignal>())
             {
-                CreateGameOverScreen();
+                //CreateGameOverScreen();
                 _eventTable.AddEvent<PauseSignal>();
                 if (!_playerData.AdsWasUsedInCore)
                     _saveService.SetHasGame(false);

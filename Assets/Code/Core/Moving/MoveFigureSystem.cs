@@ -93,9 +93,10 @@ namespace Core.Moving
 
             if (figure.column > 0 && _decisionsFilter.GetEntitiesCount() > 0)
             {
-                if (_inputEvent != null)
+                if (_inputEvent != null || true)
                 {
-                    var aiDecision = GetAiDecision(_inputEvent.Direction);
+                    //var aiDecision = GetAiDecision(_inputEvent.Direction);
+                    var aiDecision = _decisionsFilter.Get1(0);
                     if (aiDecision.Direction != Direction.None)
                     {
                         figure.rotation = aiDecision.Rotation;

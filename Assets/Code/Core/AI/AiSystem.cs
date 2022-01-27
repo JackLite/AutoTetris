@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core.AI.Genetic;
 using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
@@ -15,10 +16,10 @@ namespace Core.AI
     public class AiSystem : IEcsRunSystem
     {
         private const int MOVES_COUNT = 3;
-        private const float AHM = -0.510066f;
+        /*private const float AHM = -0.510066f;
         private const float CLM = 0.760066f;
         private const float HM = -0.35663f;
-        private const float BM = -0.184483f;
+        private const float BM = -0.184483f;*/
 
         private static readonly Dictionary<int, Direction> Directions = new Dictionary<int, Direction>
         {
@@ -34,6 +35,7 @@ namespace Core.AI
         private EcsWorld _world;
         private float _timer;
         private CoreState _coreState;
+        private AiGeneticService _aiGeneticService;
 
         public void Run()
         {
@@ -42,7 +44,7 @@ namespace Core.AI
 
             if (_filter.GetEntitiesCount() == 0 || _decisionsFilter.GetEntitiesCount() > 0)
             {
-                _timer = .06f;
+                _timer = .006f;
                 return;
             }
 
@@ -213,7 +215,7 @@ namespace Core.AI
                 if (count == 0)
                 {
                     result[count++] = CreateDecision(variant);
-                    continue;
+                    return result;
                 }
 
                 var decision = CreateDecision(variant);
@@ -267,11 +269,12 @@ namespace Core.AI
             };
         }
 
-        private static void Analyze(
+        private void Analyze(
             bool[,] fillMatrix,
             Figure figure,
             List<AiMoveVariant> variants)
         {
+            var individual = _aiGeneticService.currentIndividual;
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
             // анализируем все столбцы и строки
@@ -305,7 +308,10 @@ namespace Core.AI
                     variant.AH = aggregateHeight;
                     variant.H = holes;
                     variant.B = bumpiness;
-                    variant.Weight = aggregateHeight * AHM + completeLines * CLM + holes * HM + bumpiness * BM;
+                    variant.Weight = aggregateHeight * individual.Ah 
+                                     + completeLines * individual.Lines 
+                                     + holes * individual.Holes 
+                                     + bumpiness * individual.Bumpiness;
                     variants.Add(variant);
                 }
             }
