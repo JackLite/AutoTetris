@@ -100,10 +100,14 @@ namespace Core.Moving
                     if (aiDecision.Direction != Direction.None)
                     {
                         figure.rotation = aiDecision.Rotation;
-                        var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
-                        var moveChosen = new FigureMoveChosen { Actions = new Stack<PathAction>(path) };
-                        _activeFigureFilter.GetEntity(0).Replace(moveChosen);
+                        figure.row = aiDecision.Row;
+                        figure.column = aiDecision.Column;
+                        figure.mono.SetGridPosition(figure.row, figure.column);
+                        // var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
+                        // var moveChosen = new FigureMoveChosen { Actions = new Stack<PathAction>(path) };
+                        // _activeFigureFilter.GetEntity(0).Replace(moveChosen);
                         _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
+                        FinishMove();
                     }
                     
                     _inputEvent = null;
@@ -114,8 +118,8 @@ namespace Core.Moving
 
             _fallCounter -= Time.deltaTime;
 
-            if (_fallCounter >= 0)
-                return;
+            /*if (_fallCounter >= 0)
+                return;*/
 
             if (figure.row > 0 && !IsFall(_grid.FillMatrix, figure))
                 figure.row--;

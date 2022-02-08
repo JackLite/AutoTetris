@@ -29,8 +29,8 @@ namespace Core.Cells
 
             _checkSpeed -= Time.deltaTime;
 
-            if (_checkSpeed > 0)
-                return;
+            /*if (_checkSpeed > 0)
+                return;*/
 
             var topNotEmptyRow = GridService.FindTopNotEmptyRow(_grid.FillMatrix);
             var bottomRow = GridService.FindFirstEmptyRowUnder(topNotEmptyRow, _grid.FillMatrix);

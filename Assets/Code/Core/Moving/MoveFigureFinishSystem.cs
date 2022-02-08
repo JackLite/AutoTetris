@@ -74,7 +74,8 @@ namespace Core.Moving
             figure.mono.Delete();
             _filter.GetEntity(0).Destroy();
 
-            if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
+            if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix)
+                || _playerData.CurrentScores > _playerData.GeneticScoreBreak)
             {
                 _eventTable.AddEvent<GameOverSignal>();
                 return;

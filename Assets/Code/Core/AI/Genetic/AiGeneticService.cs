@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Utilities;
+using Random = UnityEngine.Random;
 
 namespace Core.AI.Genetic
 {
@@ -10,7 +13,8 @@ namespace Core.AI.Genetic
         public float mutationFactor;
         private List<GeneticIndividual> _population;
         private int _currentIndex;
-        
+        private const string SAVE_POPULATION_KEY = "AI_GENETIC_POPULATION";
+
         public AiGeneticService()
         {
             _population = new List<GeneticIndividual>();
@@ -37,7 +41,7 @@ namespace Core.AI.Genetic
         {
             return _currentIndex < _population.Count;
         }
-        
+
         public void CrossPopulation()
         {
             var count = _population.Count;
@@ -60,22 +64,42 @@ namespace Core.AI.Genetic
         }
         private void Mutate(GeneticIndividual child)
         {
-            child.Ah = Random.Range(-1f, 0);
-            child.Lines = Random.Range(0f, 1);
-            child.Holes = Random.Range(-1f, 0);
-            child.Bumpiness = Random.Range(-1f, 0);
+            var r = Random.Range(0f, 1);
+            if (r < .2f)
+                child.ah = Random.Range(-1f, 0);
+            else if (r < .4f)
+                child.lines = Random.Range(0f, 1);
+            else if (r < .6f)
+                child.holes = Random.Range(-1f, 0);
+            else if (r < .8f)
+                child.bumpiness = Random.Range(-1f, 0);
         }
 
         private GeneticIndividual[] Cross(GeneticIndividual p1, GeneticIndividual p2)
         {
+            var r = Random.Range(0f, 1);
+            if (r < .2f)
+                return new[]
+                {
+                    new GeneticIndividual(p1.ah, p2.lines, p2.holes, p2.bumpiness),
+                    new GeneticIndividual(p2.ah, p1.lines, p1.holes, p1.bumpiness)
+                };
+            if (r < .4f)
+                return new[]
+                {
+                    new GeneticIndividual(p2.ah, p1.lines, p2.holes, p2.bumpiness),
+                    new GeneticIndividual(p1.ah, p2.lines, p1.holes, p1.bumpiness)
+                };
+            if (r < .6f)
+                return new[]
+                {
+                    new GeneticIndividual(p2.ah, p2.lines, p1.holes, p2.bumpiness),
+                    new GeneticIndividual(p1.ah, p1.lines, p2.holes, p1.bumpiness)
+                };
             return new[]
             {
-                new GeneticIndividual(p1.Ah, p2.Lines, p2.Holes, p2.Bumpiness),
-                new GeneticIndividual(p1.Ah, p1.Lines, p2.Holes, p2.Bumpiness),
-                new GeneticIndividual(p1.Ah, p1.Lines, p1.Holes, p2.Bumpiness),
-                new GeneticIndividual(p2.Ah, p1.Lines, p1.Holes, p1.Bumpiness),
-                new GeneticIndividual(p2.Ah, p2.Lines, p1.Holes, p1.Bumpiness),
-                new GeneticIndividual(p2.Ah, p2.Lines, p2.Holes, p1.Bumpiness),
+                new GeneticIndividual(p2.ah, p2.lines, p2.holes, p1.bumpiness),
+                new GeneticIndividual(p1.ah, p1.lines, p1.holes, p2.bumpiness)
             };
         }
         public GeneticIndividual GetBest()
@@ -103,6 +127,47 @@ namespace Core.AI.Genetic
         public int GetRemain()
         {
             return _population.Count - _currentIndex;
+        }
+        public void LoadFromJson()
+        {
+            var lastGenerationJson = SaveUtility.LoadString(SAVE_POPULATION_KEY);
+            _population = JsonHelper.FromJson<GeneticIndividual>(lastGenerationJson).ToList();
+            _currentIndex = _population.FindIndex(0, g => g.scores == 0);
+            currentIndividual = _population[_currentIndex];
+        }
+        public void Save()
+        {
+            var value = JsonHelper.ToJson(_population.ToArray(), false);
+            SaveUtility.SaveString(SAVE_POPULATION_KEY, value);
+        }
+    }
+    
+    public static class JsonHelper
+    {
+        public static T[] FromJson<T>(string json)
+        {
+            Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(json);
+            return wrapper.Items;
+        }
+
+        public static string ToJson<T>(T[] array)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.Items = array;
+            return JsonUtility.ToJson(wrapper);
+        }
+
+        public static string ToJson<T>(T[] array, bool prettyPrint)
+        {
+            Wrapper<T> wrapper = new Wrapper<T>();
+            wrapper.Items = array;
+            return JsonUtility.ToJson(wrapper, prettyPrint);
+        }
+
+        [Serializable]
+        private class Wrapper<T>
+        {
+            public T[] Items;
         }
     }
 }

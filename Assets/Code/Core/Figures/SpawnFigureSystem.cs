@@ -25,7 +25,7 @@ namespace Core.Figures
         private CoreState _coreState;
         private StartCoreSettings startCoreSettings;
         private SaveService _saveService;
-        private readonly Random _random;
+        private Random _random;
         private Stack<FigureType> _figureBag = new Stack<FigureType>();
 
         public SpawnFigureSystem()
@@ -35,6 +35,7 @@ namespace Core.Figures
 
         public void Init()
         {
+            _random = new Random(45861858);
             if (startCoreSettings.isContinue)
             {
                 _figureBag = _saveService.LoadFigureBag();

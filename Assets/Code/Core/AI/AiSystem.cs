@@ -48,12 +48,12 @@ namespace Core.AI
                 return;
             }
 
-            if (_timer > 0)
-            {
-                _timer -= Time.deltaTime;
-
-                return;
-            }
+            // if (_timer > 0)
+            // {
+            //     _timer -= Time.deltaTime;
+            //
+            //     return;
+            // }
 
             ref var figure = ref _filter.Get1(0);
 
@@ -308,10 +308,10 @@ namespace Core.AI
                     variant.AH = aggregateHeight;
                     variant.H = holes;
                     variant.B = bumpiness;
-                    variant.Weight = aggregateHeight * individual.Ah 
-                                     + completeLines * individual.Lines 
-                                     + holes * individual.Holes 
-                                     + bumpiness * individual.Bumpiness;
+                    variant.Weight = aggregateHeight * individual.ah 
+                                     + completeLines * individual.lines 
+                                     + holes * individual.holes 
+                                     + bumpiness * individual.bumpiness;
                     variants.Add(variant);
                 }
             }
