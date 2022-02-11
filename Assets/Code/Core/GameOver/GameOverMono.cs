@@ -1,5 +1,4 @@
 ﻿using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,24 +9,22 @@ namespace Core.GameOver
         [SerializeField]
         private Button tryAgainBtn;
 
-        [SerializeField]
-        private Button adContinueBtn;
-
         [field:SerializeField]
         public GameOverScoresMono Scores { get; private set; }
 
+        [field:SerializeField]
+        public GameOverAdsWidget AdsWidget { get; private set; }
+
         public event Action OnTryAgain;
-        public event Action OnAdContinue;
 
         private void Awake()
         {
             tryAgainBtn.onClick.AddListener(() => OnTryAgain?.Invoke());
-            adContinueBtn.onClick.AddListener(() => OnAdContinue?.Invoke());
         }
 
-        public void SetAdsBtnActive(bool isActive)
+        public void SetTryAgainActive(bool isActive)
         {
-            adContinueBtn.gameObject.SetActive(isActive);
+            tryAgainBtn.gameObject.SetActive(isActive);
         }
     }
 }

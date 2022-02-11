@@ -5,6 +5,7 @@ using Core.Pause.Signals;
 using EcsCore;
 using Global;
 using Global.Saving;
+using Global.UI.Timer;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -16,6 +17,7 @@ namespace Core.GameOver
     {
         private EcsWorld _world;
         private EcsEventTable _eventTable;
+        private EcsFilter<GameOverTimerTag>.Exclude<TimerComponent> _adsTimerFilter;
         private GameObject _gameOverScreen;
         private GameOverMono _gameOverMono;
         private PlayerData _playerData;
@@ -38,6 +40,13 @@ namespace Core.GameOver
                 _eventTable.AddEvent<UnpauseSignal>();
                 _eventTable.AddEvent<FigureSpawnSignal>();
             }
+
+            if (_adsTimerFilter.GetEntitiesCount() > 0)
+            {
+                _adsTimerFilter.GetEntity(0).Destroy();
+                _gameOverMono.AdsWidget.SetActive(false);
+                _gameOverMono.SetTryAgainActive(true);
+            }
         }
 
         private async void CreateGameOverScreen()
@@ -47,8 +56,8 @@ namespace Core.GameOver
             _gameOverScreen = handle.Result;
             _gameOverMono = _gameOverScreen.GetComponent<GameOverMono>();
             _gameOverMono.OnTryAgain += RestartGame;
-            _gameOverMono.OnAdContinue += OnAdContinueClick;
-            _gameOverMono.SetAdsBtnActive(!_playerData.AdsWasUsedInCore);
+            _gameOverMono.SetTryAgainActive(_playerData.AdsWasUsedInCore);
+            InitAdsWidget();
 
             _gameOverMono.Scores.SetScores(_playerData.CurrentScores);
             if (_playerData.MaxScores > _playerData.CurrentScores)
@@ -58,6 +67,23 @@ namespace Core.GameOver
             }
             else
                 _gameOverMono.Scores.SetNewMaxState();
+        }
+        private void InitAdsWidget()
+        {
+            _gameOverMono.AdsWidget.OnAdContinue += OnAdContinueClick;
+
+            if (!_playerData.AdsWasUsedInCore)
+            {
+                var timerComponent = new TimerComponent(1)
+                {
+                    view = _gameOverMono.AdsWidget.Timer,
+                    currentSeconds = 5
+                };
+                timerComponent.nextUpdateTime = Time.unscaledTime + timerComponent.frequency;
+                _world.NewEntity().Replace(timerComponent).Replace(new GameOverTimerTag());
+            }
+
+            _gameOverMono.AdsWidget.SetActive(!_playerData.AdsWasUsedInCore);
         }
 
         private void OnAdContinueClick()

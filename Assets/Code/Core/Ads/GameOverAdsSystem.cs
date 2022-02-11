@@ -39,14 +39,12 @@ namespace Core.Ads
             {
                 for (var column = 0; column < _gridData.Columns; ++column)
                     _gridData.FillMatrix[row, column] = false;
-                Debug.Log("Clear row " + row);
             }
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
                 if (cell.row >= rowIndex)
                 {
-                    Debug.Log("Clear cell at row " + cell.row);
                     cell.view.SetEmpty();
                 }
             }

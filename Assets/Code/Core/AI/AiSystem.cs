@@ -15,10 +15,10 @@ namespace Core.AI
     public class AiSystem : IEcsRunSystem
     {
         private const int MOVES_COUNT = 3;
-        private const float AHM = -0.510066f;
-        private const float CLM = 0.760066f;
-        private const float HM = -0.35663f;
-        private const float BM = -0.184483f;
+        private const float AHM = -0.8718401f;
+        private const float CLM = 0.5081686f;
+        private const float HM = -0.1194989f;
+        private const float BM = -0.08723498f;
 
         private static readonly Dictionary<int, Direction> Directions = new Dictionary<int, Direction>
         {
