@@ -74,9 +74,13 @@ namespace Core.Moving
             figure.mono.Delete();
             _filter.GetEntity(0).Destroy();
 
-            if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix)
-                || _playerData.CurrentScores > _playerData.GeneticScoreBreak)
+            var isFillTopRow = GridService.IsFillSomeAtTopRow(_grid.FillMatrix);
+            if (isFillTopRow || _playerData.CurrentScores > _playerData.CurrentGeneticScoreBreak)
             {
+                if (isFillTopRow)
+                    _playerData.LastHeight = _grid.Rows;
+                else
+                    _playerData.LastHeight = GridService.FindTopNotEmptyRow(_grid.FillMatrix);
                 _eventTable.AddEvent<GameOverSignal>();
                 return;
             }

@@ -6,6 +6,7 @@ namespace Core.AI.Genetic
     public class GeneticIndividual
     {
         public int scores;
+        public int height;
         public float ah;
         public float lines;
         public float holes;
@@ -20,7 +21,8 @@ namespace Core.AI.Genetic
 
         public override string ToString()
         {
-            return $"AH: {ah}; Lines: {lines}; Holes: {holes}; Bumpiness: {bumpiness}; Scores: {scores}";
+            return
+                $"AH: {ah}; Lines: {lines}; Holes: {holes}; Bumpiness: {bumpiness}; Scores: {scores}; Height: {height}";
         }
     }
 }

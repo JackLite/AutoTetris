@@ -6,6 +6,8 @@
         public int MaxScores;
         public bool AdsWasUsedInCore;
         
-        public int GeneticScoreBreak = 1000;
+        public const int GeneticScoreBreak = 1000;
+        public int CurrentGeneticScoreBreak = 1000;
+        public int LastHeight;
     }
 }

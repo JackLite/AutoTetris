@@ -13,7 +13,9 @@ namespace Core.AI.Genetic
                 return 1;
             if (ReferenceEquals(null, x))
                 return -1;
-            return y.scores.CompareTo(x.scores);
+            if(x.height == y.height)
+                return y.scores.CompareTo(x.scores);
+            return x.height.CompareTo(y.height);
         }
     }
 }

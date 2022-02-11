@@ -26,6 +26,7 @@ namespace Core.Figures
         private StartCoreSettings startCoreSettings;
         private SaveService _saveService;
         private Random _random;
+        private PlayerData _playerData;
         private Stack<FigureType> _figureBag = new Stack<FigureType>();
 
         public SpawnFigureSystem()
@@ -91,6 +92,7 @@ namespace Core.Figures
             _mainScreen.NextFigure.ShowNext(PeekFigureType());
             if (FigureAlgorithmFacade.IsFall(_gridData.FillMatrix, figure))
             {
+                _playerData.LastHeight = _gridData.Rows;
                 _eventTable.AddEvent<GameOverSignal>();
                 _saveService.SetHasFigure(false);
                 figure.mono.Delete();

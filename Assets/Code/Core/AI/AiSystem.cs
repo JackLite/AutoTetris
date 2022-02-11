@@ -57,8 +57,8 @@ namespace Core.AI
 
             ref var figure = ref _filter.Get1(0);
 
-            if (figure.row > 20)
-                return;
+            // if (figure.row > 20)
+            //     return;
 
             var aiDecisions = FindBetterMoves(_gridData.FillMatrix, ref figure).ToArray();
             foreach (var decision in aiDecisions)

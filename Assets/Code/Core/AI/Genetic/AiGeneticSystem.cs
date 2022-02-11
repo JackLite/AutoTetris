@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Core.GameOver;
+using Core.Grid;
 using EcsCore;
 using Global;
 using Global.Saving;
@@ -19,7 +21,7 @@ namespace Core.AI.Genetic
         private int _iterationsRemain = 10;
         private const string SAVE_FLAG_KEY = "AI_GENETIC_SAVE";
         private const string SAVE_GENERATION_KEY = "AI_GENETIC_GENERATION";
-        
+
         public void Init()
         {
             _aiGeneticService.mutationFactor = .2f;
@@ -31,21 +33,23 @@ namespace Core.AI.Genetic
             }
             else
             {
-                _aiGeneticService.GenerateStartPopulation(25);
+                _aiGeneticService.GenerateStartPopulation(5);
                 _aiGeneticService.CrossPopulation();
                 _aiGeneticService.Save();
                 SaveUtility.SaveInt(SAVE_FLAG_KEY, 1);
                 SaveUtility.SaveInt(SAVE_GENERATION_KEY, _iterationsRemain);
             }
+            _playerData.CurrentGeneticScoreBreak = PlayerData.GeneticScoreBreak * (1 + 10 - _iterationsRemain);
         }
 
         public void Run()
         {
             // ждём конец игры
-            if(!_eventTable.Has<GameOverSignal>())
+            if (!_eventTable.Has<GameOverSignal>())
                 return;
             // записываем в текущую особь кол-во очков
             _aiGeneticService.currentIndividual.scores = _playerData.CurrentScores;
+            _aiGeneticService.currentIndividual.height = _playerData.LastHeight;
             Debug.Log(_aiGeneticService.currentIndividual);
             Debug.Log("Remain: " + _aiGeneticService.GetRemain());
             // если особи кончились
@@ -53,7 +57,7 @@ namespace Core.AI.Genetic
             {
                 _iterationsRemain--;
                 SaveUtility.SaveInt(SAVE_GENERATION_KEY, _iterationsRemain);
-                _playerData.GeneticScoreBreak *= 2;
+                _playerData.CurrentGeneticScoreBreak = PlayerData.GeneticScoreBreak * (1 + 10 - _iterationsRemain);
                 if (_iterationsRemain <= 0)
                 {
                     Debug.Log(_aiGeneticService.GetBest());
@@ -61,11 +65,11 @@ namespace Core.AI.Genetic
                     return;
                 }
                 _aiGeneticService.Reset();
-                _aiGeneticService.MakeSelection(25);
+                _aiGeneticService.MakeSelection(5);
                 _aiGeneticService.CrossPopulation();
                 _aiGeneticService.Save();
             }
-                
+
             // берём следующую особь и запускаем игру заново
             _aiGeneticService.Next();
             _aiGeneticService.Save();
