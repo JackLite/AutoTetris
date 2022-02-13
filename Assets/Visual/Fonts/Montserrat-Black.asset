@@ -6,7 +6,7 @@ Texture2D:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Montserrat-Black SDF Atlas
+  m_Name: Montserrat-Black Atlas
   m_ImageContentsHash:
     serializedVersion: 2
     Hash: 00000000000000000000000000000000
@@ -161,11 +161,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Montserrat-Black SDF
+  m_Name: Montserrat-Black
   m_EditorClassIdentifier: 
-  hashCode: -1907571776
+  hashCode: 2097737137
   material: {fileID: -1648639379763507639}
-  materialHashCode: -191036448
+  materialHashCode: 1275841265
   m_Version: 1.1.0
   m_SourceFontFileGUID: 337ee4117f68128448f577d678b6c6c1
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 337ee4117f68128448f577d678b6c6c1, type: 3}
@@ -2718,8 +2718,8 @@ MonoBehaviour:
     packingMode: 0
     atlasWidth: 1024
     atlasHeight: 1024
-    characterSetSelectionMode: 0
-    characterSequence: 32 - 126, 160, 8203, 8230, 9633
+    characterSetSelectionMode: 6
+    characterSequence: 20-7E,A0,200B,2026,25A1
     referencedFontAssetGUID: 9ac1e817fee9c2d45929a7f2f924fc53
     referencedTextAssetGUID: 
     fontStyle: 0
@@ -2741,7 +2741,7 @@ MonoBehaviour:
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 11400000, guid: b0fc0fc8b9c4e2e479fc46d71ba87576, type: 2}
+  - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
