@@ -16,7 +16,8 @@ namespace Core.GameOver
     {
         private EcsWorld _world;
         private EcsEventTable _eventTable;
-        private EcsFilter<GameOverTimerTag>.Exclude<TimerComponent> _adsTimerFilter;
+        private EcsFilter<GameOverTimerTag>.Exclude<TimerComponent> _adsTimerFinishFilter;
+        private EcsFilter<GameOverTimerTag> _adsTimerFilter;
         private GameObject _gameOverScreen;
         private GameOverMono _gameOverMono;
         private PlayerData _playerData;
@@ -40,9 +41,9 @@ namespace Core.GameOver
                 _eventTable.AddEvent<FigureSpawnSignal>();
             }
 
-            if (_adsTimerFilter.GetEntitiesCount() > 0)
+            if (_adsTimerFinishFilter.GetEntitiesCount() > 0)
             {
-                _adsTimerFilter.GetEntity(0).Destroy();
+                _adsTimerFinishFilter.GetEntity(0).Destroy();
                 _gameOverMono.AdsWidget.SetActive(false);
                 _gameOverMono.SetTryAgainActive(true);
             }
@@ -88,6 +89,8 @@ namespace Core.GameOver
         private void OnAdContinueClick()
         {
             _eventTable.AddEvent<GameOverAdsSignal>();
+            if(_adsTimerFilter.GetEntitiesCount() > 0)
+                _adsTimerFilter.GetEntity(0).Destroy();
         }
 
         private void RestartGame()

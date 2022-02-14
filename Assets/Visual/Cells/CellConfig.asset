@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d347f620a874bb89d6089b2a482be90, type: 3}
   m_Name: CellConfig
   m_EditorClassIdentifier: 
-  <MoveSpeed>k__BackingField: 150
-  <Distance>k__BackingField: 9.5
+  <MoveSpeed>k__BackingField: 100
+  <Distance>k__BackingField: 37.5

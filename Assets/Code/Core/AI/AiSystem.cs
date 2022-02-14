@@ -85,8 +85,6 @@ namespace Core.AI
                     if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell, position))
                     {
                         cell.view.LightUp(figure, decision.Direction);
-                        var directionMask = FigureAlgorithmFacade.GetBorderDirectionsForCell(figure, cell, position);
-                        cell.view.ShowBorders(directionMask);
                         needLightDown = false;
                         break;
                     }

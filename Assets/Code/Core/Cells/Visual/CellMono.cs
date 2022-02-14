@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core.Figures;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,19 +9,27 @@ namespace Core.Cells.Visual
     [RequireComponent(typeof(Image))]
     public class CellMono : MonoBehaviour
     {
-        [SerializeField] private float lightUpOpacity = .5f;
+        [SerializeField]
+        private float lightUpOpacity = .5f;
 
-        [SerializeField] private Color color;
+        [SerializeField]
+        private Color color;
 
-        [SerializeField] private CellArrowsMono cellArrows;
+        [SerializeField]
+        private Color leftRightContourColor;
+        [SerializeField]
+        private Image contour;
 
-        [SerializeField] private Button cellButton;
+        [SerializeField]
+        private CellArrowsMono[] arrows;
 
-        [SerializeField] private CellBorder[] borders;
+        [SerializeField]
+        private Button cellButton;
 
         private RectTransform _rect;
         private Image _image;
         private bool _isOpacityGrow;
+        private readonly Dictionary<Direction, CellArrowsMono> _arrowsMap = new Dictionary<Direction, CellArrowsMono>();
 
         public Sprite CellSprite => _image.sprite;
 
@@ -31,6 +40,8 @@ namespace Core.Cells.Visual
             _rect = GetComponent<RectTransform>();
             _image = GetComponent<Image>();
             cellButton.onClick.AddListener(() => DebugCellClick?.Invoke());
+            foreach (var arrow in arrows)
+                _arrowsMap.Add(arrow.Direction, arrow);
         }
 
         public void SetImageActive(bool isActive)
@@ -50,10 +61,17 @@ namespace Core.Cells.Visual
 
         public void LightUp(in Figure figure, Direction direction)
         {
-            SetImage(figure.mono.CellSprite);
-            SetImageActive(true);
+            contour.color = Color.white;
+            if (direction != Direction.Bottom)
+                contour.color = leftRightContourColor;
+            contour.gameObject.SetActive(true);
             ChangeOpacity(lightUpOpacity);
-            cellArrows.LightUp(direction);
+            foreach (var arrow in arrows)
+            {
+                if (arrow.Direction != direction)
+                    arrow.Hide();
+            }
+            _arrowsMap[direction].Show();
         }
 
         public void ChangeOpacity(float opacity)
@@ -64,8 +82,9 @@ namespace Core.Cells.Visual
         public void LightDown()
         {
             _image.color = Color.white;
-            cellArrows.LightDown();
-            ShowBorders(Direction.None);
+            foreach (var arrow in arrows)
+                arrow.Hide();
+            contour.gameObject.SetActive(false);
         }
 
         public void SetEmpty()
@@ -79,12 +98,6 @@ namespace Core.Cells.Visual
             cellButton.interactable = isBtnActive;
             SetImageActive(true);
             ChangeOpacity(.5f);
-        }
-
-        public void ShowBorders(Direction directionMask)
-        {
-            foreach (var border in borders)
-                border.borderObject.SetActive((directionMask & border.direction) > 0);
         }
     }
 }
