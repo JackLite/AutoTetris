@@ -5,6 +5,7 @@ using Core.Grid;
 using EcsCore;
 using Global;
 using Global.Ads;
+using Global.Settings.Core;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace Core.Ads
         private EcsFilter<Cell> _cells;
         private GridData _gridData;
         private PlayerData _playerData;
+        private CoreSettings _coreSettings;
 
         public GameOverAdsSystem()
         {
@@ -34,7 +36,7 @@ namespace Core.Ads
 
         private void OnRewardedVideoSuccess()
         {
-            var rowIndex = (_gridData.Rows - 3) / 2;
+            var rowIndex = Math.Max(_gridData.Rows - 3 - _coreSettings.adsClearRows, 0);
             for (var row = _gridData.Rows - 1; row >= rowIndex; --row)
             {
                 for (var column = 0; column < _gridData.Columns; ++column)
