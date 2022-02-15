@@ -32,7 +32,6 @@ namespace Core
             _dependencies[typeof(CoreState)] = new CoreState();
             _dependencies[typeof(MovingData)] = new MovingData();
             _dependencies[typeof(CellsViewProvider)] = new CellsViewProvider(mainScreen);
-            mainScreen.movingData = (MovingData)_dependencies[typeof(MovingData)];
         }
 
         protected override Dictionary<Type, object> GetDependencies()

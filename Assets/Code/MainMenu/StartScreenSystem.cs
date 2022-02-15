@@ -12,7 +12,7 @@ namespace MainMenu
         private StartScreenMono _startScreenMono;
         private EcsWorld _world;
         private EcsEventTable _eventTable;
-        private StartCoreSettings startCoreSettings;
+        private StartCoreData startCoreData;
         private SaveService _saveService;
 
         public void Init()
@@ -24,20 +24,20 @@ namespace MainMenu
         }
         private void ContinueGame()
         {
-            startCoreSettings.isContinue = true;
-            startCoreSettings.isDebug = false;
+            startCoreData.isContinue = true;
+            startCoreData.isDebug = false;
             Start();
         }
 
         private void StartGame()
         {
-            startCoreSettings.isDebug = false;
+            startCoreData.isDebug = false;
             Start();
         }
 
         private void StartDebug()
         {
-            startCoreSettings.isDebug = true;
+            startCoreData.isDebug = true;
             Start();
         }
 

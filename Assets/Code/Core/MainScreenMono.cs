@@ -13,8 +13,6 @@ namespace Core
     {
         public RectTransform grid;
 
-        public MovingData movingData;
-        
         [field:SerializeField]
         public ScoreView ScoreView { get; private set; }
 

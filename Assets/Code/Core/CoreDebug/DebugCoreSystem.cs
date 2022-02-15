@@ -13,15 +13,15 @@ namespace Core.CoreDebug
     {
         private EcsEventTable _eventTable;
         private CoreState _coreState;
-        private StartCoreSettings startCoreSettings;
+        private StartCoreData startCoreData;
         private MainScreenMono _mainScreenMono;
         private GridData _gridData;
         private EcsFilter<Cell> _cells;
 
         public void Init()
         {
-            _mainScreenMono.DebugMono.gameObject.SetActive(startCoreSettings.isDebug);
-            if (!startCoreSettings.isDebug)
+            _mainScreenMono.DebugMono.gameObject.SetActive(startCoreData.isDebug);
+            if (!startCoreData.isDebug)
                 return;
 
             _eventTable.AddEvent<PauseSignal>();
@@ -31,7 +31,7 @@ namespace Core.CoreDebug
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
-                cell.view.SetButtonState(startCoreSettings.isDebug);
+                cell.view.SetButtonState(startCoreData.isDebug);
                 var pos = cell.Position;
                 cell.view.DebugCellClick += () => OnCellClick(pos);
             }

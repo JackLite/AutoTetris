@@ -10,6 +10,7 @@ using Core.Path;
 using EcsCore;
 using Global;
 using Global.Saving;
+using Global.Settings.Core;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace Core.Moving
     public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
         private float _fallCounter;
+        private int _moveDownActionsCount;
         private EcsFilter<Figure>.Exclude<FigureMoveChosen> _activeFigureFilter;
         private EcsFilter<Figure, FigureMoveChosen> _finishFigureFilter;
         private EcsFilter<Figure>.Exclude<FinalFigureComponent> _notFinalFigureFilter;
@@ -32,8 +34,9 @@ namespace Core.Moving
         private EcsWorld _world;
         private InputEvent _inputEvent;
         private MovingData _movingData;
+        private CoreSettings _coreSettings;
         private SaveService _saveService;
-
+        
         public void Init()
         {
             EcsWorldEventsBlackboard.AddEventHandler<InputEvent>(SaveInputSignal);
@@ -66,22 +69,31 @@ namespace Core.Moving
             if (_fallCounter >= 0)
                 return;
 
-            if (figureFinish.Actions.Count == 0)
+            if (figureFinish.actions.Count == 0)
             {
                 FinishMove();
                 _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
                 return;
             }
 
-            if (figureFinish.Actions.All(a => a == PathActions.MoveDown))
-                _fallCounter = CalculateFallSpeed(_movingData.finishMoveSpeed);
+            if (figureFinish.actions.All(a => a == PathActions.MoveDown))
+                _fallCounter = CalculateFallSpeed(GetFinishMoveSpeed(figureFinish));
             else
-                _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
+                _fallCounter = CalculateFallSpeed(_coreSettings.ManipulationSpeed);
 
-            var nextAction = figureFinish.Actions.Pop();
+            var nextAction = figureFinish.actions.Pop();
             nextAction.Invoke(ref figure);
             figure.mono.Rotate(figure.rotation);
             figure.mono.SetGridPosition(figure.row, figure.column);
+        }
+
+        private float GetFinishMoveSpeed(in FigureMoveChosen figureFinish)
+        {
+            if (_moveDownActionsCount == 0)
+                _moveDownActionsCount = figureFinish.actions.Count;
+            var time = 1 - (float) figureFinish.actions.Count / _moveDownActionsCount;
+            var val = _coreSettings.finishMoveVelocity.Evaluate(time);
+            return Mathf.Lerp(_coreSettings.finishMoveMinSpeed, _coreSettings.finishMoveMaxSpeed, val);
         }
 
         private void ProcessMoving()
@@ -100,9 +112,9 @@ namespace Core.Moving
                     {
                         figure.rotation = aiDecision.Rotation;
                         var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
-                        var moveChosen = new FigureMoveChosen { Actions = new Stack<PathAction>(path) };
+                        var moveChosen = new FigureMoveChosen { actions = new Stack<PathAction>(path) };
                         _activeFigureFilter.GetEntity(0).Replace(moveChosen);
-                        _fallCounter = CalculateFallSpeed(_movingData.manipulationSpeed);
+                        _fallCounter = CalculateFallSpeed(_coreSettings.ManipulationSpeed);
                     }
                     
                     _inputEvent = null;

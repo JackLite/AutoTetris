@@ -8,6 +8,6 @@ namespace Core.Figures
     /// </summary>
     public struct FigureMoveChosen
     {
-        public Stack<PathAction> Actions;
+        public Stack<PathAction> actions;
     }
 }

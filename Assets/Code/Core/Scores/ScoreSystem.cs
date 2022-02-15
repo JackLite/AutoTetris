@@ -12,12 +12,12 @@ namespace Core.Scores
         private PlayerData _playerData;
         private EcsEventTable _eventTable;
         private SaveService _saveService;
-        private StartCoreSettings startCoreSettings;
+        private StartCoreData startCoreData;
         private int _lastScores = -1;
 
         public void Init()
         {
-            if (startCoreSettings.isContinue)
+            if (startCoreData.isContinue)
             {
                 _playerData.CurrentScores = _saveService.LoadScores();
                 _mainScreenMono.ScoreView.UpdateScores(_playerData.CurrentScores);

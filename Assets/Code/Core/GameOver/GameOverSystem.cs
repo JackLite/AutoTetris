@@ -20,6 +20,7 @@ namespace Core.GameOver
         private EcsFilter<GameOverTimerTag> _adsTimerFilter;
         private GameObject _gameOverScreen;
         private GameOverMono _gameOverMono;
+        private StartCoreData _startCoreData;
         private PlayerData _playerData;
         private SaveService _saveService;
 
@@ -98,6 +99,7 @@ namespace Core.GameOver
             _eventTable.AddEvent<StartCoreSignal>();
             _eventTable.AddEvent<RestartCoreSignal>();
             _world.DeactivateModule<CoreModule>();
+            _startCoreData.isContinue = false;
             DestroyGameOverScreen();
         }
 

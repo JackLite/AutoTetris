@@ -1,5 +1,8 @@
-﻿using EcsCore;
+﻿using System.Linq;
+using EcsCore;
 using Global;
+using Global.Settings;
+using Global.Settings.Core;
 using Leopotam.Ecs;
 
 namespace Core.Moving
@@ -8,11 +11,19 @@ namespace Core.Moving
     /// Отвечает за увеличение скорости движения фигур
     /// </summary>
     [EcsSystem(typeof(CoreModule))]
-    public class MovingSpeedSystem : IEcsRunSystem
+    public class MovingSpeedSystem : IEcsInitSystem, IEcsRunSystem
     {
         private PlayerData _playerData;
         private int _lastScore;
         private MovingData _movingData;
+        private CoreSettings _coreSettings;
+        private CoreSpeedProgression[] _speedProgression;
+
+        public void Init()
+        {
+            _speedProgression = _coreSettings.fallSpeedProgression.OrderByDescending(p => p.scores).ToArray();
+            UpdateSpeed();
+        }
 
         public void Run()
         {
@@ -20,8 +31,18 @@ namespace Core.Moving
                 return;
 
             _lastScore = _playerData.CurrentScores;
-            var factor = _lastScore / 100;
-            _movingData.currentFallSpeed = _movingData.startFallSpeed * (1 + factor * .5f);
+            UpdateSpeed();
+        }
+        private void UpdateSpeed()
+        {
+            foreach (var progression in _speedProgression)
+            {
+                if (progression.scores > _lastScore)
+                    continue;
+
+                _movingData.currentFallSpeed = progression.speed;
+                break;
+            }
         }
     }
 }
