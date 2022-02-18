@@ -42,7 +42,7 @@ MonoBehaviour:
       m_RotationOrder: 4
     fallSpeedProgression:
     - scores: 0
-      speed: 20
+      speed: 0
     - scores: 100
       speed: 2.5
     - scores: 250

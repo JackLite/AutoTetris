@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Core.Figures;
 using UnityEngine;
@@ -25,6 +26,9 @@ namespace Core.Cells.Visual
 
         [SerializeField]
         private Button cellButton;
+
+        [SerializeField]
+        private CellVfx cellVfx;
 
         private RectTransform _rect;
         private Image _image;
@@ -98,6 +102,12 @@ namespace Core.Cells.Visual
             cellButton.interactable = isBtnActive;
             SetImageActive(true);
             ChangeOpacity(.5f);
+        }
+
+        public void PlayVfx()
+        {
+            cellVfx.PlayFairyDust();
+            cellVfx.PlayGlow();
         }
     }
 }

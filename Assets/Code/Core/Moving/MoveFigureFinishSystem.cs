@@ -15,7 +15,7 @@ namespace Core.Moving
     [EcsSystem(typeof(CoreModule))]
     public class MoveFigureFinishSystem : IEcsRunSystem
     {
-        private const float WAIT_TIME = .2f;
+        private const float WAIT_TIME = .1f;
         private EcsEventTable _eventTable;
         private PlayerData _playerData;
         private GridData _grid;

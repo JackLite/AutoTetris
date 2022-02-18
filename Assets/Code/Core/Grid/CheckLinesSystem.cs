@@ -38,6 +38,7 @@ namespace Core.Grid
                     if (cell.row != rowIndex)
                         continue;
                     cell.view.SetEmpty();
+                    cell.view.PlayVfx();
                 }
             }
 

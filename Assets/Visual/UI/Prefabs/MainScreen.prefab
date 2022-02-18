@@ -523,11 +523,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 2372132543059578995}
-  movingData:
-    startFallSpeed: 2
-    manipulationSpeed: 10
-    finishMoveSpeed: 35
-    currentFallSpeed: 2
   <ScoreView>k__BackingField: {fileID: 2135276277065659406}
   <PauseButton>k__BackingField: {fileID: 6330806378083554980}
   <UnPauseButton>k__BackingField: {fileID: 8879651822204092409}
@@ -1137,7 +1132,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 3
+  m_AdditionalShaderChannelsFlag: 1
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
