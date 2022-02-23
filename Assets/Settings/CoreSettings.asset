@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coreSettings:
     manipulationSpeed: 10
-    finishMoveMinSpeed: 35
-    finishMoveMaxSpeed: 70
+    finishMoveMinSpeed: 50
+    finishMoveMaxSpeed: 120
     finishMoveVelocity:
       serializedVersion: 2
       m_Curve:

@@ -32,6 +32,9 @@ namespace Core
         
         [field:SerializeField]
         public GlowEffectPool GlowEffectPool { get; private set; }
+        
+        [field:SerializeField]
+        public GridView GridView { get; private set; }
 
         [field:SerializeField]
         public DebugMono DebugMono { get; private set; }

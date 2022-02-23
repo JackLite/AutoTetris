@@ -72,6 +72,7 @@ namespace Core.Moving
             if (figureFinish.actions.Count == 0)
             {
                 FinishMove();
+                _screenMono.GridView.PlayFallEffect();
                 _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
                 return;
             }
