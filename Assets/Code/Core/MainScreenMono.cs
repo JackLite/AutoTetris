@@ -1,7 +1,6 @@
 ﻿using Core.CoreDebug;
+using Core.Grid.Visual;
 using Core.Input;
-using Core.Moving;
-using Core.Pause;
 using Core.Scores;
 using Core.UI;
 using UnityEngine;
@@ -31,6 +30,9 @@ namespace Core
         [field:SerializeField]
         public SwipeMono SwipeMono { get; private set; }
         
+        [field:SerializeField]
+        public GlowEffectPool GlowEffectPool { get; private set; }
+
         [field:SerializeField]
         public DebugMono DebugMono { get; private set; }
     }

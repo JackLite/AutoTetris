@@ -12,6 +12,7 @@ namespace Core.Grid
         private EcsEventTable _eventTable;
         private EcsFilter<Cell> _cells;
         private GridData _grid;
+        private MainScreenMono _mainScreen;
         private PlayerData _playerData;
         private SaveService _saveService;
 
@@ -40,6 +41,13 @@ namespace Core.Grid
                     cell.view.SetEmpty();
                     cell.view.PlayVfx();
                 }
+            }
+            
+            foreach (var rowIndex in fullRows)
+            {
+                var glow = _mainScreen.GlowEffectPool.Get();
+                glow.SetRow(rowIndex);
+                glow.Show(v => _mainScreen.GlowEffectPool.Return(v));
             }
 
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
