@@ -60,13 +60,7 @@ namespace Core.GameOver
             _gameOverMono.SetTryAgainActive(_playerData.AdsWasUsedInCore);
             InitAdsWidget();
 
-            _gameOverMono.Scores.SetScores(_playerData.CurrentScores);
-            if (_playerData.MaxScores > _playerData.CurrentScores)
-            {
-                var percent = (float) _playerData.CurrentScores / _playerData.MaxScores;
-                _gameOverMono.Scores.SetPercentState(percent * 100);
-            }
-            else
+            if (_playerData.CurrentScores > _playerData.MaxScores)
                 _gameOverMono.Scores.SetNewMaxState();
         }
         private void InitAdsWidget()

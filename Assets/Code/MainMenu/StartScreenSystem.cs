@@ -2,6 +2,7 @@
 using Global;
 using Global.Saving;
 using Leopotam.Ecs;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 
 namespace MainMenu
@@ -19,6 +20,7 @@ namespace MainMenu
         {
             _startScreenMono.StartGameButton.OnClick += StartGame;
             _startScreenMono.ContinueGameButton.onClick.AddListener(ContinueGame);
+            _startScreenMono.StartDebugButton.gameObject.SetActive(Debug.isDebugBuild);
             _startScreenMono.StartDebugButton.onClick.AddListener(StartDebug);
             _startScreenMono.ContinueGameButton.gameObject.SetActive(_saveService.HasGame());
         }
