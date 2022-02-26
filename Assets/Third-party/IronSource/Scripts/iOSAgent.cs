@@ -40,7 +40,7 @@ public class iOSAgent : IronSourceIAgent
 	private static extern string CFGetConversionValue();
 
 	[DllImport("__Internal")]
-	private static extern string CFSetManualLoadRewardedVideo(bool isOn);
+	private static extern void CFSetManualLoadRewardedVideo(bool isOn);
 
 	[DllImport("__Internal")]
 	private static extern string CFSetNetworkData(string networkKey, string networkData);
@@ -62,7 +62,7 @@ public class iOSAgent : IronSourceIAgent
 	//******************* RewardedVideo API *******************//
 
 	[DllImport("__Internal")]
-	private static extern string CFLoadRewardedVideo();
+	private static extern void CFLoadRewardedVideo();
 
 
 	[DllImport("__Internal")]
@@ -281,7 +281,7 @@ public class iOSAgent : IronSourceIAgent
 
 	//******************* RewardedVideo API *******************//
 
-	public void loadManualRewardedVideo()
+	public void loadRewardedVideo()
 	{
 		CFLoadRewardedVideo();
 	}

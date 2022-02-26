@@ -7,7 +7,7 @@ public class IronSource : IronSourceIAgent
 {
 	private IronSourceIAgent _platformAgent;
 	private static IronSource _instance;
-	private const string UNITY_PLUGIN_VERSION = "7.1.14-r";
+	private const string UNITY_PLUGIN_VERSION = "7.2.0-r";
 	private static bool isUnsupportedPlatform;
 
 	private IronSource()
@@ -63,6 +63,7 @@ public class IronSource : IronSourceIAgent
 		_platformAgent.onApplicationPause(pause);
 	}
 
+    [Obsolete("This method has been deprecated and won’t be included in ironSource SDK versions 7.3.0 and above", false)]
 	public void setMediationSegment(string segment)
 	{
 		_platformAgent.setMediationSegment(segment);
@@ -141,11 +142,17 @@ public class IronSource : IronSourceIAgent
 	}
 
 	//******************* RewardedVideo API *******************//
-
+    [Obsolete("This method has been deprecated and won’t be included in ironSource SDK versions 7.3.0 and above. Please use loadRewardedVideo() instead", false)]
 	public void loadManualRewardedVideo()
 	{
-		_platformAgent.loadManualRewardedVideo();
+		_platformAgent.loadRewardedVideo();
 	}
+
+	public void loadRewardedVideo()
+	{
+		_platformAgent.loadRewardedVideo();
+	}
+
 
 	public void showRewardedVideo ()
 	{

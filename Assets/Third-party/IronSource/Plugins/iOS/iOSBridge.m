@@ -33,6 +33,7 @@ extern "C" {
     ISBannerView* _bannerView;
     NSInteger _position;
     UIViewController* _bannerViewController;
+    BOOL _shouldHideBanner;
 }
 
 @end
@@ -66,6 +67,7 @@ char *const IRONSOURCE_EVENTS = "IronSourceEvents";
         _bannerView = nil;
         _bannerViewController = nil;
         _position = BANNER_POSITION_BOTTOM;
+        _shouldHideBanner = NO;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:)
                                                      name:UIDeviceOrientationDidChangeNotification object:nil];
@@ -121,7 +123,12 @@ char *const IRONSOURCE_EVENTS = "IronSourceEvents";
 }
 
 - (void)setManualLoadRewardedVideo:(BOOL) isOn {
-    NSLog(@"Manual Load will be supported as of ironSource SDK 7.2.0 for iOS");
+    if (isOn) {
+        [IronSource setRewardedVideoManualDelegate:self];
+    }
+    else {
+        [IronSource setRewardedVideoManualDelegate:nil];
+    }
 }
 
 - (void)setNetworkData:(NSString *)networkKey data:(NSString *)networkData {
@@ -207,7 +214,7 @@ char *const IRONSOURCE_EVENTS = "IronSourceEvents";
 #pragma mark Rewarded Video Manual Load API
 
 - (void)loadRewardedVideo {
-    NSLog(@"Manual Load will be supported as of ironSource SDK 7.2.0 for iOS");
+    [IronSource loadRewardedVideo];
 }
 
 #pragma mark Rewarded Video DemanOnly API
@@ -520,26 +527,29 @@ char *const IRONSOURCE_EVENTS = "IronSourceEvents";
                 [IronSource destroyBanner:_bannerView];
                 _bannerView = nil;
                 _bannerViewController = nil;
+                _shouldHideBanner = NO;
             }
         }
     });
 }
 
 - (void)displayBanner {
+    _shouldHideBanner = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         @synchronized(self) {
             if (_bannerView != nil) {
-                [_bannerView setHidden:NO];
+                [_bannerView setHidden:_shouldHideBanner];
             }
         }
     });
 }
 
 - (void)hideBanner {
+    _shouldHideBanner = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
         @synchronized(self) {
             if (_bannerView != nil) {
-                [_bannerView setHidden:YES];
+                [_bannerView setHidden:_shouldHideBanner];
             }
         }
     });
@@ -592,6 +602,7 @@ char *const IRONSOURCE_EVENTS = "IronSourceEvents";
         @synchronized(self) {
             _bannerView = bannerView;
             [_bannerView setAccessibilityLabel:@"bannerContainer"];
+            [_bannerView setHidden:_shouldHideBanner];
             
             _bannerView.center = [self getBannerCenter:_position rootView:_bannerViewController.view];
             [_bannerViewController.view addSubview:_bannerView];
@@ -622,10 +633,6 @@ char *const IRONSOURCE_EVENTS = "IronSourceEvents";
 
 - (void)bannerWillLeaveApplication {
     UnitySendMessage(IRONSOURCE_EVENTS, "onBannerAdLeftApplication", "");
-}
-
-- (void)bannerDidShow {
-    
 }
 
 
@@ -1057,6 +1064,23 @@ extern "C" {
         }
       return [[iOSBridge start] setAdRevenueData:GetStringParam(datasource)impressionData:data];
     }
+
+
+#pragma mark - ISRewardedVideoManualDelegate methods
+
+
+- (void)rewardedVideoDidLoad {
+    UnitySendMessage(IRONSOURCE_EVENTS, "onRewardedVideoAdReady", "");
+}
+
+- (void)rewardedVideoDidFailToLoadWithError:(NSError *)error {
+    if (error)
+        UnitySendMessage(IRONSOURCE_EVENTS, "onRewardedVideoAdLoadFailed", MakeStringCopy([self parseErrorToEvent:error]));
+    else
+        UnitySendMessage(IRONSOURCE_EVENTS, "onRewardedVideoAdLoadFailed","");
+
+}
+
     
 #ifdef __cplusplus
 }

@@ -154,7 +154,7 @@ namespace Core.Grid
             return newState;
         }
 
-        private static bool IsEmptyRow(int row, bool[,] fillMatrix)
+        public static bool IsEmptyRow(int row, bool[,] fillMatrix)
         {
             var columns = fillMatrix.GetLength(1);
 

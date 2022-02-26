@@ -40,7 +40,7 @@ public interface IronSourceIAgent
 
 	//******************* RewardedVideo API *******************//
 
-	void loadManualRewardedVideo();
+	void loadRewardedVideo();
 
 	void showRewardedVideo ();
 

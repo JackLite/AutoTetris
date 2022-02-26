@@ -105,7 +105,7 @@ public class UnsupportedPlatformAgent : IronSourceIAgent
 
 	//******************* RewardedVideo API *******************//
 
-	public void loadManualRewardedVideo()
+	public void loadRewardedVideo()
 	{
 		Debug.Log("Unsupported Platform");
 	}

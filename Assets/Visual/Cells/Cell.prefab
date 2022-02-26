@@ -16371,7 +16371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vfxFairyDust: {fileID: 5136582082608272636}
-  vfxFairyDustDuration: 2
+  vfxFairyDustDuration: 1
   glowImage: {fileID: 3214082654561552847}
   glowRect: {fileID: 3802140795736424689}
   glowDuration: 0.3

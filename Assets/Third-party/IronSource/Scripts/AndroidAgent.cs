@@ -126,7 +126,7 @@ public class AndroidAgent : IronSourceIAgent
 
 	//******************* RewardedVideo API *******************//
 
-	public void loadManualRewardedVideo()
+	public void loadRewardedVideo()
 	{
 		getBridge().Call("loadRewardedVideo");
 	}
