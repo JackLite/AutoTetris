@@ -796,7 +796,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 690b8cc6c488434e9a757c0f0f41ea6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoresText: {fileID: 0}
   newMaxGO: {fileID: 5127169323443814757}
 --- !u!114 &2696928051397998699
 MonoBehaviour:
@@ -899,6 +898,7 @@ GameObject:
   - component: {fileID: 6992368536678040395}
   - component: {fileID: 8277679895124783121}
   - component: {fileID: 6879473698902754846}
+  - component: {fileID: 5407612420404175736}
   m_Layer: 5
   m_Name: ScoresNewRecordText
   m_TagString: Untagged
@@ -953,7 +953,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New record!
+  m_text: New Record!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4824447e62e65da4ab2046e6c1153d6f, type: 2}
   m_sharedMaterial: {fileID: 5488712476393079939, guid: 4824447e62e65da4ab2046e6c1153d6f, type: 2}
@@ -1022,6 +1022,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &5407612420404175736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5127169323443814757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  translationName: new_record
+  FallbackText: New record!
 --- !u!1 &6630602925474844473
 GameObject:
   m_ObjectHideFlags: 0
@@ -1109,6 +1123,7 @@ GameObject:
   - component: {fileID: 1245428885148578263}
   - component: {fileID: 6685419031574564447}
   - component: {fileID: 7136042898758140042}
+  - component: {fileID: 7262069355568837126}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1163,7 +1178,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Try Again
+  m_text: Try again
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9ac1e817fee9c2d45929a7f2f924fc53, type: 2}
   m_sharedMaterial: {fileID: -1648639379763507639, guid: 9ac1e817fee9c2d45929a7f2f924fc53, type: 2}
@@ -1232,6 +1247,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7262069355568837126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7366133645386566620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  translationName: try_again
+  FallbackText: Try Again
 --- !u!1 &8181758944515214075
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,6 +1548,7 @@ GameObject:
   - component: {fileID: 4919333242796694181}
   - component: {fileID: 7087231413633068983}
   - component: {fileID: 2408859224445576649}
+  - component: {fileID: 3791567054201393002}
   m_Layer: 5
   m_Name: HighScoresText
   m_TagString: Untagged
@@ -1642,6 +1672,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3791567054201393002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9208493140278366399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbf51be86e70d7941bd40914206e4ddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  translationName: high_scores
+  FallbackText: High Scores
 --- !u!1001 &848125744160677474
 PrefabInstance:
   m_ObjectHideFlags: 0

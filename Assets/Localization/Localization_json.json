@@ -1,0 +1,27 @@
+[
+  {
+    "key": "new_game",
+    "en": "New Game",
+    "ru": "Новая игра"
+  },
+  {
+    "key": "continue",
+    "en": "Continue",
+    "ru": "Продолжить"
+  },
+  {
+    "key": "try_again",
+    "en": "Try again",
+    "ru": "Попробовать снова"
+  },
+  {
+    "key": "new_record",
+    "en": "New Record!",
+    "ru": "Новый рекорд!"
+  },
+  {
+    "key": "high_scores",
+    "en": "High Scores",
+    "ru": "Рейтинг"
+  }
+]

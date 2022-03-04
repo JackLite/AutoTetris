@@ -65,6 +65,10 @@ MonoBehaviour:
     m_Address: CoreSettings
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: df70a7b5a79c7b04e938afe938a3828e
+    m_Address: GlobalSettings
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 06d91d58714a25140a5968b80a93ca1b, type: 2}
   m_SchemaSet:
