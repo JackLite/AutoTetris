@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,27 +18,34 @@ namespace Global.Settings.Localization.Editor
                 CreateAssets(property, asset);
         }
 
-        private static void CreateAssets(SerializedProperty property, TextAsset asset)
+        private static void CreateAssets(SerializedProperty property, TextAsset rawLocalization)
         {
             var localizationsProperty = property.FindPropertyRelative("localizations");
 
-            var langToTextAsset = LocalizationParser.Parse(asset.text);
+            var langToTextAsset = LocalizationParser.Parse(rawLocalization.text);
             var i = 0;
             localizationsProperty.ClearArray();
             var langMap = GetLangMap(property);
             foreach (var kvp in langToTextAsset) 
             {
-                var path = AssetDatabase.GetAssetPath(asset);
-                var indexOf = path.LastIndexOf(asset.name, StringComparison.InvariantCulture);
+                var path = AssetDatabase.GetAssetPath(rawLocalization);
+                var indexOf = path.LastIndexOf(rawLocalization.name, StringComparison.InvariantCulture);
                 var directory = path.Substring(0, indexOf);
-                AssetDatabase.CreateAsset(kvp.Value, $"{directory}Localization_{kvp.Key}.asset");
+                var newAssetPath = $"{directory}Localization_{kvp.Key}.csv";
+                if (!File.Exists(newAssetPath))
+                    using(File.Create(newAssetPath))
+                    {
+                    }
+                File.WriteAllText(newAssetPath, kvp.Value);
+                AssetDatabase.Refresh();
                 localizationsProperty.InsertArrayElementAtIndex(i);
                 var subProp = localizationsProperty.GetArrayElementAtIndex(i);
                 subProp.FindPropertyRelative("lang").enumValueIndex = langMap[kvp.Key];
-                subProp.FindPropertyRelative("csv").objectReferenceValue = kvp.Value;
+                var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(newAssetPath);
+                EditorUtility.SetDirty(asset);
+                subProp.FindPropertyRelative("csv").objectReferenceValue = asset;
                 i++;
             }
-            AssetDatabase.Refresh();
         }
 
 

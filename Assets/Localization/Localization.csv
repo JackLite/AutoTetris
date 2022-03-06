@@ -2,5 +2,8 @@ keys;en;ru
 new_game;New Game;Новая игра
 continue;Continue;Продолжить
 try_again;Try again;Попробовать снова
-new_record;New Record!;Новый рекорд!
+new_record;New\nRecord!;Новый\nрекорд!
 high_scores;High Scores;Рейтинг
+game_over;Game Over;Game Over
+more_chance;One more chance!;Ещё один шанс!
+end_continue;Continue?;Продолжить?

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 namespace Global.Settings.Localization.Editor
@@ -9,12 +8,12 @@ namespace Global.Settings.Localization.Editor
     public static class LocalizationParser
     {
         private const char COLUMN_SEPARATOR = ';';
-        public static Dictionary<string, TextAsset> Parse(string csv)
+        public static Dictionary<string, string> Parse(string csv)
         {
             using var reader = new StringReader(csv);
             var firstRow = reader.ReadLine();
             var languages = GetLanguages(firstRow);
-            var langToAssetMap = new Dictionary<string, TextAsset>();
+            var langToAssetMap = new Dictionary<string, string>();
             var langToCsvMap = new Dictionary<string, string>();
             string row;
             while((row = reader.ReadLine()) != null)
@@ -38,7 +37,7 @@ namespace Global.Settings.Localization.Editor
             }
             foreach (var kvp in langToCsvMap)
             {
-                langToAssetMap[kvp.Key] = new TextAsset(kvp.Value.Substring(0, kvp.Value.Length - 2));
+                langToAssetMap[kvp.Key] = kvp.Value.Substring(0, kvp.Value.Length - 2);
             }
 
             return langToAssetMap;
