@@ -73,6 +73,7 @@ namespace Core.Ads
         private void OnRewardVideoFailed()
         {
             // TODO: save that video failed
+            _eventTable.AddEvent<AdsFailSignal>();
             ContinueGame();
         }
     }

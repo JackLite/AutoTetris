@@ -8,6 +8,16 @@ namespace Utilities
 {
     public static class SaveUtility
     {
+        public static void SaveBool(string key, bool value, bool saveImmediate = false)
+        {
+            SaveInt(key, value ? 1 : 0, saveImmediate);
+        }
+
+        public static bool LoadBool(string key)
+        {
+            return LoadInt(key) > 0;
+        }
+
         public static void SaveInt(string key, int value, bool saveImmediate = false)
         {
             PlayerPrefs.SetInt(key, value);
