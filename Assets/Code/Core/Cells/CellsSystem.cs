@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Cells.Visual;
+using Core.Figures;
 using Core.Grid;
 using EcsCore;
 using Leopotam.Ecs;
@@ -15,11 +16,11 @@ namespace Core.Cells
         private EcsEventTable _eventTable;
         private EcsWorld _world;
         private EcsFilter<Cell> _cells;
-        
+
         private GridData _grid;
         private CoreState _coreState;
         private CellsViewProvider _cellsViewProvider;
-        
+
         private float _checkSpeed;
 
         public void Run()
@@ -59,16 +60,32 @@ namespace Core.Cells
                     if (!isFill)
                         continue;
 
-                    var cell = _cellsViewProvider.GetCell(row, column);
+                    var cellView = _cellsViewProvider.GetCell(row, column);
                     var cellUnder = _cellsViewProvider.GetCell(row - 1, column);
-                    var sprite = cell.CellSprite;
-                    cell.SetEmpty();
+                    var sprite = cellView.CellSprite;
+                    cellView.SetEmpty();
                     _grid.FillMatrix[row, column] = false;
                     cellUnder.SetImage(sprite);
                     cellUnder.SetImageActive(true);
                     _grid.FillMatrix[row - 1, column] = true;
+                    var cellIdx = FindCellIdx(row, column);
+                    var cellUnderIdx = FindCellIdx(row - 1, column);
+                    ref var cell = ref _cells.Get1(cellIdx);
+                    _cells.Get1(cellUnderIdx).figureType = cell.figureType;
+                    cell.figureType = FigureType.None;
                 }
             }
+        }
+
+        private int FindCellIdx(int row, int column)
+        {
+            foreach (var i in _cells)
+            {
+                ref var cell = ref _cells.Get1(i);
+                if (cell.row == row && cell.column == column)
+                    return i;
+            }
+            return -1;
         }
 
         private void Finish()

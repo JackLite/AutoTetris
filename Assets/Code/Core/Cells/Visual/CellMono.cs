@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Core.Figures;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.UI;
 
 namespace Core.Cells.Visual
@@ -56,6 +57,15 @@ namespace Core.Cells.Visual
         public void SetImage(Sprite sprite)
         {
             _image.sprite = sprite;
+        }
+
+        public async void SetImageAsync(AssetReference sprite)
+        {
+            if (sprite.OperationHandle.IsValid() && !sprite.OperationHandle.IsDone)
+                await sprite.OperationHandle.Task;
+            else
+                await sprite.LoadAssetAsync<Sprite>().Task;
+            _image.sprite = sprite.Asset as Sprite;
         }
 
         public void SetPosition(int row, int column)

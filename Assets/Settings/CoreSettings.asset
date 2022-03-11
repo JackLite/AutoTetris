@@ -50,3 +50,53 @@ MonoBehaviour:
     - scores: 400
       speed: 100
     adsClearRows: 14
+    figureToSpriteMap:
+    - figureType: 1
+      sprite:
+        m_AssetGUID: 57c9c4695f74ee240bc5fa2e6a162198
+        m_SubObjectName: Cell_I
+        m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_EditorAssetChanged: 0
+    - figureType: 2
+      sprite:
+        m_AssetGUID: 3e92b58eea67b9b4eb5268e8b342994e
+        m_SubObjectName: Cell_O
+        m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_EditorAssetChanged: 0
+    - figureType: 3
+      sprite:
+        m_AssetGUID: 505b40ea5a2dc704cad4ce7b3b293685
+        m_SubObjectName: Cell_T
+        m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_EditorAssetChanged: 0
+    - figureType: 4
+      sprite:
+        m_AssetGUID: 74d7caedecda0dd41ac307d1569be7eb
+        m_SubObjectName: Cell_L
+        m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_EditorAssetChanged: 0
+    - figureType: 5
+      sprite:
+        m_AssetGUID: f0ad66489e5b2a448be19d3a9af06d4b
+        m_SubObjectName: Cell_J
+        m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_EditorAssetChanged: 0
+    - figureType: 6
+      sprite:
+        m_AssetGUID: 83ae1117a12fafb45ba06007431a0029
+        m_SubObjectName: Cell_Z
+        m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_EditorAssetChanged: 0
+    - figureType: 7
+      sprite:
+        m_AssetGUID: 3ba32f8597dea2342b87c650dcc9a42f
+        m_SubObjectName: Cell_S
+        m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+        m_EditorAssetChanged: 0

@@ -4,6 +4,7 @@ using Core.Figures;
 using Core.Figures.FigureAlgorithms;
 using Core.GameOver;
 using Core.Grid;
+using Core.Saving;
 using EcsCore;
 using Global;
 using Global.Saving;
@@ -66,7 +67,7 @@ namespace Core.Moving
             _eventTable.AddEvent<CheckLinesSignal>();
 
             FigureAlgorithmFacade.FillGrid(_grid.FillMatrix, figure);
-            _saveService.SaveFillMatrix(_grid.FillMatrix);
+            _eventTable.AddEvent<SaveCoreSignal>();
             _saveService.Flush();
             CreateSingleFigures(figure);
             ClearDecisions();
@@ -89,7 +90,10 @@ namespace Core.Moving
             {
                 ref var cell = ref _cells.Get1(i);
                 if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell))
+                {
                     cell.view.SetImage(figure.mono.CellSprite);
+                    cell.figureType = figure.type;
+                }
                 cell.view.SetImageActive(_grid.FillMatrix[cell.row, cell.column]);
             }
         }

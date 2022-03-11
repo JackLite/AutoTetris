@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Utilities
@@ -43,6 +42,19 @@ namespace Utilities
             if (PlayerPrefs.HasKey(key))
                 return Convert.FromBase64String(PlayerPrefs.GetString(key));
             return Array.Empty<byte>();
+        }
+
+        public static void SaveList<T>(string key, IEnumerable<T> value, bool saveImmediate = false)
+        {
+            SaveString(key, JsonHelper.ToJson(value.ToArray()), saveImmediate);
+        }
+
+        public static T[] LoadList<T>(string key)
+        {
+            var val = LoadString(key);
+            if (string.IsNullOrWhiteSpace(val))
+                return null;
+            return JsonHelper.FromJson<T>(val);
         }
 
         public static void SaveString(string key, string value, bool saveImmediate = false)

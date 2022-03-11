@@ -1,4 +1,6 @@
 ﻿using Core.Cells;
+using Core.Figures;
+using Core.Saving;
 using EcsCore;
 using Global;
 using Global.Saving;
@@ -38,6 +40,7 @@ namespace Core.Grid
                 {
                     if (cell.row != rowIndex)
                         continue;
+                    cell.figureType = FigureType.None;
                     cell.view.SetEmpty();
                     cell.view.PlayVfx();
                 }
@@ -53,7 +56,7 @@ namespace Core.Grid
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
             _playerData.CurrentScores += fullRows.Count * 10;
-            _saveService.SaveFillMatrix(_grid.FillMatrix);
+            _eventTable.AddEvent<SaveCoreSignal>();
         }
     }
 }

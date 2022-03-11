@@ -15,6 +15,7 @@ namespace Global.Saving
         private const string FIGURE_BAG_KEY = "core.figure_bag";
         private const string UNFINISHED_GAME = "core.has_figure";
         private const string HAS_FIGURE_KEY = "core.has_saved_game";
+        private const string COLORS_KEY = "core.colors";
 
         public void SetHasGame(bool isHasGame)
         {
@@ -55,6 +56,31 @@ namespace Global.Saving
         public int LoadMaxScores()
         {
             return SaveUtility.LoadInt(MAX_SCORES_KEY);
+        }
+
+        public void SaveCells(FigureType[,] types)
+        {
+            var list = new List<int>(types.Length);
+            var i = 0;
+            var l1 = types.GetLength(0);
+            var l2 = types.GetLength(1);
+            for (var k = 0; k < l1; ++k)
+            for (var j = 0; j < l2; ++j)
+                list.Add((int) types[k, j]);
+            SaveUtility.SaveList(COLORS_KEY, list);
+        }
+
+        public FigureType[,] LoadCells(int l1, int l2)
+        { 
+            var list = SaveUtility.LoadList<int>(COLORS_KEY);
+            if (list == null)
+                return null;
+            var types = new FigureType[l1, l2];
+            var i = 0;
+            for (var k = 0; k < l1; ++k)
+            for (var j = 0; j < l2; ++j)
+                types[k, j] = (FigureType) list[i++];
+            return types;
         }
 
         public void SaveFillMatrix(bool[,] fillMatrix)

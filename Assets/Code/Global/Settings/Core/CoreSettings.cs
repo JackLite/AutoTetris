@@ -16,7 +16,8 @@ namespace Global.Settings.Core
 
         public int adsClearRows = 14;
 
-        public float ManipulationSpeed => manipulationSpeed;
+        public CoreFigureTypeToSprite[] figureToSpriteMap;
         
+        public float ManipulationSpeed => manipulationSpeed;
     }
 }

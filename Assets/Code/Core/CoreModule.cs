@@ -5,6 +5,7 @@ using Core.Cells;
 using Core.Cells.Visual;
 using Core.Grid;
 using Core.Moving;
+using Core.Saving;
 using EcsCore;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -43,6 +44,14 @@ namespace Core
         {
             Addressables.ReleaseInstance(_mainScreen);
             base.Deactivate();
+        }
+
+        protected override Dictionary<Type, int> GetSystemsOrder()
+        {
+            return new Dictionary<Type, int>
+            {
+                { typeof(SaveCoreSystem), 10 }
+            };
         }
     }
 }

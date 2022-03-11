@@ -6,6 +6,5 @@ namespace Global.Settings
     public class GlobalSettingsContainer : ScriptableObject
     {
         public GlobalSettings globalSettings;
-        public int test;
     }
 }

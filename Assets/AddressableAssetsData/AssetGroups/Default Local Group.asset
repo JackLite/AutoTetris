@@ -69,6 +69,34 @@ MonoBehaviour:
     m_Address: GlobalSettings
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 505b40ea5a2dc704cad4ce7b3b293685
+    m_Address: Cell_T
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f0ad66489e5b2a448be19d3a9af06d4b
+    m_Address: Cell_J
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 83ae1117a12fafb45ba06007431a0029
+    m_Address: Cell_Z
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 74d7caedecda0dd41ac307d1569be7eb
+    m_Address: Cell_L
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 57c9c4695f74ee240bc5fa2e6a162198
+    m_Address: Cell_I
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3ba32f8597dea2342b87c650dcc9a42f
+    m_Address: Cell_S
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3e92b58eea67b9b4eb5268e8b342994e
+    m_Address: Cell_O
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 06d91d58714a25140a5968b80a93ca1b, type: 2}
   m_SchemaSet:
