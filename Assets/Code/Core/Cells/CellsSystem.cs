@@ -9,7 +9,7 @@ using UnityEngine;
 namespace Core.Cells
 {
     [EcsSystem(typeof(CoreModule))]
-    public class CellsSystem : IEcsRunSystem, IEcsDestroySystem
+    public class CellsSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
     {
         private const float FIRST_DELAY = .2f;
         private const float DELAY = .1f;
@@ -22,6 +22,12 @@ namespace Core.Cells
         private CellsViewProvider _cellsViewProvider;
 
         private float _checkSpeed;
+        private int[,] _cellIndices;
+
+        public void Init()
+        {
+            _cellIndices = new int[_grid.Rows, _grid.Columns];
+        }
 
         public void Run()
         {
@@ -51,6 +57,11 @@ namespace Core.Cells
 
         private void MoveDownStartAbove(int bottomRow)
         {
+            foreach (var i in _cells)
+            {
+                ref var cell = ref _cells.Get1(i);
+                _cellIndices[cell.row, cell.column] = i;
+            }
             for (var row = bottomRow + 1; row < _grid.Rows; row++)
             {
                 for (var column = 0; column < _grid.Columns; column++)
@@ -68,24 +79,11 @@ namespace Core.Cells
                     cellUnder.SetImage(sprite);
                     cellUnder.SetImageActive(true);
                     _grid.FillMatrix[row - 1, column] = true;
-                    var cellIdx = FindCellIdx(row, column);
-                    var cellUnderIdx = FindCellIdx(row - 1, column);
-                    ref var cell = ref _cells.Get1(cellIdx);
-                    _cells.Get1(cellUnderIdx).figureType = cell.figureType;
+                    ref var cell = ref _cells.Get1(_cellIndices[row, column]);
+                    _cells.Get1(_cellIndices[row - 1, column]).figureType = cell.figureType;
                     cell.figureType = FigureType.None;
                 }
             }
-        }
-
-        private int FindCellIdx(int row, int column)
-        {
-            foreach (var i in _cells)
-            {
-                ref var cell = ref _cells.Get1(i);
-                if (cell.row == row && cell.column == column)
-                    return i;
-            }
-            return -1;
         }
 
         private void Finish()
