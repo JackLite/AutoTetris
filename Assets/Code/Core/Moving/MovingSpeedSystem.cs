@@ -1,9 +1,11 @@
 ﻿using System.Linq;
+using Core.Ads;
 using EcsCore;
 using Global;
 using Global.Settings;
 using Global.Settings.Core;
 using Leopotam.Ecs;
+using UnityEngine;
 
 namespace Core.Moving
 {
@@ -13,11 +15,12 @@ namespace Core.Moving
     [EcsSystem(typeof(CoreModule))]
     public class MovingSpeedSystem : IEcsInitSystem, IEcsRunSystem
     {
-        private PlayerData _playerData;
         private int _lastScore;
-        private MovingData _movingData;
         private CoreSettings _coreSettings;
         private CoreSpeedProgression[] _speedProgression;
+        private EcsEventTable _eventTable;
+        private MovingData _movingData;
+        private PlayerData _playerData;
 
         public void Init()
         {
@@ -27,6 +30,8 @@ namespace Core.Moving
 
         public void Run()
         {
+            if (_eventTable.Has<ContinueForAdsSignal>())
+                UpdateSpeed();
             if (_playerData.CurrentScores == _lastScore)
                 return;
 
@@ -40,8 +45,13 @@ namespace Core.Moving
                 if (progression.scores > _lastScore)
                     continue;
 
-                _movingData.currentFallSpeed = progression.speed;
+                _movingData.currentFallSpeed = progression.speed * _movingData.factor;
                 break;
+            }
+            if (_movingData.factor < 1f)
+            {
+                _movingData.factor += (1f - _coreSettings.adsSlowFactor) / _coreSettings.adsRestoreSpeedTurns;
+                _movingData.factor = Mathf.Clamp01(_movingData.factor);
             }
         }
     }

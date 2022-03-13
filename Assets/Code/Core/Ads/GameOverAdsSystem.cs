@@ -2,6 +2,7 @@
 using Core.Cells;
 using Core.Figures;
 using Core.Grid;
+using Core.Moving;
 using EcsCore;
 using Global;
 using Global.Ads;
@@ -23,7 +24,8 @@ namespace Core.Ads
         private MainScreenMono _mainScreen;
         private PlayerData _playerData;
         private CoreSettings _coreSettings;
-
+        private MovingData _movingData;
+        
         public GameOverAdsSystem()
         {
             _onSuccess = OnRewardedVideoSuccess;
@@ -68,6 +70,7 @@ namespace Core.Ads
 
             _eventTable.AddEvent<ContinueForAdsSignal>();
             _playerData.AdsWasUsedInCore = true;
+            _movingData.factor = .5f;
         }
 
         private void OnRewardVideoFailed()

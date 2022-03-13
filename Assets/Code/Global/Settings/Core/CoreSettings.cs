@@ -14,10 +14,14 @@ namespace Global.Settings.Core
         public AnimationCurve finishMoveVelocity;
         public CoreSpeedProgression[] fallSpeedProgression;
 
+        [Header("Ads")]
         public int adsClearRows = 14;
+        public int adsRestoreSpeedTurns = 20;
+        [Range(0f, 1f)]
+        public float adsSlowFactor = .5f;
 
         public CoreFigureTypeToSprite[] figureToSpriteMap;
-        
+
         public float ManipulationSpeed => manipulationSpeed;
     }
 }
