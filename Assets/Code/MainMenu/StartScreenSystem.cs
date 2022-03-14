@@ -1,6 +1,10 @@
-﻿using EcsCore;
+﻿using System.Linq;
+using EcsCore;
 using Global;
+using Global.Audio;
 using Global.Saving;
+using Global.Settings;
+using Global.Settings.Audio;
 using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -10,10 +14,11 @@ namespace MainMenu
     [EcsSystem(typeof(MainModule))]
     public class StartScreenSystem : IEcsInitSystem
     {
-        private StartScreenMono _startScreenMono;
         private EcsWorld _world;
         private EcsEventTable _eventTable;
+        private GlobalSettings _settings;
         private StartCoreData startCoreData;
+        private StartScreenMono _startScreenMono;
         private SaveService _saveService;
 
         public void Init()
@@ -26,6 +31,7 @@ namespace MainMenu
         }
         private void ContinueGame()
         {
+            _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.GUIButton));
             startCoreData.isContinue = true;
             startCoreData.isDebug = false;
             Start();
@@ -33,12 +39,14 @@ namespace MainMenu
 
         private void StartGame()
         {
+            _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.GUIButton));
             startCoreData.isDebug = false;
             Start();
         }
 
         private void StartDebug()
         {
+            _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.GUIButton));
             startCoreData.isDebug = true;
             Start();
         }

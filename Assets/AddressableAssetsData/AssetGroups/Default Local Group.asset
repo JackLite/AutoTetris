@@ -97,6 +97,10 @@ MonoBehaviour:
     m_Address: Cell_O
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 8e5e3ecf7ceccff439fd336fa9fdeca6
+    m_Address: AudioSource
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 06d91d58714a25140a5968b80a93ca1b, type: 2}
   m_SchemaSet:

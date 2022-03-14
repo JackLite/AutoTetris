@@ -1,4 +1,5 @@
 ﻿using System;
+using Global.Settings.Audio;
 using Global.Settings.Localization;
 
 namespace Global.Settings
@@ -7,5 +8,6 @@ namespace Global.Settings
     public class GlobalSettings
     {
         public LocalizationSettings localization;
+        public AudioMap[] audioMap;
     }
 }

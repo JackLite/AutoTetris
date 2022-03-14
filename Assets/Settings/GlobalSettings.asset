@@ -25,4 +25,6 @@ MonoBehaviour:
         csv: {fileID: 4900000, guid: 86f007630203d104babeb2956f938211, type: 3}
       - lang: 1
         csv: {fileID: 4900000, guid: 8e0c081c49f046446b655a40b7731e16, type: 3}
-  test: 0
+    audioMap:
+    - type: 0
+      clip: {fileID: 8300000, guid: 930e1d85dd929494eb7ec96a0d45e836, type: 3}

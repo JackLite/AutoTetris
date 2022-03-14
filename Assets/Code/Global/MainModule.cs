@@ -9,6 +9,7 @@ using Global.Settings.Core;
 using MainMenu;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Global
 {
@@ -33,15 +34,29 @@ namespace Global
             _dependencies.Add(typeof(AdsService), new AdsService());
             _dependencies.Add(typeof(StartCoreData), new StartCoreData());
             _dependencies.Add(typeof(SaveService), new SaveService());
-            await LoadSettings();
+            await LoadCoreSettings();
+            await LoadGlobalSettings();
         }
-        private async Task LoadSettings()
+
+        private async Task LoadCoreSettings()
         {
-            var handler = Addressables.LoadAssetAsync<CoreSettingsContainer>("CoreSettings");
+            var result = await LoadSettings<CoreSettingsContainer>("CoreSettings");
+            _dependencies.Add(typeof(CoreSettings), result.coreSettings);
+        }
+
+        private async Task LoadGlobalSettings()
+        {
+            var result = await LoadSettings<GlobalSettingsContainer>("GlobalSettings");
+            _dependencies.Add(typeof(GlobalSettings), result.globalSettings);
+        }
+
+        private static async Task<T> LoadSettings<T>(string address)
+        {
+            var handler = Addressables.LoadAssetAsync<T>(address);
             await handler.Task;
             if (handler.Result == null)
                 Debug.LogError("Didn't find core settings");
-            _dependencies.Add(typeof(CoreSettings), handler.Result.coreSettings);
+            return handler.Result;
         }
 
         protected override Dictionary<Type, object> GetDependencies()

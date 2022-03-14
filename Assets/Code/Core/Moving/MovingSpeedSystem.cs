@@ -2,7 +2,6 @@
 using Core.Ads;
 using EcsCore;
 using Global;
-using Global.Settings;
 using Global.Settings.Core;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -38,6 +37,7 @@ namespace Core.Moving
             _lastScore = _playerData.CurrentScores;
             UpdateSpeed();
         }
+
         private void UpdateSpeed()
         {
             foreach (var progression in _speedProgression)
