@@ -3,7 +3,10 @@ using Core.Figures;
 using Core.Pause.Signals;
 using EcsCore;
 using Global;
+using Global.Audio;
 using Global.Saving;
+using Global.Settings;
+using Global.Settings.Audio;
 using Global.UI.Timer;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -23,6 +26,7 @@ namespace Core.GameOver
         private StartCoreData _startCoreData;
         private PlayerData _playerData;
         private SaveService _saveService;
+        private GlobalSettings _settings;
 
         public void Run()
         {
@@ -83,6 +87,7 @@ namespace Core.GameOver
 
         private void OnAdContinueClick()
         {
+            _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.GUIButton));
             _eventTable.AddEvent<GameOverAdsSignal>();
             if(_adsTimerFilter.GetEntitiesCount() > 0)
                 _adsTimerFilter.GetEntity(0).Destroy();
@@ -90,6 +95,7 @@ namespace Core.GameOver
 
         private void RestartGame()
         {
+            _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.GUIButton));
             _eventTable.AddEvent<StartCoreSignal>();
             _eventTable.AddEvent<RestartCoreSignal>();
             _world.DeactivateModule<CoreModule>();
