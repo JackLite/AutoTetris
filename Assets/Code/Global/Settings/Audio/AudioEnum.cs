@@ -2,6 +2,8 @@
 {
     public enum AudioEnum
     {
-        GUIButton
+        GUIButton,
+        CoreLineFill,
+        FigureFall
     }
 }

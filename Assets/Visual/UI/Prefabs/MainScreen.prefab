@@ -1241,7 +1241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rectTransform: {fileID: 5012302227891924}
-  delta: {x: 0, y: -3}
+  delta: {x: 0, y: -6}
   durationMs: 50
 --- !u!1 &5317319101506206226
 GameObject:

@@ -28,3 +28,7 @@ MonoBehaviour:
     audioMap:
     - type: 0
       clip: {fileID: 8300000, guid: 930e1d85dd929494eb7ec96a0d45e836, type: 3}
+    - type: 1
+      clip: {fileID: 8300000, guid: 29c9a2c772a29484caae31b7ac9da46c, type: 3}
+    - type: 2
+      clip: {fileID: 8300000, guid: c63892f38c8b6f142a6433c11cd4ece1, type: 3}

@@ -3,7 +3,10 @@ using Core.Figures;
 using Core.Saving;
 using EcsCore;
 using Global;
+using Global.Audio;
 using Global.Saving;
+using Global.Settings;
+using Global.Settings.Audio;
 using Leopotam.Ecs;
 
 namespace Core.Grid
@@ -17,6 +20,8 @@ namespace Core.Grid
         private MainScreenMono _mainScreen;
         private PlayerData _playerData;
         private SaveService _saveService;
+        private EcsWorld _world;
+        private GlobalSettings _settings;
 
         public void Run()
         {
@@ -52,7 +57,10 @@ namespace Core.Grid
                 glow.SetRow(rowIndex);
                 glow.Show(v => _mainScreen.GlowEffectPool.Return(v));
             }
-
+            if (fullRows.Count > 0)
+            {
+                _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.CoreLineFill));
+            }
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
             _playerData.CurrentScores += fullRows.Count * 10;

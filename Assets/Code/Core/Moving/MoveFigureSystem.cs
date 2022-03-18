@@ -9,7 +9,10 @@ using Core.Input;
 using Core.Path;
 using EcsCore;
 using Global;
+using Global.Audio;
 using Global.Saving;
+using Global.Settings;
+using Global.Settings.Audio;
 using Global.Settings.Core;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -36,7 +39,8 @@ namespace Core.Moving
         private MovingData _movingData;
         private CoreSettings _coreSettings;
         private SaveService _saveService;
-        
+        private GlobalSettings _settings;
+
         public void Init()
         {
             EcsWorldEventsBlackboard.AddEventHandler<InputEvent>(SaveInputSignal);
@@ -72,7 +76,11 @@ namespace Core.Moving
             if (figureFinish.actions.Count == 0)
             {
                 FinishMove();
-                _screenMono.GridView.PlayFallEffect();
+                if (figureFinish.verticalActionsCount > 2)
+                {
+                    _screenMono.GridView.PlayFallEffect();
+                    _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.FigureFall));
+                }
                 _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
                 return;
             }
@@ -113,11 +121,15 @@ namespace Core.Moving
                     {
                         figure.rotation = aiDecision.Rotation;
                         var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
-                        var moveChosen = new FigureMoveChosen { actions = new Stack<PathAction>(path) };
+                        var moveChosen = new FigureMoveChosen
+                        {
+                            actions = new Stack<PathAction>(path.Select(p => p.action)),
+                            verticalActionsCount = CalculateVerticalCount(path)
+                        };
                         _activeFigureFilter.GetEntity(0).Replace(moveChosen);
                         _fallCounter = CalculateFallSpeed(_coreSettings.ManipulationSpeed);
                     }
-                    
+
                     _inputEvent = null;
 
                     return;
@@ -175,6 +187,22 @@ namespace Core.Moving
         private static float CalculateFallSpeed(float speed)
         {
             return 1f / speed;
+        }
+
+        private int CalculateVerticalCount(LinkedList<PathActionData> path)
+        {
+            var node = path.Last;
+            var result = 0;
+            do
+            {
+                if (node.Value.direction == Direction.Bottom)
+                    result++;
+                else
+                    result = 0;
+                node = node.Previous;
+            } while (node != null && node.Previous != null);
+
+            return result;
         }
 
         public void Destroy()
