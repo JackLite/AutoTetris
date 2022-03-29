@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Figures;
+﻿using Core.Figures;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -19,11 +18,9 @@ namespace Core.UI
         public async void ShowNext(FigureType type)
         {
             if (_current != null)
-                Destroy(_current);
+                Addressables.ReleaseInstance(_current);
 
-            var task = Addressables.InstantiateAsync(FiguresUtility.GetFigureAddress(type), _rect).Task;
-            await task;
-            _current = task.Result;
+            _current = await Addressables.InstantiateAsync(FiguresUtility.GetFigureAddress(type), _rect).Task;
         }
     }
 }

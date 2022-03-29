@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core.AI.Genetic;
 using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
@@ -22,9 +23,9 @@ namespace Core.AI
 
         private static readonly Dictionary<int, Direction> Directions = new Dictionary<int, Direction>
         {
-            {0, Direction.Left},
-            {1, Direction.Bottom},
-            {2, Direction.Right},
+            { 0, Direction.Left },
+            { 1, Direction.Bottom },
+            { 2, Direction.Right },
         };
 
         private EcsFilter<Figure> _filter;
@@ -34,6 +35,7 @@ namespace Core.AI
         private EcsWorld _world;
         private float _timer;
         private CoreState _coreState;
+        private AiGeneticService _genetic;
 
         public void Run()
         {
@@ -125,19 +127,19 @@ namespace Core.AI
                     continue;
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
                 figure.rotation = variant.Rotation;
-                if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
+                if (FigurePathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 result[count++] = CreateDecision(variant);
                 break;
             }
-            
+
             foreach (var variant in variants)
             {
-                if (variant.Column < 3 ||variant.Column > 6)
+                if (variant.Column < 3 || variant.Column > 6)
                     continue;
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
                 figure.rotation = variant.Rotation;
-                if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
+                if (FigurePathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 var decision = CreateDecision(variant);
                 var isIntersects = false;
@@ -157,14 +159,14 @@ namespace Core.AI
                 result[count++] = decision;
                 break;
             }
-            
+
             foreach (var variant in variants)
             {
                 if (variant.Column < 7)
                     continue;
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
                 figure.rotation = variant.Rotation;
-                if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
+                if (FigurePathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 var decision = CreateDecision(variant);
                 var isIntersects = false;
@@ -184,9 +186,8 @@ namespace Core.AI
                 result[count] = decision;
                 break;
             }
-            
-            figure.rotation = FigureRotation.Zero;
 
+            figure.rotation = FigureRotation.Zero;
 
             for (var i = 0; i < result.Length; ++i)
             {
@@ -197,7 +198,7 @@ namespace Core.AI
             }
             return result;
         }
-        
+
         private IEnumerable<AiDecision> ChooseBetterMoves(List<AiMoveVariant> variants, Figure figure)
         {
             var result = new AiDecision[MOVES_COUNT];
@@ -206,11 +207,12 @@ namespace Core.AI
             {
                 var targetPoint = new GridPosition(variant.Row, variant.Column);
                 figure.rotation = variant.Rotation;
-                if (Pathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
+                if (FigurePathfinder.FindPath(figure.Position, targetPoint, _gridData.FillMatrix, figure).Count == 0)
                     continue;
                 if (count == 0)
                 {
                     result[count++] = CreateDecision(variant);
+                    Debug.Log(variant.ToString());
                     continue;
                 }
 
@@ -230,7 +232,7 @@ namespace Core.AI
                 if (isIntersects)
                     continue;
                 result[count++] = decision;
-
+                Debug.Log(variant.ToString());
                 if (count >= MOVES_COUNT)
                     break;
             }
@@ -265,10 +267,7 @@ namespace Core.AI
             };
         }
 
-        private static void Analyze(
-            bool[,] fillMatrix,
-            Figure figure,
-            List<AiMoveVariant> variants)
+        private void Analyze(bool[,] fillMatrix, Figure figure, List<AiMoveVariant> variants)
         {
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
@@ -303,7 +302,11 @@ namespace Core.AI
                     variant.AH = aggregateHeight;
                     variant.H = holes;
                     variant.B = bumpiness;
-                    variant.Weight = aggregateHeight * AHM + completeLines * CLM + holes * HM + bumpiness * BM;
+                    var ind = _genetic.currentIndividual;
+                    variant.Weight = aggregateHeight * AHM
+                                     + completeLines * CLM
+                                     + holes * HM
+                                     + bumpiness * BM;
                     variants.Add(variant);
                 }
             }

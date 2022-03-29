@@ -425,7 +425,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5efc990f54bb4f259c3304f2acae1d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellSprite: {fileID: 21300000, guid: 57c9c4695f74ee240bc5fa2e6a162198, type: 3}
+  <CellSprite>k__BackingField: {fileID: 21300000, guid: 57c9c4695f74ee240bc5fa2e6a162198, type: 3}
   rotations:
   - rotationObject: {fileID: 4025412287065179681}
     rotations: 00000000b4000000
@@ -446,7 +446,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7358821699600720120
 RectTransform:
   m_ObjectHideFlags: 0
@@ -560,7 +560,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1948411120794493117
 RectTransform:
   m_ObjectHideFlags: 0

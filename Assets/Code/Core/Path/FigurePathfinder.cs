@@ -6,13 +6,12 @@ using Core.Grid;
 
 namespace Core.Path
 {
-    public static class Pathfinder
+    public static class FigurePathfinder
     {
-        private static HashSet<GridPosition> _checkedPositions = new HashSet<GridPosition>();
-        private static List<GridPosition> _positions = new List<GridPosition>(240);
-        private static LinkedList<PathNode> _nodes = new LinkedList<PathNode>();
-        private static LinkedList<PathActionData> _actions = new LinkedList<PathActionData>();
-        private static int[] _nodeIndexes = new int[128];
+        private static readonly HashSet<GridPosition> _checkedPositions = new HashSet<GridPosition>();
+        private static readonly LinkedList<PathNode> _nodes = new LinkedList<PathNode>();
+        private static readonly LinkedList<PathActionData> _actions = new LinkedList<PathActionData>();
+        private static readonly int[] _nodeIndexes = new int[128];
         
         public static LinkedList<PathActionData> FindPath(
             in GridPosition from,
@@ -21,7 +20,6 @@ namespace Core.Path
             in Figure figure)
         {
             _checkedPositions.Clear();
-            _positions.Clear();
             _nodes.Clear();
             _actions.Clear();
             Array.Clear(_nodeIndexes, 0, _nodeIndexes.Length);
@@ -60,15 +58,6 @@ namespace Core.Path
                         break;
                 }
             }
-
-            if (_nodes.Count > 0)
-            {
-                foreach (var node in _nodes)
-                {
-                    _positions.Add(node.Place);
-                }
-            }
-            // если позиция не занята - добавляем в список проверенных позиций и обновляем текущую
 
             return _actions;
         }

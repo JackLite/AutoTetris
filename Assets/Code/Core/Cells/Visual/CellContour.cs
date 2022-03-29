@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Core.Cells.Visual
 {
     [Serializable]
-    public class CellBorder
+    public struct CellContour
     {
         public Direction direction;
-        public GameObject borderObject;
+        public Color color;
     }
 }

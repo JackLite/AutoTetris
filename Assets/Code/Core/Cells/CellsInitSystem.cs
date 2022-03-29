@@ -47,7 +47,7 @@ namespace Core.Cells
             {
                 column = column, row = row, view = view
             };
-            _world.NewEntity().Replace(cell);
+            
             if (_grid.FillMatrix[row, column])
                 _cellsViewProvider.GetCell(row, column).SetImageActive(true);
 
@@ -56,6 +56,7 @@ namespace Core.Cells
                 cell.figureType = savedTypes[row, column];
                 cell.view.SetImageAsync(_figureTypeToSpriteMap[cell.figureType]);
             }
+            _world.NewEntity().Replace(cell);
         }
     }
 }

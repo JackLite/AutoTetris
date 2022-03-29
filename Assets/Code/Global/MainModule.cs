@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.AI.Genetic;
 using EcsCore;
 using Global.Ads;
 using Global.Saving;
@@ -34,6 +35,7 @@ namespace Global
             _dependencies.Add(typeof(AdsService), new AdsService());
             _dependencies.Add(typeof(StartCoreData), new StartCoreData());
             _dependencies.Add(typeof(SaveService), new SaveService());
+            _dependencies.Add(typeof(AiGeneticService), new AiGeneticService());
             await LoadCoreSettings();
             await LoadGlobalSettings();
         }

@@ -57,6 +57,9 @@ namespace Core.Moving
             if (_coreState.IsPaused || _notFinalFigureFilter.GetEntitiesCount() == 0)
                 return;
 
+            if (UnityEngine.Input.GetKeyUp(KeyCode.Space))
+                ClearDecisions();
+            
             if (_finishFigureFilter.GetEntitiesCount() != 0)
                 ProcessFinishing();
             else if (_activeFigureFilter.GetEntitiesCount() != 0)
@@ -120,7 +123,7 @@ namespace Core.Moving
                     if (aiDecision.Direction != Direction.None)
                     {
                         figure.rotation = aiDecision.Rotation;
-                        var path = Pathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
+                        var path = FigurePathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
                         var moveChosen = new FigureMoveChosen
                         {
                             actions = new Stack<PathAction>(path.Select(p => p.action)),

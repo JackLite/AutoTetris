@@ -24,10 +24,10 @@ namespace MainMenu
         public void Init()
         {
             _startScreenMono.StartGameButton.OnClick += StartGame;
-            _startScreenMono.ContinueGameButton.onClick.AddListener(ContinueGame);
+            //_startScreenMono.ContinueGameButton.onClick.AddListener(ContinueGame);
             _startScreenMono.StartDebugButton.gameObject.SetActive(Debug.isDebugBuild);
             _startScreenMono.StartDebugButton.onClick.AddListener(StartDebug);
-            _startScreenMono.ContinueGameButton.gameObject.SetActive(_saveService.HasGame());
+            //_startScreenMono.ContinueGameButton.gameObject.SetActive(_saveService.HasGame());
         }
         private void ContinueGame()
         {
@@ -39,6 +39,11 @@ namespace MainMenu
 
         private void StartGame()
         {
+            if (_saveService.HasGame())
+            {
+                ContinueGame();
+                return;
+            }
             _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.GUIButton));
             startCoreData.isDebug = false;
             Start();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Core.Figures;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -17,10 +18,12 @@ namespace Core.Cells.Visual
         [SerializeField]
         private Color color;
 
-        [SerializeField]
-        private Color leftRightContourColor;
+        [Header("Contour")]
         [SerializeField]
         private Image contour;
+
+        [SerializeField]
+        private CellContour[] cellContours;
 
         [SerializeField]
         private CellArrowsMono[] arrows;
@@ -61,11 +64,15 @@ namespace Core.Cells.Visual
 
         public async void SetImageAsync(AssetReference sprite)
         {
-            if (sprite.OperationHandle.IsValid() && !sprite.OperationHandle.IsDone)
-                await sprite.OperationHandle.Task;
+            Sprite s;
+            if (sprite.OperationHandle.IsValid() && sprite.OperationHandle.IsDone)
+            {
+                s = sprite.Asset as Sprite;
+            } else if (sprite.OperationHandle.IsValid())
+                s = await sprite.OperationHandle.Task as Sprite;
             else
-                await sprite.LoadAssetAsync<Sprite>().Task;
-            _image.sprite = sprite.Asset as Sprite;
+                s = await sprite.LoadAssetAsync<Sprite>().Task;
+            _image.sprite = s;
         }
 
         public void SetPosition(int row, int column)
@@ -75,9 +82,7 @@ namespace Core.Cells.Visual
 
         public void LightUp(in Figure figure, Direction direction)
         {
-            contour.color = Color.white;
-            if (direction != Direction.Bottom)
-                contour.color = leftRightContourColor;
+            contour.color = cellContours.FirstOrDefault(c => c.direction == direction).color;
             contour.gameObject.SetActive(true);
             ChangeOpacity(lightUpOpacity);
             foreach (var arrow in arrows)

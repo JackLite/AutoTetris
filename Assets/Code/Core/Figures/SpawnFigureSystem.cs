@@ -79,6 +79,7 @@ namespace Core.Figures
             var startRow = _gridData.FillMatrix.GetLength(0) - 4;
             var startColumn = _gridData.FillMatrix.GetLength(1) / 2 - 1;
             mono.SetGridPosition(startRow, startColumn);
+            mono.Rotate(FigureRotation.Zero);
             var entity = EcsWorldContainer.World.NewEntity();
 
             var figure = new Figure

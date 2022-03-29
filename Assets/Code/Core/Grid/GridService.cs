@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Path;
 
 namespace Core.Grid
 {
     public static class GridService
     {
+        private static readonly List<GridPosition> _holesBuffer = new List<GridPosition>(64);
+        private static readonly HashSet<GridPosition> _seenHolesBuffer = new HashSet<GridPosition>();
+        private static readonly HashSet<GridPosition> _seenNonHolesBuffer = new HashSet<GridPosition>();
         public static List<int> GetFullRowsIndexes(bool[,] fillMatrix)
         {
             var rows = new List<int>();
@@ -65,9 +69,10 @@ namespace Core.Grid
 
         public static int CalculateHoles(bool[,] fillMatrix)
         {
+            _holesBuffer.Clear();
             var rows = fillMatrix.GetLength(0);
             var columns = fillMatrix.GetLength(1);
-            var result = 0;
+
             for (var column = 0; column < columns; ++column)
             {
                 var startCount = false;
@@ -80,11 +85,31 @@ namespace Core.Grid
                     }
 
                     if (!fillMatrix[row, column] && startCount)
-                        result++;
+                        _holesBuffer.Add(new GridPosition(row, column));
                 }
             }
 
-            return result;
+            var emptyRow = FindTopNotEmptyRow(fillMatrix) + 1;
+            _seenHolesBuffer.Clear();
+            _seenNonHolesBuffer.Clear();
+            foreach (var gridPosition in _holesBuffer)
+            {
+                if (_seenHolesBuffer.Contains(gridPosition))
+                    continue;
+                if (_seenNonHolesBuffer.Contains(gridPosition))
+                    continue;
+
+                var isPathExist = CellPathfinder.GetPathToRow(gridPosition, emptyRow, fillMatrix, out var seen);
+                foreach (var position in seen)
+                {
+                    if (isPathExist)
+                        _seenNonHolesBuffer.Add(position);
+                    else
+                        _seenHolesBuffer.Add(position);
+                }
+            }
+
+            return _seenHolesBuffer.Count;
         }
 
         public static int CalculateBumpiness(bool[,] fillMatrix)
@@ -132,10 +157,10 @@ namespace Core.Grid
                 for (var column = 0; column < fillMatrix.GetLength(1); ++column)
                     newState[row, column] = false;
             }
-            
+
             var topNotEmptyRow = FindTopNotEmptyRow(newState);
             var bottomRow = FindFirstEmptyRowUnder(topNotEmptyRow, newState);
-            
+
             if (topNotEmptyRow == -1 || bottomRow == -1)
                 return newState;
 
