@@ -1,76 +1,55 @@
-﻿using System;
-using EcsCore;
+﻿using EcsCore;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Core.Input
 {
-    public class SwipeMono : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class SwipeMono : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
+
+        [SerializeField]
+        [Tooltip("Процент от ширины экрана")]
+        private float _leftThreshold;
+
+        [SerializeField]
+        [Tooltip("Процент от ширины экрана")]
+        private float _rightThreshold;
+
+        [SerializeField]
+        [Tooltip("Процент от высоты экрана")]
+        private float _downThreshold;
+
         private bool _isSwipeStart;
         private Vector2 _swipeStartPoint;
 
-        /// <summary>
-        /// Порог после которого считается свайп вниз.
-        /// Задаётся в процентах от высоты экрана
-        /// </summary>
-        [SerializeField]
-        private float swipeThreshold;
-
-        public void OnPointerDown(PointerEventData eventData)
+        public void OnBeginDrag(PointerEventData eventData)
         {
             _isSwipeStart = true;
             _swipeStartPoint = eventData.position;
         }
 
-        private void Update()
-        {
-            if (!_isSwipeStart)
-                return;
-            
-            // if (CheckDownSwipe(eventData.position))
-            // {
-            //     EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Bottom });
-            //     return;
-            // }
-            //
-            // if (CheckLeftSwipe(eventData.position))
-            // {
-            //     EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Left });
-            //     return;
-            // }
-            //
-            // if (CheckRightSwipe(eventData.position))
-            // {
-            //     EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Right });
-            //     return;
-            // }
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
+        public void OnDrag(PointerEventData eventData)
         {
             if (!_isSwipeStart)
                 return;
 
-            if (CheckDownSwipe(eventData.position))
-            {
-                EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Bottom });
-                return;
-            }
-            
             if (CheckLeftSwipe(eventData.position))
             {
                 EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Left });
                 return;
             }
-            
+
             if (CheckRightSwipe(eventData.position))
             {
                 EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Right });
                 return;
             }
-        }
 
+            if (!CheckDownSwipe(eventData.position))
+                return;
+
+            EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Bottom });
+        }
         private bool CheckDownSwipe(in Vector2 pointerEndPosition)
         {
             if (_swipeStartPoint.y < pointerEndPosition.y)
@@ -79,7 +58,7 @@ namespace Core.Input
             var screenHeight = Screen.height;
             var distance = distanceY / screenHeight;
 
-            return distance > swipeThreshold * .01;
+            return distance > _downThreshold * .01;
         }
 
         private bool CheckLeftSwipe(in Vector2 pointerEndPosition)
@@ -91,7 +70,7 @@ namespace Core.Input
             var screenWidth = Screen.width;
             var distance = distanceX / screenWidth;
 
-            return distance > swipeThreshold * .01;
+            return distance > _leftThreshold * .01;
         }
 
         private bool CheckRightSwipe(in Vector2 pointerEndPosition)
@@ -103,8 +82,9 @@ namespace Core.Input
             var screenWidth = Screen.width;
             var distance = distanceX / screenWidth;
 
-            return distance > swipeThreshold * .01;
+            return distance > _rightThreshold * .01;
         }
+
         public void SetActive(bool isActive)
         {
             gameObject.SetActive(isActive);
