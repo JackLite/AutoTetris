@@ -8,7 +8,6 @@ namespace Global.UI.Timer
         public int currentSeconds;
         public float nextUpdateTime;
         public TimerView view;
-        public Action onEnd;
 
         public TimerComponent(int f)
         {
@@ -16,7 +15,6 @@ namespace Global.UI.Timer
             currentSeconds = 0;
             nextUpdateTime = 0;
             view = null;
-            onEnd = null;
         }
     }
 }

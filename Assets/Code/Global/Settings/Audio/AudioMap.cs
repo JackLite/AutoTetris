@@ -1,4 +1,5 @@
 ﻿using System;
+using Global.Audio;
 using UnityEngine;
 
 namespace Global.Settings.Audio

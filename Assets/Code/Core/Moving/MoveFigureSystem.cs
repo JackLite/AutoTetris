@@ -15,6 +15,7 @@ using Global.Settings;
 using Global.Settings.Audio;
 using Global.Settings.Core;
 using Leopotam.Ecs;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Core.Moving
@@ -59,7 +60,7 @@ namespace Core.Moving
 
             if (UnityEngine.Input.GetKeyUp(KeyCode.Space))
                 ClearDecisions();
-            
+
             if (_finishFigureFilter.GetEntitiesCount() != 0)
                 ProcessFinishing();
             else if (_activeFigureFilter.GetEntitiesCount() != 0)
@@ -91,7 +92,10 @@ namespace Core.Moving
             if (figureFinish.actions.All(a => a == PathActions.MoveDown))
                 _fallCounter = CalculateFallSpeed(GetFinishMoveSpeed(figureFinish));
             else
-                _fallCounter = CalculateFallSpeed(_coreSettings.ManipulationSpeed);
+            {
+                var speed = math.max(_coreSettings.ManipulationSpeed, _movingData.currentFallSpeed);
+                _fallCounter = CalculateFallSpeed(speed);
+            }
 
             var nextAction = figureFinish.actions.Pop();
             nextAction.Invoke(ref figure);
@@ -123,14 +127,18 @@ namespace Core.Moving
                     if (aiDecision.Direction != Direction.None)
                     {
                         figure.rotation = aiDecision.Rotation;
-                        var path = FigurePathfinder.FindPath(figure.Position, aiDecision.Position, _grid.FillMatrix, figure);
+                        var path = FigurePathfinder.FindPath(figure.Position,
+                            aiDecision.Position,
+                            _grid.FillMatrix,
+                            figure);
                         var moveChosen = new FigureMoveChosen
                         {
                             actions = new Stack<PathAction>(path.Select(p => p.action)),
                             verticalActionsCount = CalculateVerticalCount(path)
                         };
                         _activeFigureFilter.GetEntity(0).Replace(moveChosen);
-                        _fallCounter = CalculateFallSpeed(_coreSettings.ManipulationSpeed);
+                        var speed = math.max(_coreSettings.ManipulationSpeed, _movingData.currentFallSpeed);
+                        _fallCounter = CalculateFallSpeed(speed);
                     }
 
                     _inputEvent = null;

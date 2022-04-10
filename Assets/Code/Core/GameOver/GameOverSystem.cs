@@ -33,6 +33,7 @@ namespace Core.GameOver
             if (_eventTable.Has<GameOverSignal>())
             {
                 CreateGameOverScreen();
+                _world.CreateOneFrame().Replace(AudioHelper.Create(_settings, AudioEnum.GameOver));
                 _eventTable.AddEvent<PauseSignal>();
                 if (!_playerData.AdsWasUsedInCore)
                     _saveService.SetHasGame(false);

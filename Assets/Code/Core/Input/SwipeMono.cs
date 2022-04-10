@@ -1,4 +1,5 @@
-﻿using EcsCore;
+﻿using System;
+using EcsCore;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -20,6 +21,30 @@ namespace Core.Input
         {
             _isSwipeStart = true;
             _swipeStartPoint = eventData.position;
+        }
+
+        private void Update()
+        {
+            if (!_isSwipeStart)
+                return;
+            
+            // if (CheckDownSwipe(eventData.position))
+            // {
+            //     EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Bottom });
+            //     return;
+            // }
+            //
+            // if (CheckLeftSwipe(eventData.position))
+            // {
+            //     EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Left });
+            //     return;
+            // }
+            //
+            // if (CheckRightSwipe(eventData.position))
+            // {
+            //     EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Right });
+            //     return;
+            // }
         }
 
         public void OnPointerUp(PointerEventData eventData)

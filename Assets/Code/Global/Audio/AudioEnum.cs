@@ -1,9 +1,10 @@
-﻿namespace Global.Settings.Audio
+﻿namespace Global.Audio
 {
     public enum AudioEnum
     {
         GUIButton,
         CoreLineFill,
-        FigureFall
+        FigureFall,
+        GameOver
     }
 }
