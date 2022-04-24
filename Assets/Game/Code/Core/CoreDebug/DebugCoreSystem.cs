@@ -5,6 +5,7 @@ using Core.Pause.Signals;
 using EcsCore;
 using Global;
 using Leopotam.Ecs;
+using UnityEngine;
 
 namespace Core.CoreDebug
 {
@@ -13,15 +14,17 @@ namespace Core.CoreDebug
     {
         private EcsEventTable _eventTable;
         private CoreState _coreState;
-        private StartCoreData startCoreData;
+        private StartCoreData _startCoreData;
         private MainScreenMono _mainScreenMono;
         private GridData _gridData;
         private EcsFilter<Cell> _cells;
 
         public void Init()
         {
-            _mainScreenMono.DebugMono.gameObject.SetActive(startCoreData.isDebug);
-            if (!startCoreData.isDebug)
+            _mainScreenMono.DebugMono.gameObject.SetActive(_startCoreData.isDebug);
+            if (!Debug.isDebugBuild)
+                Object.DestroyImmediate(_mainScreenMono.DebugInPause);
+            if (!_startCoreData.isDebug)
                 return;
 
             _eventTable.AddEvent<PauseSignal>();
@@ -31,7 +34,7 @@ namespace Core.CoreDebug
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
-                cell.view.SetButtonState(startCoreData.isDebug);
+                cell.view.SetButtonState(true);
                 var pos = cell.Position;
                 cell.view.DebugCellClick += () => OnCellClick(pos);
             }

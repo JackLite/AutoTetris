@@ -27,20 +27,24 @@ namespace Core
 
         [field:SerializeField]
         public NextFigureUI NextFigure { get; private set; }
-        
+
         [field:SerializeField]
         public SwipeMono SwipeMono { get; private set; }
-        
+
         [field:SerializeField]
         public GlowEffectPool GlowEffectPool { get; private set; }
-        
+
         [field:SerializeField]
         public GridView GridView { get; private set; }
 
         [field:SerializeField]
-        public DebugMono DebugMono { get; private set; }
-        
-        [field:SerializeField]
         public TextMeshProUGUI GeneticText { get; private set; }
+
+        [field:Header("Debug")]
+        [field:SerializeField]
+        public GameObject DebugInPause { get; private set; }
+
+        [field:SerializeField]
+        public DebugMono DebugMono { get; private set; }
     }
 }

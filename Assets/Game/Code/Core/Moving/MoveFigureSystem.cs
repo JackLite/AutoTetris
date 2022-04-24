@@ -131,7 +131,7 @@ namespace Core.Moving
                 }
                 if (_inputEvent != null)
                 {
-                    var aiDecision = GetAiDecision(_inputEvent.Direction);
+                    var aiDecision = GetAiDecision(_inputEvent.direction);
                     if (aiDecision.Direction != Direction.None)
                     {
                         figure.rotation = aiDecision.Rotation;

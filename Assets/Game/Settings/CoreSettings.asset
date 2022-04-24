@@ -48,7 +48,7 @@ MonoBehaviour:
     - scores: 50
       speed: 3.07
     - scores: 70
-      speed: 0
+      speed: 4
     adsClearRows: 14
     adsRestoreSpeedTurns: 20
     adsSlowFactor: 0.5

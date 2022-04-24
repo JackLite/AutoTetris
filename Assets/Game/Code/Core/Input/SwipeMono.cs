@@ -35,20 +35,20 @@ namespace Core.Input
 
             if (CheckLeftSwipe(eventData.position))
             {
-                EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Left });
+                EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = Direction.Left });
                 return;
             }
 
             if (CheckRightSwipe(eventData.position))
             {
-                EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Right });
+                EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = Direction.Right });
                 return;
             }
 
             if (!CheckDownSwipe(eventData.position))
                 return;
 
-            EcsWorldEventsBlackboard.AddEvent(new InputEvent { Direction = Direction.Bottom });
+            EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = Direction.Bottom });
         }
         private bool CheckDownSwipe(in Vector2 pointerEndPosition)
         {
@@ -88,6 +88,21 @@ namespace Core.Input
         public void SetActive(bool isActive)
         {
             gameObject.SetActive(isActive);
+        }
+
+        public void OnLeft(string val)
+        {
+            float.TryParse(val, out _leftThreshold);
+        }
+        
+        public void OnDown(string val)
+        {
+            float.TryParse(val, out _downThreshold);
+        }
+        
+        public void OnRight(string val)
+        {
+            float.TryParse(val, out _rightThreshold);
         }
     }
 }

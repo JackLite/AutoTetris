@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.AI;
 using Core.Cells.Visual;
+using Core.CoreDebug;
 using Core.Figures;
 using Core.Grid;
 using Core.Moving;
@@ -61,6 +62,7 @@ namespace Core
                 { typeof(MoveFigureSystem), -9 },
                 { typeof(MoveFigureFinishSystem), -8 },
                 { typeof(CheckLinesSystem), -7 },
+                { typeof(DebugCoreSystem), 10 },
                 { typeof(SaveCoreSystem), 10 }
             };
         }

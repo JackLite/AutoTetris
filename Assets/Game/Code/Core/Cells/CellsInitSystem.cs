@@ -3,6 +3,7 @@ using Core.Cells.Visual;
 using Core.Figures;
 using Core.Grid;
 using EcsCore;
+using Global;
 using Global.Saving;
 using Global.Settings.Core;
 using JetBrains.Annotations;
@@ -19,6 +20,7 @@ namespace Core.Cells
         private EcsWorld _world;
         private GridData _grid;
         private SaveService _saveService;
+        private StartCoreData _startCoreData;
 
         private int _remainCreate;
         private readonly Dictionary<FigureType, AssetReference> _figureTypeToSpriteMap =
@@ -47,16 +49,24 @@ namespace Core.Cells
             {
                 column = column, row = row, view = view
             };
-            
+
             if (_grid.FillMatrix[row, column])
                 _cellsViewProvider.GetCell(row, column).SetImageActive(true);
 
-            if (savedTypes != null && savedTypes.Length > 0 && savedTypes[row, column] != FigureType.None)
-            {
-                cell.figureType = savedTypes[row, column];
-                cell.view.SetImageAsync(_figureTypeToSpriteMap[cell.figureType]);
-            }
+            if (!_startCoreData.isDebug)
+                LoadCellState(row, column, savedTypes, ref cell);
             _world.NewEntity().Replace(cell);
+        }
+
+        private void LoadCellState(int row, int column, FigureType[,] savedTypes, ref Cell cell)
+        {
+            if (savedTypes == null || savedTypes.Length <= 0)
+                return;
+
+            if (savedTypes[row, column] == FigureType.None)
+                return;
+            cell.figureType = savedTypes[row, column];
+            cell.view.SetImageAsync(_figureTypeToSpriteMap[cell.figureType]);
         }
     }
 }

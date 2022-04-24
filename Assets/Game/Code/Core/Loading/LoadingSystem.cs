@@ -12,7 +12,7 @@ namespace Core.Loading
     public class LoadingSystem : IEcsPreInitSystem
     {
         private GridData _gridData;
-        private StartCoreData startCoreData;
+        private StartCoreData _startCoreData;
         private SaveService _saveService;
         private CoreSettings _settings;
 
@@ -20,14 +20,14 @@ namespace Core.Loading
         public void Setup(GridData grid, StartCoreData data, SaveService saveService, CoreSettings coreSettings)
         {
             _gridData = grid;
-            startCoreData = data;
+            _startCoreData = data;
             _saveService = saveService;
             _settings = coreSettings;
         }
         
         public void PreInit()
         {
-            if (!startCoreData.isContinue || _settings.aiEnable)
+            if (!_startCoreData.isContinue || _settings.aiEnable || _startCoreData.isDebug)
                 return;
 
             _gridData.FillMatrix = _saveService.LoadFillMatrix(_gridData.Rows, _gridData.Columns);

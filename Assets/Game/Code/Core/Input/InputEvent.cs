@@ -2,6 +2,6 @@
 {
     public class InputEvent
     {
-        public Direction Direction;
+        public Direction direction;
     }
 }
