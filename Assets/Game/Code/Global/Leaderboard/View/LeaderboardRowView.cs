@@ -22,8 +22,11 @@ namespace Global.Leaderboard.View
         [SerializeField]
         private Color nicknameColor;
         
-        public void SetData(int place, string nickname, int scores)
+        public long Place { get; private set; }
+        
+        public void SetData(long place, string nickname, long scores)
         {
+            Place = place;
             var culture = CultureInfo.InvariantCulture;
             var format = culture.NumberFormat;
             format.NumberGroupSeparator = " ";

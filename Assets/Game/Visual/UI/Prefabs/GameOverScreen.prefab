@@ -1010,7 +1010,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90.05
+  m_fontSize: 85.65
   m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1450,6 +1450,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1830736475114008805}
   - component: {fileID: 4108390534726525554}
+  - component: {fileID: 4266414978561691779}
   m_Layer: 5
   m_Name: LeaderBoard
   m_TagString: Untagged
@@ -1507,6 +1508,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &4266414978561691779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8631788724067472542}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff18e541d9d940fbac61a22025649a66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _leaderboardRowPrefab: {fileID: 3643510000687767837, guid: c3f2461638e470e41903b4d25607ee13, type: 3}
 --- !u!1 &9032861603667286644
 GameObject:
   m_ObjectHideFlags: 0

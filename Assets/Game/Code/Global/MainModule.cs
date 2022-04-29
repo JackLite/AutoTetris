@@ -7,10 +7,11 @@ using Global.Ads;
 using Global.Saving;
 using Global.Settings;
 using Global.Settings.Core;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
 using MainMenu;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 
 namespace Global
 {
@@ -27,6 +28,7 @@ namespace Global
 
         protected override async Task Setup()
         {
+            PlayGamesPlatform.Instance.Authenticate(ProcessAuth);
             var handler = Addressables.InstantiateAsync("StartScreen");
             await handler.Task;
             _startScreen = handler.Result;
@@ -38,6 +40,14 @@ namespace Global
             _dependencies.Add(typeof(AiGeneticService), new AiGeneticService());
             await LoadCoreSettings();
             await LoadGlobalSettings();
+        }
+        private void ProcessAuth(SignInStatus status)
+        {
+            Debug.Log("ProcessAuth: " + status);
+            if (status == SignInStatus.Success)
+            {
+                Debug.Log("Success auth. User: " + PlayGamesPlatform.Instance.localUser.userName);
+            }
         }
 
         private async Task LoadCoreSettings()
