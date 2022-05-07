@@ -10,27 +10,39 @@ namespace Global.Leaderboard.View
         [SerializeField]
         private LeaderboardRowView _leaderboardRowPrefab;
 
-        private LinkedList<LeaderboardRowView> _rows = new LinkedList<LeaderboardRowView>();
+        [SerializeField]
+        private GameObject _leaderboardLoading;
+
+        private readonly SortedList<long, LeaderboardRowView> _rows = new SortedList<long, LeaderboardRowView>();
 
         public void AddScore(long place, string nickname, long value, bool isCurrentPlayer = false)
         {
+            if (_rows.ContainsKey(place))
+            {
+                Debug.LogError("There is place " + place);
+                return;
+            }
             var row = Instantiate(_leaderboardRowPrefab, transform);
-            _leaderboardRowPrefab.SetData(place, nickname, value);
+            row.SetData(place, nickname, value);
             if(isCurrentPlayer)
-                _leaderboardRowPrefab.SetAsCurrentPlayer();
-            if (_rows.Count == 0 || _rows.Last.Value.Place > place)
-                _rows.AddLast(row);
-            else
-                _rows.AddFirst(row);
+                row.SetAsCurrentPlayer();
+            _rows.Add(place, row);
         }
 
         public void UpdateView()
         {
             foreach (var row in _rows)
             {
-                row.transform.SetAsLastSibling();
+                row.Value.transform.SetAsLastSibling();
             }
             LayoutRebuilder.MarkLayoutForRebuild(transform as RectTransform);
+        }
+
+        public void ShowScores(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+            _leaderboardLoading.SetActive(false);
+            UpdateView();
         }
     }
 }

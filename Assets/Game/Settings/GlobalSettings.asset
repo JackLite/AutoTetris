@@ -34,3 +34,4 @@ MonoBehaviour:
       clip: {fileID: 8300000, guid: c63892f38c8b6f142a6433c11cd4ece1, type: 3}
     - type: 3
       clip: {fileID: 8300000, guid: 5fdb13d3756c84fecac96f5a2d124370, type: 3}
+    fakeScores: {fileID: 4900000, guid: e15377574b47ad646bfbc9a830d0b31e, type: 3}

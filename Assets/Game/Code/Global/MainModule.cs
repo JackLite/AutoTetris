@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Core.AI.Genetic;
 using EcsCore;
 using Global.Ads;
+using Global.Leaderboard.Services;
 using Global.Saving;
 using Global.Settings;
 using Global.Settings.Core;
@@ -28,7 +29,9 @@ namespace Global
 
         protected override async Task Setup()
         {
+            PlayGamesPlatform.Activate();
             PlayGamesPlatform.Instance.Authenticate(ProcessAuth);
+            Social.localUser.Authenticate(ProcessUserAuth);
             var handler = Addressables.InstantiateAsync("StartScreen");
             await handler.Task;
             _startScreen = handler.Result;
@@ -38,8 +41,17 @@ namespace Global
             _dependencies.Add(typeof(StartCoreData), new StartCoreData());
             _dependencies.Add(typeof(SaveService), new SaveService());
             _dependencies.Add(typeof(AiGeneticService), new AiGeneticService());
+            _dependencies.Add(typeof(ScoresService), new ScoresService());
             await LoadCoreSettings();
             await LoadGlobalSettings();
+        }
+        private void ProcessUserAuth(bool isSuccess)
+        {
+            Debug.Log("ProcessUserAuth: " + isSuccess);
+            if (isSuccess)
+            {
+                
+            }
         }
         private void ProcessAuth(SignInStatus status)
         {

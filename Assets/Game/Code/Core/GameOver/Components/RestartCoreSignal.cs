@@ -1,4 +1,4 @@
-﻿namespace Core.GameOver
+﻿namespace Core.GameOver.Components
 {
     public struct RestartCoreSignal
     {

@@ -1,6 +1,7 @@
 ﻿using ByteBrewSDK;
 using Core.Ads;
 using Core.GameOver;
+using Core.GameOver.Components;
 using EcsCore;
 using Leopotam.Ecs;
 using Utilities;
@@ -34,7 +35,7 @@ namespace Global.Analytics
                 return;
             if (_eventTable.Has<StartCoreSignal>())
                 ByteBrew.NewCustomEvent("round_start");
-            if (_eventTable.Has<GameOverSignal>())
+            if (_eventTable.Has<GameOverCoreSignal>())
             {
                 if (_playerData.AdsWasUsedInCore)
                     ByteBrew.NewCustomEvent("round_defeat");

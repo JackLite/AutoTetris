@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Figures.FigureAlgorithms;
 using Core.GameOver;
+using Core.GameOver.Components;
 using Core.Grid;
 using Core.Pause.Signals;
 using EcsCore;
@@ -95,7 +96,7 @@ namespace Core.Figures
             _mainScreen.NextFigure.ShowNext(PeekFigureType());
             if (FigureAlgorithmFacade.IsFall(_gridData.FillMatrix, figure))
             {
-                _eventTable.AddEvent<GameOverSignal>();
+                _eventTable.AddEvent<GameOverCoreSignal>();
                 _saveService.SetHasFigure(false);
                 figure.mono.Delete();
                 entity.Destroy();

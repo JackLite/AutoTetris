@@ -1,5 +1,6 @@
 ﻿using Core.Figures;
 using Core.GameOver;
+using Core.GameOver.Components;
 using Core.Grid;
 using EcsCore;
 using Global;
@@ -67,7 +68,7 @@ namespace Core.AI.Genetic
                     _aiGeneticService.currentIndividual.CalculateAvgHeight();
                 }
             }
-            if (!_eventTable.Has<GameOverSignal>() && _aiGeneticService.currentIndividual.turns < 2000 && _aiGeneticService.IsHasMore())
+            if (!_eventTable.Has<GameOverCoreSignal>() && _aiGeneticService.currentIndividual.turns < 2000 && _aiGeneticService.IsHasMore())
                 return;
 
             // если особи кончились

@@ -1,8 +1,9 @@
 ﻿using System;
+using Global.Leaderboard.View;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.GameOver
+namespace Core.GameOver.Views
 {
     public class GameOverMono : MonoBehaviour
     {
@@ -10,7 +11,7 @@ namespace Core.GameOver
         private Button tryAgainBtn;
 
         [field:SerializeField]
-        public GameOverScoresMono Scores { get; private set; }
+        public LeaderboardView LeaderboardView { get; private set; }
 
         [field:SerializeField]
         public GameOverAdsWidget AdsWidget { get; private set; }

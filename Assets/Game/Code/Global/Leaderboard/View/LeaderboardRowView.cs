@@ -28,8 +28,10 @@ namespace Global.Leaderboard.View
         {
             Place = place;
             var culture = CultureInfo.InvariantCulture;
-            var format = culture.NumberFormat;
-            format.NumberGroupSeparator = " ";
+            var format = new NumberFormatInfo
+            {
+                NumberGroupSeparator = " "
+            };
             placeText.text = place.ToString(format);
 
             nicknameText.text = nickname;

@@ -3,7 +3,7 @@ using Global.UI.Timer;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.GameOver
+namespace Core.GameOver.Views
 {
     public class GameOverAdsWidget : MonoBehaviour
     {

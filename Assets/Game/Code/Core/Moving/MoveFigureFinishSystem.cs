@@ -3,6 +3,7 @@ using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
 using Core.GameOver;
+using Core.GameOver.Components;
 using Core.Grid;
 using Core.Saving;
 using EcsCore;
@@ -79,7 +80,7 @@ namespace Core.Moving
 
             if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
             {
-                _eventTable.AddEvent<GameOverSignal>();
+                _eventTable.AddEvent<GameOverCoreSignal>();
                 return;
             }
 

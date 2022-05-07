@@ -62,6 +62,8 @@ namespace Leaderboard.Editor
             {
                 if (!_regions.ContainsKey(region.region))
                     continue;
+                if (!_regions[region.region])
+                    continue;
                 for (var i = 0; i < _countPerRegion; ++i)
                 {
                     var names = Random.Range(0, 1f) > .5f ? region.female : region.male;
