@@ -41,6 +41,9 @@ namespace Global.Leaderboard.View
             playerArrow.gameObject.SetActive(true);
             nicknameText.color = nicknameColor;
             nicknameText.fontStyle |= FontStyles.Bold;
+            
+            scoreText.color = nicknameColor;
+            scoreText.fontStyle |= FontStyles.Bold;
         }
     }
 }
