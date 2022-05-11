@@ -10,9 +10,6 @@ namespace Core.GameOver.Views
         [SerializeField]
         private Button adContinueBtn;
 
-        [SerializeField]
-        private GameObject continueGo;
-        
         [field:SerializeField]
         public TimerView Timer { get; private set; }
         
@@ -27,7 +24,6 @@ namespace Core.GameOver.Views
         {
             adContinueBtn.gameObject.SetActive(isActive);
             Timer.SetActive(isActive);
-            continueGo.SetActive(isActive);
         }
     }
 }
