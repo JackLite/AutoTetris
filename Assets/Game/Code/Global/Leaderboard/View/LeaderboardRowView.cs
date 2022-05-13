@@ -1,14 +1,13 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
 namespace Global.Leaderboard.View
 {
+    [RequireComponent(typeof(RectTransform))]
     public class LeaderboardRowView : MonoBehaviour
     {
-        [SerializeField]
-        private RectTransform playerArrow;
-
         [SerializeField]
         private TextMeshProUGUI placeText;
 
@@ -21,9 +20,15 @@ namespace Global.Leaderboard.View
         [Header("Active player settings")]
         [SerializeField]
         private Color nicknameColor;
-        
+
+        private RectTransform _rt;
         public long Place { get; private set; }
-        
+
+        private void Awake()
+        {
+            _rt = GetComponent<RectTransform>();
+        }
+
         public void SetData(long place, string nickname, long scores)
         {
             Place = place;
@@ -40,12 +45,17 @@ namespace Global.Leaderboard.View
 
         public void SetAsCurrentPlayer()
         {
-            playerArrow.gameObject.SetActive(true);
             nicknameText.color = nicknameColor;
             nicknameText.fontStyle |= FontStyles.Bold;
             
             scoreText.color = nicknameColor;
             scoreText.fontStyle |= FontStyles.Bold;
+        }
+        public void SetY(float y)
+        {
+            if (!_rt)
+                _rt = GetComponent<RectTransform>();
+            _rt.anchoredPosition = new Vector2(_rt.anchoredPosition.x, y);
         }
     }
 }

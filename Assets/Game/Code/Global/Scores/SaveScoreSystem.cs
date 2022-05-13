@@ -30,7 +30,7 @@ namespace Global.Scores
             Debug.Log("[Scores] Send scores in board.");
             #if UNITY_ANDROID || UNITY_EDITOR
             Debug.Log("[Scores] Send scores in board 2.");
-            PlayGamesPlatform.Instance.ReportScore(_playerData.CurrentScores, "CgkIjaDa6ZgfEAIQAQ", 
+            PlayGamesPlatform.Instance.ReportScore(_playerData.CurrentScores, GPGSIds.leaderboard_main, 
                 b =>
                 {
                     Debug.Log("[Scores] Add scores in board. Success: " + b);

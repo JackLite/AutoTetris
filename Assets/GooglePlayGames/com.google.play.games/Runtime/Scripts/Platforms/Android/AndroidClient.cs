@@ -791,7 +791,7 @@ namespace GooglePlayGames.Android
                     leaderboardId,
                     AndroidJavaConverter.ToLeaderboardVariantTimeSpan(timeSpan),
                     AndroidJavaConverter.ToLeaderboardVariantCollection(collection),
-                    rowCount))
+                    rowCount, true))
                 {
                     AndroidTaskUtils.AddOnSuccessListener<AndroidJavaObject>(
                         task,

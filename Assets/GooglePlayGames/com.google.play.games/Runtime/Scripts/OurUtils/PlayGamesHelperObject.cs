@@ -133,6 +133,11 @@ namespace GooglePlayGames.OurUtils
             // forEach
             for (int i = 0; i < localQueue.Count; i++)
             {
+                if (localQueue[i] == null)
+                {
+                    Debug.LogError("[Google Play Games] At " + i + " action is null!");
+                    continue;
+                }
                 localQueue[i].Invoke();
             }
         }

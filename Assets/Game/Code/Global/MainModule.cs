@@ -13,6 +13,7 @@ using GooglePlayGames.BasicApi;
 using MainMenu;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using Application = UnityEngine.Device.Application;
 
 namespace Global
 {
@@ -29,9 +30,10 @@ namespace Global
 
         protected override async Task Setup()
         {
-            PlayGamesPlatform.Activate();
+            if (!Debug.isDebugBuild)
+                Debug.unityLogger.filterLogType = LogType.Error;
+
             PlayGamesPlatform.Instance.Authenticate(ProcessAuth);
-            Social.localUser.Authenticate(ProcessUserAuth);
             var handler = Addressables.InstantiateAsync("StartScreen");
             await handler.Task;
             _startScreen = handler.Result;
@@ -45,14 +47,7 @@ namespace Global
             await LoadCoreSettings();
             await LoadGlobalSettings();
         }
-        private void ProcessUserAuth(bool isSuccess)
-        {
-            Debug.Log("ProcessUserAuth: " + isSuccess);
-            if (isSuccess)
-            {
-                
-            }
-        }
+
         private void ProcessAuth(SignInStatus status)
         {
             Debug.Log("ProcessAuth: " + status);

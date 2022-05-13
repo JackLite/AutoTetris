@@ -1,4 +1,8 @@
 ﻿using System;
+using GooglePlayGames.Android;
+using GooglePlayGames.BasicApi;
+using UnityEngine;
+using Random = System.Random;
 
 namespace Utilities
 {
