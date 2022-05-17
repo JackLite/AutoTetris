@@ -14,7 +14,7 @@ namespace Leaderboard.Editor
         private static string _resultFileName;
         private static readonly Dictionary<string, bool> _regions = new Dictionary<string, bool>();
         private Vector2 _scrollPos = Vector2.zero;
-        private static int _countPerRegion = 100;
+        private static int _resultCount = 3476;
 
         [MenuItem("AWC/Leaderboard Dummies")]
         private static void ShowWindow()
@@ -46,7 +46,7 @@ namespace Leaderboard.Editor
             }
 
             DrawRegions(regions);
-            _countPerRegion = EditorGUILayout.IntField("Count per region", _countPerRegion);
+            _resultCount = EditorGUILayout.IntField("Result counts", _resultCount);
 
             if (GUILayout.Button("Generate"))
             {
@@ -55,21 +55,27 @@ namespace Leaderboard.Editor
 
             GUILayout.EndScrollView();
         }
-        private void CreateResultJson(List<NamesRegion> regions)
+
+        private static void CreateResultJson(IReadOnlyList<NamesRegion> regions)
         {
             var resultNames = new List<string>();
-            foreach (var region in regions)
+            var regionIndex = 0;
+            while (resultNames.Count < _resultCount)
             {
-                if (!_regions.ContainsKey(region.region))
-                    continue;
-                if (!_regions[region.region])
-                    continue;
-                for (var i = 0; i < _countPerRegion; ++i)
+                var region = regions[regionIndex];
+                if (!_regions.ContainsKey(region.region) || !_regions[region.region])
                 {
-                    var names = Random.Range(0, 1f) > .5f ? region.female : region.male;
-                    var resName = names[Random.Range(0, names.Length)];
-                    resultNames.Add(resName);
+                    ++regionIndex;
+                    if (regionIndex >= regions.Count)
+                        regionIndex = 0;
+                    continue;
                 }
+                var names = Random.Range(0, 1f) > .5f ? region.female : region.male;
+                var resName = names[Random.Range(0, names.Length)];
+                resultNames.Add(resName);
+                ++regionIndex;
+                if (regionIndex >= regions.Count)
+                    regionIndex = 0;
             }
 
             var arr = new JArray();
@@ -83,7 +89,7 @@ namespace Leaderboard.Editor
                 arr.Add(o);
             }
             if (!File.Exists(_resultFileName))
-                using(File.Create(_resultFileName))
+                using (File.Create(_resultFileName))
                 {
                 }
             File.WriteAllText(_resultFileName, arr.ToString());
