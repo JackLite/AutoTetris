@@ -160,7 +160,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5933146719269723459
 RectTransform:
   m_ObjectHideFlags: 0
@@ -177,9 +177,9 @@ RectTransform:
   m_Father: {fileID: 7733239096337380243}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 540, y: -207}
   m_SizeDelta: {x: 1080, y: 125}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &1067996506410614691
@@ -721,7 +721,6 @@ GameObject:
   - component: {fileID: 6143292080715811151}
   - component: {fileID: 2509109278138973750}
   - component: {fileID: 8641324214990685072}
-  - component: {fileID: 2835313607268182044}
   - component: {fileID: 2696928051397998699}
   m_Layer: 5
   m_Name: GameOverScreen
@@ -830,22 +829,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tryAgainBtn: {fileID: 4037913102953759332}
+  _newTopRecord: {fileID: 581390864799589455}
+  _headerContainer: {fileID: 7733239096337380243}
   <LeaderboardView>k__BackingField: {fileID: 743797983149165890}
   <AdsWidget>k__BackingField: {fileID: 2696928051397998699}
---- !u!114 &2835313607268182044
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3243959612843553566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 690b8cc6c488434e9a757c0f0f41ea6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  newMaxGO: {fileID: 581390864799589455}
-  <LeaderboardView>k__BackingField: {fileID: 743797983149165890}
 --- !u!114 &2696928051397998699
 MonoBehaviour:
   m_ObjectHideFlags: 0

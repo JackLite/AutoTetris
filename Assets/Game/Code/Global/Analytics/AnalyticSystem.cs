@@ -37,12 +37,12 @@ namespace Global.Analytics
                 ByteBrew.NewCustomEvent("round_start");
             if (_eventTable.Has<GameOverCoreSignal>())
             {
-                if (_playerData.AdsWasUsedInCore)
+                if (_playerData.adsWasUsedInCore)
                     ByteBrew.NewCustomEvent("round_defeat");
                 else
                     ByteBrew.NewCustomEvent("round_end");
             }
-            if (_playerData.CurrentScores > _playerData.MaxScores)
+            if (_playerData.currentScores > _playerData.maxScores)
                 ByteBrew.NewCustomEvent("new_high_score");
 
             if (_eventTable.Has<ContinueForAdsSignal>())

@@ -19,7 +19,7 @@ namespace Global
                 return;
 
             _world.ActivateModule<CoreModule>();
-            _playerData.AdsWasUsedInCore = false;
+            _playerData.adsWasUsedInCore = false;
             _saveService.SetHasGame(true);
         }
     }

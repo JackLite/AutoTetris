@@ -21,24 +21,24 @@ namespace Core.Scores
         {
             if (startCoreData.isContinue && !_coreSettings.aiEnable)
             {
-                _playerData.CurrentScores = _saveService.LoadScores();
-                _mainScreenMono.ScoreView.UpdateScores(_playerData.CurrentScores);
-                _lastScores = _playerData.CurrentScores;
+                _playerData.currentScores = _saveService.LoadScores();
+                _mainScreenMono.ScoreView.UpdateScores(_playerData.currentScores);
+                _lastScores = _playerData.currentScores;
             }
             else
             {
-                _playerData.CurrentScores = 0;
+                _playerData.currentScores = 0;
                 _lastScores = -1;
             }
         }
 
         public void Run()
         {
-            if (_lastScores == _playerData.CurrentScores)
+            if (_lastScores == _playerData.currentScores)
                 return;
 
-            _mainScreenMono.ScoreView.UpdateScores(_playerData.CurrentScores);
-            _lastScores = _playerData.CurrentScores;
+            _mainScreenMono.ScoreView.UpdateScores(_playerData.currentScores);
+            _lastScores = _playerData.currentScores;
             _saveService.SaveScores(_lastScores);
         }
     }

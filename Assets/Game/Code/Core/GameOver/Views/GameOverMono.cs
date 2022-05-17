@@ -10,6 +10,12 @@ namespace Core.GameOver.Views
         [SerializeField]
         private Button tryAgainBtn;
 
+        [SerializeField]
+        private GameObject _newTopRecord;
+        
+        [SerializeField]
+        private RectTransform _headerContainer;
+
         [field:SerializeField]
         public LeaderboardView LeaderboardView { get; private set; }
 
@@ -26,6 +32,12 @@ namespace Core.GameOver.Views
         public void SetTryAgainActive(bool isActive)
         {
             tryAgainBtn.gameObject.SetActive(isActive);
+        }
+
+        public void SetNewTopRecord(bool state)
+        {
+            _newTopRecord.SetActive(state);
+            LayoutRebuilder.MarkLayoutForRebuild(_headerContainer);
         }
     }
 }

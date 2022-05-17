@@ -31,10 +31,10 @@ namespace Core.Moving
         {
             if (_eventTable.Has<ContinueForAdsSignal>())
                 UpdateSpeed();
-            if (_playerData.CurrentScores == _lastScore)
+            if (_playerData.currentScores == _lastScore)
                 return;
 
-            _lastScore = _playerData.CurrentScores;
+            _lastScore = _playerData.currentScores;
             UpdateSpeed();
         }
 

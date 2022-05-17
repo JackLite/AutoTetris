@@ -4,7 +4,6 @@ using Core.GameOver.Views;
 using EcsCore;
 using Global;
 using Global.Leaderboard.Services;
-using Global.Settings.Core;
 using GooglePlayGames;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -18,14 +17,12 @@ namespace Core.GameOver.Systems
         private FakeScoresService _fakeScores;
         private SelectScoresService _selectScoresService;
         private ScoresService _scoresService;
-        private EcsEventTable _eventTable;
-        private EcsWorld _world;
-        private CoreSettings _coreSettings;
         private PlayerData _playerData;
         private GameOverMono _gameOverMono;
 
         public void Init()
         {
+            _gameOverMono.SetNewTopRecord(_playerData.maxScoresAchieved);
             if (Application.isEditor)
                 Show(_fakeScores.FakeScores);
             else
@@ -53,9 +50,9 @@ namespace Core.GameOver.Systems
 
         private void Show(List<ScoreData> scoresList)
         {
-            var after = _selectScoresService.GetScoresAfter(2, _playerData.MaxScores, scoresList);
-            var before = _selectScoresService.GetScoresBefore(4 - after.Count, _playerData.MaxScores, scoresList);
-            after = _selectScoresService.GetScoresAfter(4 - before.Count, _playerData.MaxScores, scoresList);
+            var after = _selectScoresService.GetScoresAfter(2, _playerData.maxScores, scoresList);
+            var before = _selectScoresService.GetScoresBefore(4 - after.Count, _playerData.maxScores, scoresList);
+            after = _selectScoresService.GetScoresAfter(4 - before.Count, _playerData.maxScores, scoresList);
 
             foreach (var fakeScore in before)
                 _gameOverMono.LeaderboardView.AddScore(fakeScore.place + 1, fakeScore.nickname, fakeScore.scores);
@@ -67,7 +64,7 @@ namespace Core.GameOver.Systems
                 var nextPlace = after.Max(s => s.place);
                 playerPlace = nextPlace + 1;
             }
-            _gameOverMono.LeaderboardView.AddScore(playerPlace, "You", _playerData.MaxScores, true);
+            _gameOverMono.LeaderboardView.AddScore(playerPlace, "You", _playerData.maxScores, true);
             _gameOverMono.LeaderboardView.ShowScores(true);
         }
     }

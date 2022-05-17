@@ -19,7 +19,7 @@ namespace Global.Scores
 
         public void Init()
         {
-            _playerData.MaxScores = _saveService.LoadMaxScores();
+            _playerData.maxScores = _saveService.LoadMaxScores();
         }
 
         public void Run()
@@ -30,18 +30,19 @@ namespace Global.Scores
             Debug.Log("[Scores] Send scores in board.");
             #if UNITY_ANDROID || UNITY_EDITOR
             Debug.Log("[Scores] Send scores in board 2.");
-            PlayGamesPlatform.Instance.ReportScore(_playerData.CurrentScores, GPGSIds.leaderboard_main, 
+            PlayGamesPlatform.Instance.ReportScore(_playerData.currentScores, GPGSIds.leaderboard_main, 
                 b =>
                 {
                     Debug.Log("[Scores] Add scores in board. Success: " + b);
                 });
             #endif
-            
-            if (_playerData.CurrentScores <= _playerData.MaxScores)
+            _playerData.maxScoresAchieved = _playerData.currentScores > _playerData.maxScores;
+
+            if (_playerData.currentScores <= _playerData.maxScores)
                 return;
 
-            _playerData.MaxScores = _playerData.CurrentScores;
-            _saveService.SaveMaxScores(_playerData.MaxScores);
+            _playerData.maxScores = _playerData.currentScores;
+            _saveService.SaveMaxScores(_playerData.maxScores);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Core.GameOver.Systems
                 return;
 
             _eventTable.AddEvent<PauseSignal>();
-            if (!_playerData.AdsWasUsedInCore)
+            if (!_playerData.adsWasUsedInCore)
                 _saveService.SetHasGame(false);
         }
 

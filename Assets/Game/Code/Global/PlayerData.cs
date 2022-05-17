@@ -2,8 +2,9 @@
 {
     public class PlayerData
     {
-        public int CurrentScores;
-        public int MaxScores;
-        public bool AdsWasUsedInCore;
+        public int currentScores;
+        public int maxScores;
+        public bool adsWasUsedInCore;
+        public bool maxScoresAchieved;
     }
 }

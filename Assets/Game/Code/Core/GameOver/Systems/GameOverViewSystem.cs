@@ -51,10 +51,10 @@ namespace Core.GameOver.Systems
         private void InitGameOverScreen()
         {
             _gameOverMono.OnTryAgain += RestartGame;
-            _gameOverMono.SetTryAgainActive(_playerData.AdsWasUsedInCore);
+            _gameOverMono.SetTryAgainActive(_playerData.adsWasUsedInCore);
             InitAdsWidget();
 
-            if (_playerData.AdsWasUsedInCore)
+            if (_playerData.adsWasUsedInCore)
             {
                 InitLeaderboard();
             }
@@ -73,8 +73,8 @@ namespace Core.GameOver.Systems
 
         private void InitAdsWidget()
         {
-            _gameOverMono.AdsWidget.SetActive(!_playerData.AdsWasUsedInCore);
-            if (_playerData.AdsWasUsedInCore)
+            _gameOverMono.AdsWidget.SetActive(!_playerData.adsWasUsedInCore);
+            if (_playerData.adsWasUsedInCore)
                 return;
 
             _gameOverMono.AdsWidget.OnAdContinue += OnAdContinueClick;

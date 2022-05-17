@@ -69,7 +69,7 @@ namespace Core.Ads
             }
 
             _eventTable.AddEvent<ContinueForAdsSignal>();
-            _playerData.AdsWasUsedInCore = true;
+            _playerData.adsWasUsedInCore = true;
             _movingData.factor = .5f;
         }
 
