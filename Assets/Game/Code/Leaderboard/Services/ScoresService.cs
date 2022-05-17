@@ -14,7 +14,7 @@ namespace Global.Leaderboard.Services
             Debug.Log("[Scores] Load scores...");
             PlayGamesPlatform.Instance.LoadScores(GPGSIds.leaderboard_main,
                 LeaderboardStart.PlayerCentered,
-                20,
+                count,
                 LeaderboardCollection.Public,
                 LeaderboardTimeSpan.AllTime,
                 data =>
@@ -24,14 +24,24 @@ namespace Global.Leaderboard.Services
                         return;
                     Debug.Log("[Scores] Load users... ");
                     Debug.Log("[Scores] Scores loaded. Count " + data.Scores.Length);
-                    Debug.Log("[Scores] Data: Id = " + data.Id + "; title = " + data.Title
-                    + "; user scores = " + data.PlayerScore?.value);
+                    Debug.Log("[Scores] Data: Id = "
+                              + data.Id
+                              + "; title = "
+                              + data.Title
+                              + "; user scores = "
+                              + data.PlayerScore?.value);
                     foreach (var dataScore in data.Scores)
                     {
-                        Debug.Log("[Scores] Raw score: " + dataScore.userID + " --- " + dataScore.date +
-                                  " --- " + dataScore.value + " --- " + dataScore.leaderboardID);
-
+                        Debug.Log("[Scores] Raw score: "
+                                  + dataScore.userID
+                                  + " --- "
+                                  + dataScore.date
+                                  + " --- "
+                                  + dataScore.value
+                                  + " --- "
+                                  + dataScore.leaderboardID);
                     }
+
                     LoadUsers(data.Scores.Select(s => s.userID).ToArray(),
                         users =>
                         {
@@ -47,7 +57,8 @@ namespace Global.Leaderboard.Services
                                 }
                                 var scoreData = new ScoreData(s.value, users[s.userID])
                                 {
-                                    place = s.rank
+                                    place = s.rank,
+                                    userId = s.userID
                                 };
                                 res.Add(scoreData);
                             }

@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Core.GameOver.Views;
 using EcsCore;
 using Global;
 using Global.Leaderboard.Services;
-using Global.Settings;
 using Global.Settings.Core;
 using GooglePlayGames;
 using Leopotam.Ecs;
@@ -13,32 +13,29 @@ using Application = UnityEngine.Device.Application;
 namespace Core.GameOver.Systems
 {
     [EcsSystem(typeof(GameOverModule))]
-    public class GameOverLeaderboardSystem : IEcsPreInitSystem, IEcsInitSystem
+    public class GameOverLeaderboardSystem : IEcsInitSystem
     {
         private FakeScoresService _fakeScores;
+        private SelectScoresService _selectScoresService;
         private ScoresService _scoresService;
         private EcsEventTable _eventTable;
         private EcsWorld _world;
         private CoreSettings _coreSettings;
-        private GlobalSettings _globalSettings;
         private PlayerData _playerData;
         private GameOverMono _gameOverMono;
-        public void PreInit()
-        {
-            _fakeScores = new FakeScoresService(_globalSettings.fakeScores.text);
-        }
 
         public void Init()
         {
             if (Application.isEditor)
-                ShowFake();
+                Show(_fakeScores.FakeScores);
             else
                 LoadReal();
         }
 
         private void LoadReal()
         {
-            _scoresService.LoadScores(5,
+            const int COUNT = 5;
+            _scoresService.LoadScores(COUNT,
                 data =>
                 {
                     Debug.Log("[Scores] Scores loaded. Count " + data.Count);
@@ -54,10 +51,11 @@ namespace Core.GameOver.Systems
                 });
         }
 
-        private void ShowFake()
+        private void Show(List<ScoreData> scoresList)
         {
-            var after = _fakeScores.GetScoresAfter(2, _playerData.MaxScores);
-            var before = _fakeScores.GetScoresBefore(2, _playerData.MaxScores);
+            var after = _selectScoresService.GetScoresAfter(2, _playerData.MaxScores, scoresList);
+            var before = _selectScoresService.GetScoresBefore(4 - after.Count, _playerData.MaxScores, scoresList);
+            after = _selectScoresService.GetScoresAfter(4 - before.Count, _playerData.MaxScores, scoresList);
 
             foreach (var fakeScore in before)
                 _gameOverMono.LeaderboardView.AddScore(fakeScore.place + 1, fakeScore.nickname, fakeScore.scores);

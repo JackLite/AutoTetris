@@ -13,7 +13,6 @@ using GooglePlayGames.BasicApi;
 using MainMenu;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using Application = UnityEngine.Device.Application;
 
 namespace Global
 {
@@ -43,9 +42,11 @@ namespace Global
             _dependencies.Add(typeof(StartCoreData), new StartCoreData());
             _dependencies.Add(typeof(SaveService), new SaveService());
             _dependencies.Add(typeof(AiGeneticService), new AiGeneticService());
-            _dependencies.Add(typeof(ScoresService), new ScoresService());
+            _dependencies[typeof(ScoresService)] = new ScoresService();
+            _dependencies[typeof(SelectScoresService)] = new SelectScoresService();
             await LoadCoreSettings();
-            await LoadGlobalSettings();
+            var globalSettings = await LoadGlobalSettings();
+            _dependencies[typeof(FakeScoresService)] = new FakeScoresService(globalSettings.fakeScores.text);
         }
 
         private void ProcessAuth(SignInStatus status)
@@ -63,10 +64,11 @@ namespace Global
             _dependencies.Add(typeof(CoreSettings), result.coreSettings);
         }
 
-        private async Task LoadGlobalSettings()
+        private async Task<GlobalSettings> LoadGlobalSettings()
         {
             var result = await LoadSettings<GlobalSettingsContainer>("GlobalSettings");
             _dependencies.Add(typeof(GlobalSettings), result.globalSettings);
+            return result.globalSettings;
         }
 
         private static async Task<T> LoadSettings<T>(string address)

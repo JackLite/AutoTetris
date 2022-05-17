@@ -19,10 +19,12 @@ namespace Core.GameOver
             _gameOverScreen = _gameOverScreenObject.GetComponent<GameOverMono>();
             _dependencies[typeof(GameOverMono)] = _gameOverScreen;
         }
+
         public override Dictionary<Type, object> GetDependencies()
         {
             return _dependencies;
         }
+
         public override void Deactivate()
         {
             Addressables.Release(_gameOverScreenObject);
