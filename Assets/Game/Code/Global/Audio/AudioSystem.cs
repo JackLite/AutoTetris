@@ -1,24 +1,53 @@
 ﻿using EcsCore;
+using Global.Saving;
 using Leopotam.Ecs;
 using UnityEngine;
 
 namespace Global.Audio
 {
     [EcsSystem(typeof(MainModule))]
-    public class AudioSystem : IEcsInitSystem, IEcsRunLateSystem, IEcsDestroySystem
+    public class AudioSystem : IEcsInitSystem, IEcsRunSystem, IEcsRunLateSystem, IEcsDestroySystem
     {
         private EcsFilter<AudioComponent> _sounds;
+        private EcsFilter<AudioChangeEvent> _audioChangeFilter;
         private AudioSourcePool _pool;
+        private AudioService _audioService;
+        private SaveService _saveService;
 
         public void Init()
         {
             _pool = new AudioSourcePool(4, new GameObject("AudioSourcePool").transform);
+            _audioService.SetMusicState(_saveService.GetMusicState());
+            _audioService.SetSoundState(_saveService.GetSoundState());
+        }
+
+        public void Run()
+        {
+            foreach (var i in _audioChangeFilter)
+            {
+                ref var changeSignal = ref _audioChangeFilter.Get1(i);
+                if (changeSignal.isMusic)
+                {
+                    _audioService.SetMusicState(changeSignal.isActive);
+                    _saveService.SaveMusicState(changeSignal.isActive);
+                }
+                else
+                {
+                    _audioService.SetSoundState(changeSignal.isActive);
+                    _saveService.SaveSoundState(changeSignal.isActive);
+                }
+                _audioChangeFilter.GetEntity(i).Replace(new EcsOneFrame());
+            }
+            if (_audioChangeFilter.GetEntitiesCount() > 0)
+                _saveService.Flush();
         }
 
         public void RunLate()
         {
             foreach (var i in _sounds)
             {
+                if (!_saveService.GetSoundState())
+                    return;
                 ref var sound = ref _sounds.Get1(i);
                 var source = _pool.GetSource();
                 source.clip = sound.clip;
@@ -31,5 +60,6 @@ namespace Global.Audio
         {
             _pool.Dispose();
         }
+
     }
 }

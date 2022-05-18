@@ -2,6 +2,7 @@
 using EcsCore;
 using Global.Saving;
 using Leopotam.Ecs;
+using MainMenu;
 
 namespace Global
 {

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Core.AI.Genetic;
 using EcsCore;
 using Global.Ads;
+using Global.Audio;
 using Global.Leaderboard.Services;
 using Global.Saving;
 using Global.Settings;
@@ -13,13 +14,13 @@ using GooglePlayGames.BasicApi;
 using MainMenu;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.Audio;
 
 namespace Global
 {
     [EcsGlobalModule]
     public class MainModule : EcsModule
     {
-        private GameObject _startScreen;
         private readonly Dictionary<Type, object> _dependencies;
 
         public MainModule()
@@ -33,10 +34,7 @@ namespace Global
                 Debug.unityLogger.filterLogType = LogType.Error;
 
             PlayGamesPlatform.Instance.Authenticate(ProcessAuth);
-            var handler = Addressables.InstantiateAsync("StartScreen");
-            await handler.Task;
-            _startScreen = handler.Result;
-            _dependencies.Add(typeof(StartScreenMono), _startScreen.GetComponent<StartScreenMono>());
+            
             _dependencies.Add(typeof(PlayerData), new PlayerData());
             _dependencies.Add(typeof(AdsService), new AdsService());
             _dependencies.Add(typeof(StartCoreData), new StartCoreData());
@@ -47,6 +45,8 @@ namespace Global
             await LoadCoreSettings();
             var globalSettings = await LoadGlobalSettings();
             _dependencies[typeof(FakeScoresService)] = new FakeScoresService(globalSettings.fakeScores.text);
+            _dependencies[typeof(AudioService)] = new AudioService(globalSettings.mixer);
+            EcsWorldContainer.World.ActivateModule<MainMenuModule>();
         }
 
         private void ProcessAuth(SignInStatus status)

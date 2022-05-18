@@ -7,6 +7,7 @@ using Core.CoreDebug;
 using Core.Figures;
 using Core.Grid;
 using Core.Moving;
+using Core.Pause;
 using Core.Saving;
 using EcsCore;
 using Global.Leaderboard.Services;
@@ -32,6 +33,7 @@ namespace Core
             _mainScreen = await Addressables.InstantiateAsync("MainScreen").Task;
             var mainScreen = _mainScreen.GetComponent<MainScreenMono>();
             _dependencies[typeof(MainScreenMono)] = mainScreen;
+            _dependencies[typeof(PauseScreenView)] = mainScreen.PauseScreen;
             _coreSettings = await Addressables.LoadAssetAsync<CoreSettingsContainer>("CoreSettings").Task;
             var gridSize = new Vector2Int(24, 10);
             if (_coreSettings.coreSettings.aiEnable)

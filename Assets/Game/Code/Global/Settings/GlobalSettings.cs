@@ -2,6 +2,7 @@
 using Global.Settings.Audio;
 using Global.Settings.Localization;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Global.Settings
 {
@@ -10,6 +11,7 @@ namespace Global.Settings
     {
         public LocalizationSettings localization;
         public AudioMap[] audioMap;
+        public AudioMixer mixer;
         public TextAsset fakeScores;
     }
 }

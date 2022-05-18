@@ -1,6 +1,7 @@
 ﻿using Core.CoreDebug;
 using Core.Grid.Visual;
 using Core.Input;
+using Core.Pause;
 using Core.Scores;
 using Core.UI;
 using TMPro;
@@ -23,7 +24,7 @@ namespace Core
         public Button UnPauseButton { get; private set; }
 
         [field:SerializeField]
-        public GameObject PauseScreen { get; private set; }
+        public PauseScreenView PauseScreen { get; private set; }
 
         [field:SerializeField]
         public NextFigureUI NextFigure { get; private set; }

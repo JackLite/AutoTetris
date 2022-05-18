@@ -16,6 +16,8 @@ namespace Global.Saving
         private const string UNFINISHED_GAME = "core.has_figure";
         private const string HAS_FIGURE_KEY = "core.has_saved_game";
         private const string COLORS_KEY = "core.colors";
+        private const string AUDIO_MUSIC_KEY = "global.music.state";
+        private const string AUDIO_SOUND_KEY = "global.sound.state";
 
         public void SetHasGame(bool isHasGame)
         {
@@ -71,7 +73,7 @@ namespace Global.Saving
         }
 
         public FigureType[,] LoadCells(int l1, int l2)
-        { 
+        {
             var list = SaveUtility.LoadList<int>(COLORS_KEY);
             if (list == null)
                 return null;
@@ -143,6 +145,26 @@ namespace Global.Saving
         public void Flush()
         {
             PlayerPrefs.Save();
+        }
+
+        public void SaveMusicState(bool isActive)
+        {
+            SaveUtility.SaveBool(AUDIO_MUSIC_KEY, isActive);
+        }
+
+        public void SaveSoundState(bool isActive)
+        {
+            SaveUtility.SaveBool(AUDIO_SOUND_KEY, isActive);
+        }
+
+        public bool GetMusicState()
+        {
+            return SaveUtility.LoadBool(AUDIO_MUSIC_KEY);
+        }
+
+        public bool GetSoundState()
+        {
+            return SaveUtility.LoadBool(AUDIO_SOUND_KEY);
         }
     }
 }

@@ -30,6 +30,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3420212174118071001}
   m_Father: {fileID: 0}
@@ -114,7 +115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <StartGameButton>k__BackingField: {fileID: 3420212173512344321}
-  <ContinueGameButton>k__BackingField: {fileID: 820663561601847616}
+  <AudioSettingsView>k__BackingField: {fileID: 3693961318642890234}
   <StartDebugButton>k__BackingField: {fileID: 720133565822915380}
 --- !u!1 &3290943542701558627
 GameObject:
@@ -145,6 +146,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2951114248497732106}
   m_Father: {fileID: 3420212174118071001}
@@ -263,6 +265,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5809415246488842874}
   - {fileID: 8675603632313215051}
@@ -304,6 +307,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9134947997732997771}
   m_RootOrder: 0
@@ -454,6 +458,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1299869962212795202}
   m_Father: {fileID: 3420212174118071001}
@@ -586,6 +591,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8675603632313215051}
   m_RootOrder: 0
@@ -805,11 +811,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 233bd368d172bad4d9556a9faa3c0b3b, type: 3}
---- !u!224 &5809415246488842874 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8513248931122338235, guid: 233bd368d172bad4d9556a9faa3c0b3b, type: 3}
-  m_PrefabInstance: {fileID: 2790563462738209729}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3420212173512344321 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 706249814519212224, guid: 233bd368d172bad4d9556a9faa3c0b3b, type: 3}
@@ -821,3 +822,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e1401e7c3154685a0567d26916cb364, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3693961318642890234 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1583442499552140859, guid: 233bd368d172bad4d9556a9faa3c0b3b, type: 3}
+  m_PrefabInstance: {fileID: 2790563462738209729}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3195a78c4e5b47319cb77ce5ab1ba804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &5809415246488842874 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8513248931122338235, guid: 233bd368d172bad4d9556a9faa3c0b3b, type: 3}
+  m_PrefabInstance: {fileID: 2790563462738209729}
+  m_PrefabAsset: {fileID: 0}

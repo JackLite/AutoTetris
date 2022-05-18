@@ -28,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 706249814519212231}
   m_RootOrder: 0
@@ -163,6 +164,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6443996609960024966}
   - {fileID: 318276100722117090}
@@ -266,6 +268,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2163407437907120778}
   m_RootOrder: 0
@@ -325,6 +328,7 @@ GameObject:
   - component: {fileID: 4233602235168089569}
   - component: {fileID: 5942208559736725493}
   - component: {fileID: 913898234235059331}
+  - component: {fileID: 7659932998266690193}
   m_Layer: 5
   m_Name: SoundBtn
   m_TagString: Untagged
@@ -342,6 +346,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7118989465712125183}
   m_Father: {fileID: 8513248931122338235}
@@ -434,6 +439,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &7659932998266690193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3029245354529717047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 930ae7955e8a48648d958aca748b7a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 913898234235059331}
+  _inactiveIndicator: {fileID: 1658530881448448725}
 --- !u!1 &4481397909471729210
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,6 +481,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8513248931122338235}
   m_RootOrder: 0
@@ -537,6 +557,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 706249814519212231}
   m_RootOrder: 1
@@ -596,6 +617,7 @@ GameObject:
   - component: {fileID: 2826829199804158750}
   - component: {fileID: 8393403917269515153}
   - component: {fileID: 8152458718807685275}
+  - component: {fileID: 4101439295651917006}
   m_Layer: 5
   m_Name: MusicBtn
   m_TagString: Untagged
@@ -613,6 +635,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6746358633859981287}
   m_Father: {fileID: 8513248931122338235}
@@ -705,6 +728,20 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &4101439295651917006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5961464543967877367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 930ae7955e8a48648d958aca748b7a47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _button: {fileID: 8152458718807685275}
+  _inactiveIndicator: {fileID: 8225691754562014967}
 --- !u!1 &7366757513613792305
 GameObject:
   m_ObjectHideFlags: 0
@@ -714,6 +751,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8513248931122338235}
+  - component: {fileID: 1583442499552140859}
   m_Layer: 5
   m_Name: StartPause
   m_TagString: Untagged
@@ -731,6 +769,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 374195843076065260}
   - {fileID: 706249814519212231}
@@ -744,6 +783,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1583442499552140859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7366757513613792305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3195a78c4e5b47319cb77ce5ab1ba804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MusicButton: {fileID: 4101439295651917006}
+  SoundButton: {fileID: 7659932998266690193}
 --- !u!1 &8225691754562014967
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,6 +825,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2094123284324640693}
   m_RootOrder: 0

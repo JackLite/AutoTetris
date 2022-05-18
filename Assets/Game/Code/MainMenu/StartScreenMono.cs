@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Global.Audio;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace MainMenu
@@ -7,9 +8,9 @@ namespace MainMenu
     {
         [field:SerializeField]
         public StartGameButton StartGameButton { get; private set; }
-        
+
         [field:SerializeField]
-        public Button ContinueGameButton { get; private set; }
+        public AudioSettingsView AudioSettingsView { get; private set; }
         
         [field:SerializeField]
         public Button StartDebugButton { get; private set; }
