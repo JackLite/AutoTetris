@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using Core.AI;
 using Core.Grid;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Core.Figures.FigureAlgorithms.FigureO
 {
@@ -41,6 +45,24 @@ namespace Core.Figures.FigureAlgorithms.FigureO
             var isFillRightUnder = fillMatrix[figure.row - 1, figure.column + 1];
 
             return isFillUnder || isFillRightUnder;
+        }
+        public override IEnumerable<AiDecision> GetStartDecision(in Vector2Int gridSize)
+        {
+            var first = new AiDecision
+            {
+                Column = 0, Row = 0, Rotation = FigureRotation.Zero, Direction = Direction.Left
+            };
+
+            var second = new AiDecision
+            {
+                Column = gridSize.y - 2, Row = 0, Rotation = FigureRotation.Zero, Direction = Direction.Right
+            };
+
+            var third = new AiDecision
+            {
+                Column = 4, Row = 0, Rotation = FigureRotation.Zero, Direction = Direction.Bottom
+            };
+            return new [] { first, second, third };
         }
 
         public GridPosition[] GetPositions(in GridPosition position)

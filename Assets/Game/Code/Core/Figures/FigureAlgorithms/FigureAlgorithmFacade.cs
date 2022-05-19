@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.AI;
 using Core.Cells;
 using Core.Figures.FigureAlgorithms.FigureI;
 using Core.Figures.FigureAlgorithms.FigureJ;
@@ -10,6 +11,7 @@ using Core.Figures.FigureAlgorithms.FigureS;
 using Core.Figures.FigureAlgorithms.FigureT;
 using Core.Figures.FigureAlgorithms.FigureZ;
 using Core.Grid;
+using UnityEngine;
 
 namespace Core.Figures.FigureAlgorithms
 {
@@ -165,6 +167,12 @@ namespace Core.Figures.FigureAlgorithms
         {
             var algorithm = _algorithms[figure.type];
             return algorithm.GetBorderDirectionsForCell(figure, cell, position);
+        }
+
+        public static IEnumerable<AiDecision> GetStartDecision(in Figure figure, in Vector2Int gridSize)
+        {
+            var algorithm = _algorithms[figure.type];
+            return algorithm.GetStartDecision(gridSize);
         }
     }
 }

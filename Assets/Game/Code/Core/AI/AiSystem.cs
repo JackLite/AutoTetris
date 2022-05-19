@@ -18,7 +18,7 @@ namespace Core.AI
     {
         private const float AHM = -4.96598f;
         private const float CLM = 2.994397f;
-        private const float HM = -3.276442f;
+        private const float HM = -5.276442f;
         private const float BM = -1.619069f;
 
         private static readonly Dictionary<int, Direction> Directions = new Dictionary<int, Direction>
@@ -103,8 +103,14 @@ namespace Core.AI
             }
         }
 
-        private IEnumerable<AiDecision> FindBetterMoves(in bool[,] fillMatrix, ref Figure figure)
+        private IEnumerable<AiDecision> FindBetterMoves(bool[,] fillMatrix, ref Figure figure)
         {
+            if (GridService.IsGridEmpty(fillMatrix))
+            {
+                var size = new Vector2Int(fillMatrix.GetLength(0), fillMatrix.GetLength(1));
+                return FigureAlgorithmFacade.GetStartDecision(figure, size);
+            }
+
             var comparer = new AiMoveVariantComparer();
             var variants = new List<AiMoveVariant>();
             var currentRotation = figure.rotation;

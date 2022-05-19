@@ -221,5 +221,10 @@ namespace Core.Grid
 
             return -1;
         }
+
+        public static bool IsGridEmpty(bool[,] fillMatrix)
+        {
+            return IsEmptyRow(0, fillMatrix);
+        }
     }
 }

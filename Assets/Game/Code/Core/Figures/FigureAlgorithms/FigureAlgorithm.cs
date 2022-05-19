@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using Core.AI;
 using Core.Cells;
 using Core.Grid;
+using UnityEngine;
 
 namespace Core.Figures.FigureAlgorithms
 {
@@ -96,7 +98,7 @@ namespace Core.Figures.FigureAlgorithms
         {
             return RotatedFigures[figure.rotation].GetPositions(place);
         }
-        
+
         public IEnumerable<GridPosition> GetPositions(in GridPosition place, FigureRotation rotation)
         {
             return RotatedFigures[rotation].GetPositions(place);
@@ -107,5 +109,7 @@ namespace Core.Figures.FigureAlgorithms
             var cellPosition = cell.Position;
             return RotatedFigures[figure.rotation].GetBorderDirectionsForCell(cellPosition, position);
         }
+
+        public abstract IEnumerable<AiDecision> GetStartDecision(in Vector2Int gridSize);
     }
 }
