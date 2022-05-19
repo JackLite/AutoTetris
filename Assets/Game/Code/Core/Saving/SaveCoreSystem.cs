@@ -8,12 +8,21 @@ using Leopotam.Ecs;
 namespace Core.Saving
 {
     [EcsSystem(typeof(CoreModule))]
-    public class SaveCoreSystem : IEcsRunSystem
+    public class SaveCoreSystem : IEcsInitSystem, IEcsRunSystem
     {
         private EcsEventTable _eventTable;
         private EcsFilter<Cell> _cells;
         private SaveService _saveService;
         private GridData _grid;
+
+        public void Init()
+        {
+            if (_saveService.HasGame())
+                return;
+            _saveService.SetHasGame(true);
+            _saveService.SaveFillMatrix(_grid.FillMatrix);
+            _saveService.Flush();
+        }
 
         public void Run()
         {

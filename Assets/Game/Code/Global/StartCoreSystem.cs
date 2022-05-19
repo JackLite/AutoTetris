@@ -21,7 +21,6 @@ namespace Global
 
             _world.ActivateModule<CoreModule>();
             _playerData.adsWasUsedInCore = false;
-            _saveService.SetHasGame(true);
         }
     }
 }
