@@ -30,11 +30,9 @@ namespace Core.Figures.FigureAlgorithms.FigureJ
                 Column = gridSize.y - 2, Row = 0, Rotation = FigureRotation.Zero, Direction = Direction.Right
             };
 
-            var thirdRotation = Random.Range(0, 1f) > .5f ? FigureRotation.ClockWise : FigureRotation.Zero;
-            var column = Random.Range(0, 1f) > .5f ? 3 : 4;
             var third = new AiDecision
             {
-                Column = column, Row = 0, Rotation = thirdRotation, Direction = Direction.Bottom
+                Column = 4, Row = 0, Rotation = FigureRotation.ClockWise, Direction = Direction.Bottom
             };
             return new [] { first, second, third };
         }

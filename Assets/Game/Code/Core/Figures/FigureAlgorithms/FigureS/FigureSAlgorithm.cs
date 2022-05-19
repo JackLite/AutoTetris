@@ -26,10 +26,9 @@ namespace Core.Figures.FigureAlgorithms.FigureS
                 Column = gridSize.y - 2, Row = 0, Rotation = FigureRotation.ClockWise, Direction = Direction.Right
             };
 
-            var column = Random.Range(0, 1f) > .5f ? 3 : 4;
             var third = new AiDecision
             {
-                Column = column, Row = 0, Rotation = FigureRotation.Zero, Direction = Direction.Bottom
+                Column = 3, Row = 0, Rotation = FigureRotation.Zero, Direction = Direction.Bottom
             };
             return new [] { first, second, third };
         }
