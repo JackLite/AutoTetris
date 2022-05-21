@@ -29,6 +29,9 @@ namespace Core.Saving
             if (!_eventTable.Has<SaveCoreSignal>())
                 return;
 
+            if (GridService.IsFillSomeAtTopRow(_grid.FillMatrix))
+                return;
+
             var types = new FigureType[_grid.Rows, _grid.Columns];
             foreach (var i in _cells)
             {

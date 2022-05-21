@@ -34,22 +34,19 @@ namespace Core.Input
                 return;
 
             if (CheckLeftSwipe(eventData.position))
-            {
-                EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = Direction.Left });
-                return;
-            }
-
-            if (CheckRightSwipe(eventData.position))
-            {
-                EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = Direction.Right });
-                return;
-            }
-
-            if (!CheckDownSwipe(eventData.position))
-                return;
-
-            EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = Direction.Bottom });
+                CreateSwipe(Direction.Left);
+            else if (CheckRightSwipe(eventData.position))
+                CreateSwipe(Direction.Right);
+            else if (CheckDownSwipe(eventData.position))
+                CreateSwipe(Direction.Bottom);
         }
+
+        private void CreateSwipe(Direction direction)
+        {
+            _isSwipeStart = false;
+            EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = direction });
+        }
+
         private bool CheckDownSwipe(in Vector2 pointerEndPosition)
         {
             if (_swipeStartPoint.y < pointerEndPosition.y)
@@ -94,12 +91,12 @@ namespace Core.Input
         {
             float.TryParse(val, out _leftThreshold);
         }
-        
+
         public void OnDown(string val)
         {
             float.TryParse(val, out _downThreshold);
         }
-        
+
         public void OnRight(string val)
         {
             float.TryParse(val, out _rightThreshold);

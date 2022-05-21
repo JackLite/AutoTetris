@@ -14,13 +14,13 @@ namespace Core.GameOver.Systems
     [EcsSystem(typeof(GameOverModule))]
     public class GameOverSystem : IEcsInitSystem, IEcsRunSystem
     {
-        private EcsWorld _world;
+        private CoreSettings _coreSettings;
         private EcsEventTable _eventTable;
-        private StartCoreData _startCoreData;
+        private EcsWorld _world;
+        private GlobalSettings _settings;
         private PlayerData _playerData;
         private SaveService _saveService;
-        private GlobalSettings _settings;
-        private CoreSettings _coreSettings;
+        private StartCoreData _startCoreData;
 
         public void Init()
         {
@@ -28,8 +28,8 @@ namespace Core.GameOver.Systems
                 return;
 
             _eventTable.AddEvent<PauseSignal>();
-            if (_playerData.adsWasUsedInCore)
-                _saveService.SetHasGame(false);
+            _saveService.SetHasGame(false);
+            _saveService.Flush();
         }
 
         public void Run()
@@ -42,6 +42,8 @@ namespace Core.GameOver.Systems
 
             if (_eventTable.Has<ContinueForAdsSignal>())
             {
+                _saveService.SetHasGame(true);
+                _saveService.Flush();
                 _eventTable.AddEvent<UnpauseSignal>();
                 _eventTable.AddEvent<FigureSpawnSignal>();
                 _world.DeactivateModule<GameOverModule>();
