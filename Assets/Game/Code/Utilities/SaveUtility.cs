@@ -70,5 +70,17 @@ namespace Utilities
                 return PlayerPrefs.GetString(key);
             return string.Empty;
         }
+
+        public static void SaveFloat(string key, float value, bool saveImmediate = false)
+        {
+            PlayerPrefs.SetFloat(key, value);
+            if (saveImmediate)
+                PlayerPrefs.Save();
+        }
+
+        public static float LoadFloat(string key)
+        {
+            return PlayerPrefs.HasKey(key) ? PlayerPrefs.GetFloat(key) : 0;
+        }
     }
 }

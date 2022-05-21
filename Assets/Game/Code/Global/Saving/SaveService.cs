@@ -16,6 +16,7 @@ namespace Global.Saving
         private const string UNFINISHED_GAME = "core.has_figure";
         private const string HAS_FIGURE_KEY = "core.has_saved_game";
         private const string COLORS_KEY = "core.colors";
+        private const string FALL_SPEED = "core.fall_speed";
         private const string AUDIO_MUSIC_KEY = "global.music.state";
         private const string AUDIO_SOUND_KEY = "global.sound.state";
 
@@ -165,6 +166,16 @@ namespace Global.Saving
         public bool GetSoundState()
         {
             return SaveUtility.LoadBool(AUDIO_SOUND_KEY);
+        }
+
+        public float GetFallSpeedFactor()
+        {
+            return SaveUtility.LoadFloat(FALL_SPEED);
+        }
+
+        public void SaveFallSpeedFactor(float speed)
+        {
+            SaveUtility.SaveFloat(FALL_SPEED, speed);
         }
     }
 }

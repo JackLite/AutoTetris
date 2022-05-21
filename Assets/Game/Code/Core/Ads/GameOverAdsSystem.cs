@@ -1,14 +1,13 @@
 ﻿using System;
 using Core.Cells;
-using Core.Figures;
 using Core.Grid;
 using Core.Moving;
+using Core.Saving;
 using EcsCore;
 using Global;
 using Global.Ads;
 using Global.Settings.Core;
 using Leopotam.Ecs;
-using UnityEngine;
 
 namespace Core.Ads
 {
@@ -68,9 +67,10 @@ namespace Core.Ads
                     _gridData.FillMatrix[row, column] = false;
             }
 
+            _eventTable.AddEvent<SaveCoreSignal>();
             _eventTable.AddEvent<ContinueForAdsSignal>();
             _playerData.adsWasUsedInCore = true;
-            _movingData.factor = .5f;
+            _movingData.factor = _coreSettings.adsSlowFactor;
         }
 
         private void OnRewardVideoFailed()
