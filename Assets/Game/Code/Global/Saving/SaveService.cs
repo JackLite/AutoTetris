@@ -160,12 +160,12 @@ namespace Global.Saving
 
         public bool GetMusicState()
         {
-            return SaveUtility.LoadBool(AUDIO_MUSIC_KEY);
+            return SaveUtility.LoadBool(AUDIO_MUSIC_KEY, true);
         }
 
         public bool GetSoundState()
         {
-            return SaveUtility.LoadBool(AUDIO_SOUND_KEY);
+            return SaveUtility.LoadBool(AUDIO_SOUND_KEY, true);
         }
 
         public float GetFallSpeedFactor()

@@ -12,8 +12,10 @@ namespace Utilities
             SaveInt(key, value ? 1 : 0, saveImmediate);
         }
 
-        public static bool LoadBool(string key)
+        public static bool LoadBool(string key, bool defaultValue = false)
         {
+            if (!IsKeyExist(key))
+                return defaultValue;
             return LoadInt(key) > 0;
         }
 
@@ -81,6 +83,11 @@ namespace Utilities
         public static float LoadFloat(string key)
         {
             return PlayerPrefs.HasKey(key) ? PlayerPrefs.GetFloat(key) : 0;
+        }
+
+        public static bool IsKeyExist(string key)
+        {
+            return PlayerPrefs.HasKey(key);
         }
     }
 }

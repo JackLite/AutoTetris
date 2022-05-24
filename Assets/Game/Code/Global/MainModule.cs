@@ -45,7 +45,7 @@ namespace Global
             await LoadCoreSettings();
             var globalSettings = await LoadGlobalSettings();
             _dependencies[typeof(FakeScoresService)] = new FakeScoresService(globalSettings.fakeScores.text);
-            _dependencies[typeof(AudioService)] = new AudioService(globalSettings.mixer);
+            _dependencies[typeof(AudioService)] = new AudioService(globalSettings.mixer, globalSettings);
             EcsWorldContainer.World.ActivateModule<MainMenuModule>();
         }
 

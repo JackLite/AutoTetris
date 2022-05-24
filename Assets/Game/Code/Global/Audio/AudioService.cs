@@ -1,28 +1,27 @@
-﻿using UnityEngine.Audio;
+﻿using Global.Settings;
+using UnityEngine.Audio;
 
 namespace Global.Audio
 {
     public class AudioService
     {
         private readonly AudioMixer _mixer;
-        
-        public AudioService(AudioMixer mixer)
+        private readonly GlobalSettings _settings;
+
+        public AudioService(AudioMixer mixer, GlobalSettings settings)
         {
             _mixer = mixer;
+            _settings = settings;
         }
 
-        public void SetMusicState(bool isMusicActive)
+        public void SetMusicState(bool isActive)
         {
-            SetAudioState(isMusicActive, "MusicVolume");
-        }
-        private void SetAudioState(bool isActive, string paramName)
-        {
-            _mixer.SetFloat(paramName, isActive ? 0 : -80);
+            _mixer.SetFloat("MusicVolume", isActive ? _settings.musicDb : -80);
         }
 
-        public void SetSoundState(bool isSoundActive)
+        public void SetSoundState(bool isActive)
         {
-            SetAudioState(isSoundActive, "SoundsVolume");
+            _mixer.SetFloat("SoundsVolume", isActive ? _settings.soundDb : -80);
         }
     }
 }
