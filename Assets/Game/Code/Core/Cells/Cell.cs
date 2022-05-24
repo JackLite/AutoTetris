@@ -10,6 +10,8 @@ namespace Core.Cells
         public int column;
         public FigureType figureType;
         public CellMono view;
+        public bool isLightUp;
+        public Direction lightUpDirection;
 
         public GridPosition Position => new GridPosition(row, column);
     }

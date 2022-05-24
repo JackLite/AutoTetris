@@ -5,6 +5,7 @@ using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
 using Core.Grid;
+using Core.Moving;
 using Core.Path;
 using EcsCore;
 using Global.Settings.Core;
@@ -21,14 +22,14 @@ namespace Core.AI
         private const float HM = -5.276442f;
         private const float BM = -1.619069f;
 
-        private static readonly Dictionary<int, Direction> Directions = new Dictionary<int, Direction>
+        private static readonly Dictionary<int, Direction> directions = new Dictionary<int, Direction>
         {
             { 0, Direction.Left },
             { 1, Direction.Bottom },
             { 2, Direction.Right },
         };
 
-        private EcsFilter<Figure> _filter;
+        private EcsFilter<Figure>.Exclude<FigureMoveChosen> _filter;
         private EcsFilter<AiDecision> _decisionsFilter;
         private EcsFilter<Cell> _cells;
         private GridData _gridData;
@@ -73,33 +74,6 @@ namespace Core.AI
                 if (decision.Direction == Direction.None)
                     continue;
                 _world.NewEntity().Replace(decision);
-            }
-
-            LightUpMoves(figure, aiDecisions);
-        }
-
-        private void LightUpMoves(Figure figure, in IEnumerable<AiDecision> aiDecisions)
-        {
-            foreach (var i in _cells)
-            {
-                ref var cell = ref _cells.Get1(i);
-                var needLightDown = true;
-                foreach (var decision in aiDecisions)
-                {
-                    if (decision.Direction == Direction.None)
-                        continue;
-                    figure.rotation = decision.Rotation;
-                    var position = new GridPosition(decision.Row, decision.Column);
-
-                    if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell, position))
-                    {
-                        cell.view.LightUp(figure, decision.Direction);
-                        needLightDown = false;
-                        break;
-                    }
-                }
-                if (needLightDown)
-                    cell.view.LightDown();
             }
         }
 
@@ -207,7 +181,7 @@ namespace Core.AI
                 ref var decision = ref result[i];
                 if (decision.Direction == Direction.None)
                     continue;
-                decision.Direction = Directions[i];
+                decision.Direction = directions[i];
             }
             return result;
         }
@@ -258,7 +232,7 @@ namespace Core.AI
                 ref var decision = ref temp[i];
                 if (decision.Direction == Direction.None)
                     continue;
-                decision.Direction = Directions[i];
+                decision.Direction = directions[i];
             }
 
             return temp;

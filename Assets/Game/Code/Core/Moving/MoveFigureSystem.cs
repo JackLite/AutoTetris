@@ -12,7 +12,6 @@ using Global;
 using Global.Audio;
 using Global.Saving;
 using Global.Settings;
-using Global.Settings.Audio;
 using Global.Settings.Core;
 using Leopotam.Ecs;
 using Unity.Mathematics;
@@ -167,9 +166,10 @@ namespace Core.Moving
             if (IsFall(_grid.FillMatrix, figure))
                 FinishMove();
             else
+            {
                 _saveService.SaveCurrentFigure(figure);
-
-            ClearDecisions();
+                _world.NewEntity().Replace(new MoveFigureSignal());
+            }
 
             _fallCounter = CalculateFallSpeed(_movingData.currentFallSpeed);
         }

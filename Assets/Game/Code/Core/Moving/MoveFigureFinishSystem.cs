@@ -94,6 +94,7 @@ namespace Core.Moving
                 ref var cell = ref _cells.Get1(i);
                 if (FigureAlgorithmFacade.IsFigureAtCell(figure, cell))
                 {
+                    cell.view.LightDown();
                     cell.view.SetImage(figure.mono.CellSprite);
                     cell.figureType = figure.type;
                 }
