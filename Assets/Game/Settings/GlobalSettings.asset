@@ -27,12 +27,14 @@ MonoBehaviour:
         csv: {fileID: 4900000, guid: 8e0c081c49f046446b655a40b7731e16, type: 3}
     audioMap:
     - type: 0
-      clip: {fileID: 8300000, guid: 930e1d85dd929494eb7ec96a0d45e836, type: 3}
+      clip: {fileID: 8300000, guid: a50590163fd750b4eac491154ead596e, type: 3}
     - type: 1
-      clip: {fileID: 8300000, guid: 29c9a2c772a29484caae31b7ac9da46c, type: 3}
+      clip: {fileID: 8300000, guid: 7653b686cf7f75f43bb6a8876e50cb24, type: 3}
     - type: 2
-      clip: {fileID: 8300000, guid: c63892f38c8b6f142a6433c11cd4ece1, type: 3}
+      clip: {fileID: 8300000, guid: aa229b5aa8ca6f54a8fdc36e4b7e1e00, type: 3}
     - type: 3
-      clip: {fileID: 8300000, guid: 5fdb13d3756c84fecac96f5a2d124370, type: 3}
+      clip: {fileID: 8300000, guid: 3fe97ad90e93e5f49965e3dda31b0493, type: 3}
     mixer: {fileID: 24100000, guid: 2d82f7a7a5652e4488215e83eda0ff3c, type: 2}
+    soundDb: 0
+    musicDb: -10
     fakeScores: {fileID: 4900000, guid: e15377574b47ad646bfbc9a830d0b31e, type: 3}
