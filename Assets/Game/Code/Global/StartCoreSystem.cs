@@ -1,4 +1,5 @@
 ﻿using Core;
+using Core.Tutorial;
 using EcsCore;
 using Global.Saving;
 using Leopotam.Ecs;
@@ -20,6 +21,8 @@ namespace Global
 
             _world.ActivateModule<CoreModule>();
             _playerData.adsWasUsedInCore = false;
+            if(!_saveService.GetTutorCompleted())
+                _world.ActivateModule<TutorialModule>();
         }
     }
 }

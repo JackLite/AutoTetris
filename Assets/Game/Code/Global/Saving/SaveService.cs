@@ -19,6 +19,7 @@ namespace Global.Saving
         private const string FALL_SPEED = "core.fall_speed";
         private const string AUDIO_MUSIC_KEY = "global.music.state";
         private const string AUDIO_SOUND_KEY = "global.sound.state";
+        private const string TUTOR_COMPLETED_KEY = "global.tutorial.completed";
 
         public void SetHasGame(bool isHasGame)
         {
@@ -176,6 +177,16 @@ namespace Global.Saving
         public void SaveFallSpeedFactor(float speed)
         {
             SaveUtility.SaveFloat(FALL_SPEED, speed);
+        }
+
+        public bool GetTutorCompleted()
+        {
+            return SaveUtility.LoadBool(TUTOR_COMPLETED_KEY);
+        }
+
+        public void SaveTutorCompleted()
+        {
+            SaveUtility.SaveBool(TUTOR_COMPLETED_KEY, true);
         }
     }
 }

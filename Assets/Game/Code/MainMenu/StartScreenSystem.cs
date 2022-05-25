@@ -59,7 +59,7 @@ namespace MainMenu
 
         private void StartGame()
         {
-            if (_saveService.HasGame())
+            if (_saveService.HasGame() && _saveService.GetTutorCompleted())
             {
                 ContinueGame();
                 return;

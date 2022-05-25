@@ -138,10 +138,12 @@ namespace Core.Moving
                             aiDecision.Position,
                             _grid.FillMatrix,
                             figure);
+                        var calculateVerticalCount = CalculateVerticalCount(path);
+                        Debug.Log("[calculateVerticalCount] " + calculateVerticalCount);
                         var moveChosen = new FigureMoveChosen
                         {
                             actions = new Stack<PathAction>(path.Select(p => p.action)),
-                            verticalActionsCount = CalculateVerticalCount(path)
+                            verticalActionsCount = calculateVerticalCount
                         };
                         _activeFigureFilter.GetEntity(0).Replace(moveChosen);
                         var speed = math.max(_coreSettings.ManipulationSpeed, _movingData.currentFallSpeed);
@@ -153,6 +155,9 @@ namespace Core.Moving
                     return;
                 }
             }
+
+            if (!_saveService.GetTutorCompleted())
+                return;
 
             _fallCounter -= Time.deltaTime;
 
@@ -219,7 +224,7 @@ namespace Core.Moving
                 else
                     result = 0;
                 node = node.Previous;
-            } while (node != null && node.Previous != null);
+            } while (node != null);
 
             return result;
         }

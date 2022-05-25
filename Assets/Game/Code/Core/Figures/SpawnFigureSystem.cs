@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Figures.FigureAlgorithms;
-using Core.GameOver;
 using Core.GameOver.Components;
 using Core.Grid;
 using Core.Pause.Signals;
@@ -11,8 +10,10 @@ using Global;
 using Global.Saving;
 using Global.Settings.Core;
 using Leopotam.Ecs;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Utilities;
+using Random = System.Random;
 
 namespace Core.Figures
 {
@@ -30,7 +31,7 @@ namespace Core.Figures
         private SaveService _saveService;
         private Random _random;
         private Stack<FigureType> _figureBag = new Stack<FigureType>();
-        
+
         public SpawnFigureSystem()
         {
             _random = new Random();
@@ -70,7 +71,7 @@ namespace Core.Figures
 
             if (GridService.IsFillSomeAtTopRow(_gridData.FillMatrix))
                 return;
-            
+
             _saveService.SetHasFigure(true);
             CreateFigure(PopFigureType());
         }
@@ -78,11 +79,14 @@ namespace Core.Figures
         private async void CreateFigure(FigureType type)
         {
             var name = FiguresUtility.GetFigureAddress(type);
-            var task = Addressables.InstantiateAsync(name, _mainScreen.grid).Task;
+            var task = Addressables.InstantiateAsync(name, Vector2.one * 10000, Quaternion.identity, _mainScreen.grid)
+                                   .Task;
             await task;
             var mono = task.Result.GetComponent<FigureMono>();
             var startRow = _gridData.FillMatrix.GetLength(0) - 4;
             var startColumn = _gridData.FillMatrix.GetLength(1) / 2 - 1;
+            if (!_saveService.GetTutorCompleted())
+                startRow -= 2;
             mono.SetGridPosition(startRow, startColumn);
             mono.Rotate(FigureRotation.Zero);
             var entity = _world.NewEntity();
@@ -126,6 +130,13 @@ namespace Core.Figures
 
         private void FillBag(Stack<FigureType> figureBag)
         {
+            if (!_saveService.GetTutorCompleted())
+            {
+                figureBag.Push(FigureType.T);
+                figureBag.Push(FigureType.I);
+                figureBag.Push(FigureType.L);
+                return;
+            }
             var variants = Enum.GetValues(typeof(FigureType)).Cast<FigureType>().Where(f => f > 0).ToArray();
             _random.Shuffle(variants);
 
