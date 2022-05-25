@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
@@ -19,7 +20,6 @@ namespace Global.Audio
             _parent = parent;
             _pool = new Stack<AudioSource>(prewarmCount);
             _processed = new List<AudioSource>(prewarmCount);
-            LoadPrefab(prewarmCount);
         }
 
         public AudioSource GetSource()
@@ -57,7 +57,7 @@ namespace Global.Audio
                 Object.Destroy(source.gameObject);
         }
 
-        private async void LoadPrefab(int prewarmCount)
+        public async Task LoadPrefab(int prewarmCount)
         {
             var task = Addressables.LoadAssetAsync<GameObject>("AudioSource").Task;
             await task;

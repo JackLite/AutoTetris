@@ -35,6 +35,8 @@ MonoBehaviour:
     - type: 3
       clip: {fileID: 8300000, guid: 3fe97ad90e93e5f49965e3dda31b0493, type: 3}
     mixer: {fileID: 24100000, guid: 2d82f7a7a5652e4488215e83eda0ff3c, type: 2}
+    music: {fileID: 8300000, guid: e6549ee4658e2ad409276c839cbd90a7, type: 3}
+    musicGroup: {fileID: -1158504791997908468, guid: 2d82f7a7a5652e4488215e83eda0ff3c, type: 2}
     soundDb: 0
     musicDb: -10
     fakeScores: {fileID: 4900000, guid: e15377574b47ad646bfbc9a830d0b31e, type: 3}

@@ -281,6 +281,7 @@ MonoBehaviour:
   _leftThreshold: 4
   _rightThreshold: 4
   _downThreshold: 2
+  _commonThreshold: 6
 --- !u!1 &1458478508312812522
 GameObject:
   m_ObjectHideFlags: 0

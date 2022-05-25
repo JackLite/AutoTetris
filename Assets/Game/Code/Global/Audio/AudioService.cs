@@ -16,7 +16,7 @@ namespace Global.Audio
 
         public void SetMusicState(bool isActive)
         {
-            _mixer.SetFloat("MusicVolume", isActive ? _settings.musicDb : -80);
+            _mixer.SetFloat("MusicVolumeTest", isActive ? _settings.musicDb : -80);
         }
 
         public void SetSoundState(bool isActive)

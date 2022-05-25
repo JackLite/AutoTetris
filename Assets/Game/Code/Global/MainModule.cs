@@ -46,7 +46,15 @@ namespace Global
             var globalSettings = await LoadGlobalSettings();
             _dependencies[typeof(FakeScoresService)] = new FakeScoresService(globalSettings.fakeScores.text);
             _dependencies[typeof(AudioService)] = new AudioService(globalSettings.mixer, globalSettings);
+            await InitAudioPool();
             EcsWorldContainer.World.ActivateModule<MainMenuModule>();
+        }
+        private async Task InitAudioPool()
+        {
+            const int PREWARM_COUNT = 5;
+            var audioSourcePool = new AudioSourcePool(PREWARM_COUNT, new GameObject("AudioSourcePool").transform);
+            await audioSourcePool.LoadPrefab(PREWARM_COUNT);
+            _dependencies[typeof(AudioSourcePool)] = audioSourcePool;
         }
 
         private void ProcessAuth(SignInStatus status)

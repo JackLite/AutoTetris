@@ -1,5 +1,6 @@
 ﻿using EcsCore;
 using Global.Saving;
+using Global.Settings;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -12,13 +13,22 @@ namespace Global.Audio
         private EcsFilter<AudioChangeEvent> _audioChangeFilter;
         private AudioSourcePool _pool;
         private AudioService _audioService;
+        private GlobalSettings _settings;
         private SaveService _saveService;
 
         public void Init()
         {
-            _pool = new AudioSourcePool(4, new GameObject("AudioSourcePool").transform);
             _audioService.SetMusicState(_saveService.GetMusicState());
             _audioService.SetSoundState(_saveService.GetSoundState());
+            InitMusic();
+        }
+        private void InitMusic()
+        {
+            var s = _pool.GetSource();
+            s.clip = _settings.music;
+            s.loop = true;
+            s.outputAudioMixerGroup = _settings.musicGroup;
+            s.Play();
         }
 
         public void Run()

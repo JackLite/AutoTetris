@@ -19,6 +19,10 @@ namespace Core.Input
         [Tooltip("Процент от высоты экрана")]
         private float _downThreshold;
 
+        [SerializeField]
+        [Tooltip("Процент от высоты или ширины после которого свайп будет считан")]
+        private float _commonThreshold = 8;
+
         private bool _isSwipeStart;
         private Vector2 _swipeStartPoint;
 
@@ -33,18 +37,68 @@ namespace Core.Input
             if (!_isSwipeStart)
                 return;
 
-            if (CheckLeftSwipe(eventData.position))
+            var downDistance = GetDownDistance(eventData.position);
+            var leftDistance = GetLeftDistance(eventData.position);
+            var rightDistance = GetRightDistance(eventData.position);
+            if (!CheckCommon(leftDistance, rightDistance, downDistance))
+                return;
+
+            if (downDistance > leftDistance && downDistance > rightDistance)
+                CreateSwipe(Direction.Bottom);
+            else if (leftDistance > rightDistance)
+                CreateSwipe(Direction.Left);
+            else
+                CreateSwipe(Direction.Right);
+
+            /*if (CheckLeftSwipe(eventData.position))
                 CreateSwipe(Direction.Left);
             else if (CheckRightSwipe(eventData.position))
                 CreateSwipe(Direction.Right);
             else if (CheckDownSwipe(eventData.position))
-                CreateSwipe(Direction.Bottom);
+                CreateSwipe(Direction.Bottom);*/
+        }
+
+        private bool CheckCommon(float leftDistance, float rightDistance, float downDistance)
+        {
+            var screenWidth = Screen.width;
+            var screenHeight = Screen.height;
+            var heightPercents = downDistance / screenHeight;
+            var leftPercents = leftDistance / screenWidth;
+            var rightPercents = rightDistance / screenWidth;
+            var threshold = Mathf.Max(_commonThreshold, _leftThreshold, _rightThreshold, _downThreshold) * .01;
+
+            return heightPercents > threshold || leftPercents > threshold || rightPercents > threshold;
         }
 
         private void CreateSwipe(Direction direction)
         {
             _isSwipeStart = false;
             EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = direction });
+        }
+
+        private float GetDownDistance(in Vector2 endPos)
+        {
+            if (_swipeStartPoint.y < endPos.y)
+                return 0;
+            var distanceY = _swipeStartPoint.y - endPos.y;
+
+            return distanceY;
+        }
+
+        private float GetLeftDistance(in Vector2 endPos)
+        {
+            if (_swipeStartPoint.x < endPos.x)
+                return 0;
+
+            return _swipeStartPoint.x - endPos.x;
+        }
+
+        private float GetRightDistance(in Vector2 endPos)
+        {
+            if (_swipeStartPoint.x > endPos.x)
+                return 0;
+
+            return endPos.x - _swipeStartPoint.x;
         }
 
         private bool CheckDownSwipe(in Vector2 pointerEndPosition)

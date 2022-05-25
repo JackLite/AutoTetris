@@ -101,6 +101,14 @@ MonoBehaviour:
     m_Address: AudioSource
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 2d82f7a7a5652e4488215e83eda0ff3c
+    m_Address: Assets/Game/Audio/AudioMixer.mixer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2cda990e2423bbf4892e6590ba056729
+    m_Address: Assets/Game/Scenes/Start.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 06d91d58714a25140a5968b80a93ca1b, type: 2}
   m_SchemaSet:

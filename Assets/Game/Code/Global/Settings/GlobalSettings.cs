@@ -12,6 +12,8 @@ namespace Global.Settings
         public LocalizationSettings localization;
         public AudioMap[] audioMap;
         public AudioMixer mixer;
+        public AudioClip music;
+        public AudioMixerGroup musicGroup;
         public float soundDb;
         public float musicDb;
         public TextAsset fakeScores;
