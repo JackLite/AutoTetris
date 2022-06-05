@@ -79,8 +79,9 @@ namespace Core.Figures
         private async void CreateFigure(FigureType type)
         {
             var name = FiguresUtility.GetFigureAddress(type);
-            var task = Addressables.InstantiateAsync(name, Vector2.one * 10000, Quaternion.identity, _mainScreen.grid)
-                                   .Task;
+            var task = Addressables
+                       .InstantiateAsync(name, Vector2.one * 10000, Quaternion.identity, _mainScreen.FiguresRoot)
+                       .Task;
             await task;
             var mono = task.Result.GetComponent<FigureMono>();
             var startRow = _gridData.FillMatrix.GetLength(0) - 4;

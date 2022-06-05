@@ -45,6 +45,9 @@ namespace Core
         [field:SerializeField]
         public TextMeshProUGUI GeneticText { get; private set; }
 
+        [field:SerializeField]
+        public Transform FiguresRoot { get; private set; }
+
         [field:Header("Debug")]
         [field:SerializeField]
         public GameObject DebugInPause { get; private set; }

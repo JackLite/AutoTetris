@@ -47,9 +47,9 @@ namespace Global.Saving
             SaveUtility.SaveLong(SCORES_KEY, scores);
         }
 
-        public int LoadScores()
+        public long LoadScores()
         {
-            return SaveUtility.LoadInt(SCORES_KEY);
+            return SaveUtility.LoadLong(SCORES_KEY);
         }
 
         public void SaveMaxScores(long maxScores)
@@ -57,15 +57,14 @@ namespace Global.Saving
             SaveUtility.SaveLong(MAX_SCORES_KEY, maxScores);
         }
 
-        public int LoadMaxScores()
+        public long LoadMaxScores()
         {
-            return SaveUtility.LoadInt(MAX_SCORES_KEY);
+            return SaveUtility.LoadLong(MAX_SCORES_KEY);
         }
 
         public void SaveCells(FigureType[,] types)
         {
             var list = new List<int>(types.Length);
-            var i = 0;
             var l1 = types.GetLength(0);
             var l2 = types.GetLength(1);
             for (var k = 0; k < l1; ++k)
