@@ -61,7 +61,7 @@ MonoBehaviour:
     m_Address: Figure_S
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 24cf0c0eb26ff1849994fc2be3ae14b3
+  - m_GUID: 782038e74794e144c99f069936a19b3a
     m_Address: CoreSettings
     m_ReadOnly: 0
     m_SerializedLabels: []

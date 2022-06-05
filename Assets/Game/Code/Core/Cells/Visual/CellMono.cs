@@ -85,12 +85,12 @@ namespace Core.Cells.Visual
             contour.color = cellContours.FirstOrDefault(c => c.direction == direction).color;
             contour.gameObject.SetActive(true);
             ChangeOpacity(lightUpOpacity);
-            foreach (var arrow in arrows)
-            {
-                if (arrow.Direction != direction)
-                    arrow.Hide();
-            }
-            _arrowsMap[direction].Show();
+            // foreach (var arrow in arrows)
+            // {
+            //     if (arrow.Direction != direction)
+            //         arrow.Hide();
+            // }
+            // _arrowsMap[direction].Show();
         }
 
         public void ChangeOpacity(float opacity)

@@ -25,10 +25,9 @@ namespace Core.GameOver
             return _dependencies;
         }
 
-        public override void Deactivate()
+        public override void OnDeactivate()
         {
             Addressables.Release(_gameOverScreenObject);
-            base.Deactivate();
         }
     }
 }

@@ -42,13 +42,35 @@ MonoBehaviour:
       m_RotationOrder: 4
     fallSpeedProgression:
     - scores: 0
-      speed: 0
-    - scores: 20
+      speed: 1
+    - scores: 40
+      speed: 2
+    - scores: 160
       speed: 3
-    - scores: 50
+    - scores: 320
       speed: 4
-    - scores: 70
+    - scores: 740
       speed: 5
+    - scores: 1600
+      speed: 6
+    - scores: 3200
+      speed: 7
+    - scores: 4800
+      speed: 8
+    - scores: 7200
+      speed: 9
+    - scores: 9600
+      speed: 10
+    - scores: 12800
+      speed: 11
+    - scores: 16000
+      speed: 12
+    - scores: 22500
+      speed: 13
+    - scores: 4200
+      speed: 14
+    - scores: 2147483647
+      speed: 15
     adsClearRows: 14
     adsRestoreSpeedTurns: 20
     adsSlowFactor: 0.5

@@ -19,6 +19,7 @@ namespace Core.Cells
         private CoreSettings _coreSettings;
         private EcsWorld _world;
         private GridData _grid;
+        private MainScreenMono _mainScreen;
         private SaveService _saveService;
         private StartCoreData _startCoreData;
 
@@ -40,6 +41,7 @@ namespace Core.Cells
                     CreateCell(row, column, savedTypes);
                 }
             }
+            _mainScreen.ShadowCellsController.Init();
         }
 
         private void CreateCell(int row, int column, [CanBeNull] FigureType[,] savedTypes)

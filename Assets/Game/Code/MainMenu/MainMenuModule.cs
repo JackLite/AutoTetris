@@ -25,10 +25,9 @@ namespace MainMenu
             return _dependencies;
         }
 
-        public override void Deactivate()
+        public override void OnDeactivate()
         {
             Addressables.ReleaseInstance(_startScreen);
-            base.Deactivate();
         }
     }
 }

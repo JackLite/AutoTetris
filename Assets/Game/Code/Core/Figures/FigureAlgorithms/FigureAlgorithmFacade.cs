@@ -66,22 +66,27 @@ namespace Core.Figures.FigureAlgorithms
 
         public static bool IsFigureAtCell(in Figure figure, in Cell cell)
         {
-            var algorithm = _algorithms[figure.type];
-
-            var positions = algorithm.GetPositions(figure.Position, figure.rotation);
-            foreach (var position in positions)
-            {
-                if (position == cell.Position)
-                    return true;
-            }
-
-            return false;
+            return IsFigureAtCell(figure, cell.Position);
         }
 
         public static bool IsFigureAtCell(in Figure figure, in Cell cell, in GridPosition figurePosition)
         {
             var algorithm = _algorithms[figure.type];
             return algorithm.IsFigureAtCell(figurePosition, cell, figure);
+        }
+
+        private static bool IsFigureAtCell(in Figure figure, in GridPosition cellPosition)
+        {
+            var algorithm = _algorithms[figure.type];
+
+            var positions = algorithm.GetPositions(figure.Position, figure.rotation);
+            foreach (var position in positions)
+            {
+                if (position == cellPosition)
+                    return true;
+            }
+
+            return false;
         }
 
         public static bool IsFall(in bool[,] fillMatrix, in Figure figure)

@@ -1,4 +1,5 @@
-﻿using Core.CoreDebug;
+﻿using Core.Cells.Visual;
+using Core.CoreDebug;
 using Core.Grid.Visual;
 using Core.Input;
 using Core.Pause;
@@ -37,6 +38,9 @@ namespace Core
 
         [field:SerializeField]
         public GridView GridView { get; private set; }
+
+        [field:SerializeField]
+        public ShadowCellsController ShadowCellsController { get; private set; }
 
         [field:SerializeField]
         public TextMeshProUGUI GeneticText { get; private set; }

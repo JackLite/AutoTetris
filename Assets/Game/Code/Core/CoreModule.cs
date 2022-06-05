@@ -49,11 +49,10 @@ namespace Core
             return _dependencies;
         }
 
-        public override void Deactivate()
+        public override void OnDeactivate()
         {
             Addressables.ReleaseInstance(_mainScreen);
             Addressables.Release(_coreSettings);
-            base.Deactivate();
         }
 
         protected override Dictionary<Type, int> GetSystemsOrder()
