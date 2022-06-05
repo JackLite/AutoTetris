@@ -7,6 +7,7 @@ using Global.Audio;
 using Global.Saving;
 using Global.Settings;
 using Global.Settings.Audio;
+using Global.Settings.Core;
 using Leopotam.Ecs;
 
 namespace Core.Grid
@@ -22,6 +23,8 @@ namespace Core.Grid
         private SaveService _saveService;
         private EcsWorld _world;
         private GlobalSettings _settings;
+        private CoreSettings _coreSettings;
+        private CoreProgressionService _progressionService;
 
         public void Run()
         {
@@ -50,7 +53,7 @@ namespace Core.Grid
                     cell.view.PlayVfx();
                 }
             }
-            
+
             foreach (var rowIndex in fullRows)
             {
                 var glow = _mainScreen.GlowEffectPool.Get();
@@ -63,8 +66,20 @@ namespace Core.Grid
             }
             _grid.IsNeedCheckPieces = fullRows.Count > 0;
             _grid.IsGridStable = fullRows.Count == 0;
-            _playerData.currentScores += fullRows.Count * 10;
+            _playerData.currentScores += GetScoresReward(fullRows.Count);
             _eventTable.AddEvent<SaveCoreSignal>();
+        }
+
+        private int GetScoresReward(int rowsCount)
+        {
+            var level = _progressionService.GetLevel(_playerData.currentScores);
+            if (rowsCount >= 4)
+                return _coreSettings.linesScores[3] * level;
+
+            if (rowsCount > 0)
+                return _coreSettings.linesScores[rowsCount - 1];
+
+            return level;
         }
     }
 }

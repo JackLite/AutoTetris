@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Core.Ads;
+﻿using Core.Ads;
 using EcsCore;
 using Global;
 using Global.Saving;
@@ -17,7 +16,7 @@ namespace Core.Moving
     {
         private long _lastScore;
         private CoreSettings _coreSettings;
-        private CoreSpeedProgression[] _speedProgression;
+        private CoreProgressionService _coreProgressionService;
         private EcsEventTable _eventTable;
         private MovingData _movingData;
         private PlayerData _playerData;
@@ -25,7 +24,6 @@ namespace Core.Moving
 
         public void Init()
         {
-            _speedProgression = _coreSettings.fallSpeedProgression.OrderByDescending(p => p.scores).ToArray();
             if (_saveService.HasGame())
                 _movingData.factor = _saveService.GetFallSpeedFactor();
             UpdateSpeed();
@@ -44,14 +42,7 @@ namespace Core.Moving
 
         private void UpdateSpeed()
         {
-            foreach (var progression in _speedProgression)
-            {
-                if (progression.scores > _lastScore)
-                    continue;
-
-                _movingData.currentFallSpeed = progression.speed * _movingData.factor;
-                break;
-            }
+            _movingData.currentFallSpeed = _coreProgressionService.GetSpeed(_lastScore) * _movingData.factor;
             if (_movingData.factor < 1f)
             {
                 _movingData.factor += (1f - _coreSettings.adsSlowFactor) / _coreSettings.adsRestoreSpeedTurns;

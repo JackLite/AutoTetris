@@ -12,6 +12,9 @@ namespace Global.Settings.Core
         public float finishMoveMinSpeed = 35f;
         public float finishMoveMaxSpeed = 35f;
         public AnimationCurve finishMoveVelocity;
+
+        [Header("Scores")]
+        public int[] linesScores = { 10, 30, 50, 80 };
         public CoreSpeedProgression[] fallSpeedProgression;
 
         [Header("Ads")]

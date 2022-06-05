@@ -42,6 +42,7 @@ namespace Core
             _dependencies[typeof(CoreState)] = new CoreState();
             _dependencies[typeof(MovingData)] = new MovingData();
             _dependencies[typeof(CellsViewProvider)] = new CellsViewProvider(mainScreen);
+            _dependencies[typeof(CoreProgressionService)] = new CoreProgressionService(_coreSettings.coreSettings);
         }
 
         public override Dictionary<Type, object> GetDependencies()

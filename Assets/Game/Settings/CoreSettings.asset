@@ -40,6 +40,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    linesScores: 0a0000001e0000003200000050000000
     fallSpeedProgression:
     - scores: 0
       speed: 1
@@ -69,7 +70,7 @@ MonoBehaviour:
       speed: 13
     - scores: 4200
       speed: 14
-    - scores: -9223372036854775808
+    - scores: 9223372036854775807
       speed: 15
     adsClearRows: 14
     adsRestoreSpeedTurns: 20

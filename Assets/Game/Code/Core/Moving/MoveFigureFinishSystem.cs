@@ -2,12 +2,10 @@
 using Core.Cells;
 using Core.Figures;
 using Core.Figures.FigureAlgorithms;
-using Core.GameOver;
 using Core.GameOver.Components;
 using Core.Grid;
 using Core.Saving;
 using EcsCore;
-using Global;
 using Global.Saving;
 using Global.Settings.Core;
 using Leopotam.Ecs;
@@ -20,7 +18,6 @@ namespace Core.Moving
     {
         private float WAIT_TIME = .1f;
         private EcsEventTable _eventTable;
-        private PlayerData _playerData;
         private GridData _grid;
         private EcsFilter<Figure, FinalFigureComponent> _filter;
         private EcsFilter<Cell> _cells;
@@ -45,7 +42,6 @@ namespace Core.Moving
         {
             _isActive = true;
             _processTime = Time.time + WAIT_TIME;
-            _playerData.currentScores += 1;
             LightDownMoves();
         }
 
