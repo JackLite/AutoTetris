@@ -35,5 +35,43 @@ namespace Core.Cells.Visual
         {
             _bottomShadow.Show(figure, Direction.Bottom);
         }
+
+        public void HideAll()
+        {
+            HideLeft();
+            HideRight();
+            HideBottom();
+        }
+
+        public void Hide(Direction decisionDirection)
+        {
+            switch (decisionDirection)
+            {
+                case Direction.Left:
+                    HideLeft();
+                    break;
+                case Direction.Right:
+                    HideRight();
+                    break;
+                case Direction.Bottom:
+                    HideBottom();
+                    break;
+            }
+        }
+
+        private void HideLeft()
+        {
+            _leftShadow.Hide();
+        }
+
+        private void HideRight()
+        {
+            _rightShadow.Hide();
+        }
+
+        private void HideBottom()
+        {
+            _bottomShadow.Hide();
+        }
     }
 }

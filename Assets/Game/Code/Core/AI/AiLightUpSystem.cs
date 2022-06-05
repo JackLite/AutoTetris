@@ -13,6 +13,7 @@ namespace Core.AI
     public class AiLightUpSystem : IEcsRunLateSystem
     {
         private EcsFilter<AiDecision>.Exclude<AiDecisionShowedTag> _decisionsFilter;
+        private EcsFilter<AiDecision, EcsOneFrame> _unreachableDecisions;
         private EcsFilter<Cell> _cells;
         private EcsFilter<Figure> _filter;
 
@@ -36,6 +37,27 @@ namespace Core.AI
                 figure.rotation = decision.Rotation;
                 LightUp(decision, figure);
                 _decisionsFilter.GetEntity(i).Replace(new AiDecisionShowedTag());
+            }
+
+            foreach (var i in _unreachableDecisions)
+            {
+                ref var unreachableDecision = ref _unreachableDecisions.Get1(i);
+                LightDownDecision(unreachableDecision, figure);
+            }
+        }
+        private void LightDownDecision(AiDecision decision, Figure figure)
+        {
+            figure.rotation = decision.Rotation;
+            var pos = new GridPosition(decision.Row, decision.Column);
+            foreach (var i in _cells)
+            {
+                ref var cell = ref _cells.Get1(i);
+
+                if (!cell.isLightUp || !FigureAlgorithmFacade.IsFigureAtCell(figure, cell, pos))
+                    continue;
+
+                cell.isLightUp = false;
+                cell.view.LightDown();
             }
         }
 

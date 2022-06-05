@@ -14,6 +14,7 @@ namespace Core.AI
         private EcsFilter<AiDecision> _decisionsFilter;
         private EcsFilter<Figure>.Exclude<FigureMoveChosen> _figureFilter;
         private GridData _grid;
+        private MainScreenMono _mainScreen;
 
         public void Run()
         {
@@ -41,6 +42,7 @@ namespace Core.AI
                     if (path.Count == 0)
                     {
                         _decisionsFilter.GetEntity(i).Replace(new EcsOneFrame());
+                        _mainScreen.ShadowCellsController.Hide(decision.Direction);
                     }
                 }
             }

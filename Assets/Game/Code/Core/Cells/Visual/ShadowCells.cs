@@ -31,6 +31,8 @@ namespace Core.Cells.Visual
 
         public void Show(in Figure figure, Direction direction)
         {
+            _shadowCellCreator.ReInitCells(direction);
+            _shadowCellCreator.ShowCells();
             var shadowFigure = Map.Value[figure.type];
             var cellsParent = shadowFigure.GetFigureGo(figure.rotation).transform;
             _shadowCellCreator.SetParent(cellsParent);
@@ -46,6 +48,11 @@ namespace Core.Cells.Visual
         {
             public FigureType figureType;
             public ShadowFigure shadowFigure;
+        }
+
+        public void Hide()
+        {
+            _shadowCellCreator.HideCells();
         }
     }
 }

@@ -55,5 +55,21 @@ namespace Core.Cells.Visual
                 }
             }
         }
+        
+        public void ShowCells()
+        {
+            foreach (var cell in Cells)
+            {
+                cell.Show();
+            }
+        }
+        
+        public void HideCells()
+        {
+            foreach (var cell in Cells)
+            {
+                cell.Hide();
+            }
+        }
     }
 }

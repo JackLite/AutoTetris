@@ -26,6 +26,7 @@ namespace Core.Moving
         private float _processTime;
         private SaveService _saveService;
         private CoreSettings _settings;
+        private MainScreenMono _mainScreen;
 
         public void Run()
         {
@@ -100,6 +101,7 @@ namespace Core.Moving
 
         private void LightDownMoves()
         {
+            _mainScreen.ShadowCellsController.HideAll();
             foreach (var i in _cells)
             {
                 ref var cell = ref _cells.Get1(i);
