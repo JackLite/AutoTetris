@@ -42,9 +42,9 @@ namespace Global.Saving
         }
 
 
-        public void SaveScores(int scores)
+        public void SaveScores(long scores)
         {
-            SaveUtility.SaveInt(SCORES_KEY, scores);
+            SaveUtility.SaveLong(SCORES_KEY, scores);
         }
 
         public int LoadScores()
@@ -52,9 +52,9 @@ namespace Global.Saving
             return SaveUtility.LoadInt(SCORES_KEY);
         }
 
-        public void SaveMaxScores(int maxScores)
+        public void SaveMaxScores(long maxScores)
         {
-            SaveUtility.SaveInt(MAX_SCORES_KEY, maxScores);
+            SaveUtility.SaveLong(MAX_SCORES_KEY, maxScores);
         }
 
         public int LoadMaxScores()

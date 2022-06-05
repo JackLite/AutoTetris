@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UnityEngine;
 
@@ -29,6 +30,16 @@ namespace Utilities
         public static int LoadInt(string key)
         {
             return PlayerPrefs.HasKey(key) ? PlayerPrefs.GetInt(key) : 0;
+        }
+
+        public static void SaveLong(string key, long value, bool saveImmediate = false)
+        {
+            SaveString(key, value.ToString(CultureInfo.InvariantCulture), saveImmediate);
+        }
+
+        public static long LoadLong(string key)
+        {
+            return long.Parse(LoadString(key), CultureInfo.InvariantCulture);
         }
 
         public static void SaveBytes(string key, byte[] bytes, bool saveImmediate = false)

@@ -5,7 +5,7 @@ namespace Global.Settings.Core
     [Serializable]
     public class CoreSpeedProgression
     {
-        public ulong scores;
+        public long scores;
         public float speed;
     }
 }

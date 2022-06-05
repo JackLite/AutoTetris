@@ -9,7 +9,7 @@ namespace Core.Scores
         [SerializeField]
         private TextMeshProUGUI scoresText;
 
-        public void UpdateScores(int scores)
+        public void UpdateScores(long scores)
         {
             scoresText.text = scores.ToString("D10", CultureInfo.InvariantCulture);
         }

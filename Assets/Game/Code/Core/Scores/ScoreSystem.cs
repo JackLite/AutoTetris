@@ -15,7 +15,7 @@ namespace Core.Scores
         private EcsEventTable _eventTable;
         private SaveService _saveService;
         private StartCoreData startCoreData;
-        private int _lastScores = -1;
+        private long _lastScores = -1;
 
         public void Init()
         {

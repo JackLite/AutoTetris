@@ -69,7 +69,7 @@ MonoBehaviour:
       speed: 13
     - scores: 4200
       speed: 14
-    - scores: 2147483647
+    - scores: -9223372036854775808
       speed: 15
     adsClearRows: 14
     adsRestoreSpeedTurns: 20

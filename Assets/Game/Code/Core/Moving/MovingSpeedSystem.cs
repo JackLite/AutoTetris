@@ -15,7 +15,7 @@ namespace Core.Moving
     [EcsSystem(typeof(CoreModule))]
     public class MovingSpeedSystem : IEcsInitSystem, IEcsRunSystem
     {
-        private int _lastScore;
+        private long _lastScore;
         private CoreSettings _coreSettings;
         private CoreSpeedProgression[] _speedProgression;
         private EcsEventTable _eventTable;
