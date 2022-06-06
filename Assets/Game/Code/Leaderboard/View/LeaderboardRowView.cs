@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -20,6 +19,9 @@ namespace Global.Leaderboard.View
         [Header("Active player settings")]
         [SerializeField]
         private Color nicknameColor;
+
+        [SerializeField]
+        private TMP_FontAsset playerScoresFont;
 
         private RectTransform _rt;
         public long Place { get; private set; }
@@ -47,9 +49,10 @@ namespace Global.Leaderboard.View
         {
             nicknameText.color = nicknameColor;
             nicknameText.fontStyle |= FontStyles.Bold;
-            
+
             scoreText.color = nicknameColor;
-            scoreText.fontStyle |= FontStyles.Bold;
+            scoreText.font = playerScoresFont;
+            scoreText.fontStyle = FontStyles.Normal;
         }
         public void SetY(float y)
         {

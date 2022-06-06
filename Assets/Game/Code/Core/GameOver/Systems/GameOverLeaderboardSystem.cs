@@ -23,10 +23,12 @@ namespace Core.GameOver.Systems
         public void Init()
         {
             _gameOverMono.SetNewTopRecord(_playerData.maxScoresAchieved);
-            if (Application.isEditor)
-                Show(_fakeScores.FakeScores);
-            else
-                LoadReal();
+            Show(_fakeScores.FakeScores); // пока показываем фейки
+            _gameOverMono.SetCurrentScores(_playerData.currentScores);
+            // if (Application.isEditor)
+            //     Show(_fakeScores.FakeScores);
+            // else
+            //     LoadReal();
         }
 
         private void LoadReal()

@@ -44,7 +44,6 @@ namespace Core.GameOver.Systems
                 _adsTimerFinishFilter.GetEntity(0).Destroy();
                 _gameOverMono.AdsWidget.SetActive(false);
                 _gameOverMono.SetTryAgainActive(true);
-                InitLeaderboard();
             }
         }
 
@@ -53,22 +52,6 @@ namespace Core.GameOver.Systems
             _gameOverMono.OnTryAgain += RestartGame;
             _gameOverMono.SetTryAgainActive(_playerData.adsWasUsedInCore);
             InitAdsWidget();
-
-            if (_playerData.adsWasUsedInCore)
-            {
-                InitLeaderboard();
-            }
-        }
-        private void InitLeaderboard()
-        {
-            /*_gameOverMono.LeaderboardView.ShowScores(true);
-            foreach (var i in _leaderboardScoresFilter)
-            {
-                ref var score = ref _leaderboardScoresFilter.Get1(i);
-                _gameOverMono.LeaderboardView.AddScore(score.place, score.nickname, score.scores);
-                _leaderboardScoresFilter.GetEntity(i).Destroy();
-            }
-            _gameOverMono.LeaderboardView.UpdateView();*/
         }
 
         private void InitAdsWidget()
