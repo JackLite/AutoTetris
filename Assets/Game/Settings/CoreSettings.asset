@@ -43,9 +43,9 @@ MonoBehaviour:
     linesScores: 0a0000001e0000003200000050000000
     fallSpeedProgression:
     - scores: 0
-      speed: 100
+      speed: 1
     - scores: 40
-      speed: 100
+      speed: 2
     - scores: 160
       speed: 3
     - scores: 320
