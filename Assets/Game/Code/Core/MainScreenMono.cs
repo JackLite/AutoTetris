@@ -4,6 +4,7 @@ using Core.Grid.Visual;
 using Core.Input;
 using Core.Pause;
 using Core.Scores;
+using Core.Tutorial;
 using Core.UI;
 using TMPro;
 using UnityEngine;
@@ -47,6 +48,9 @@ namespace Core
 
         [field:SerializeField]
         public Transform FiguresRoot { get; private set; }
+        
+        [field:SerializeField]
+        public TutorialArrows Tutorial { get; private set; }
 
         [field:Header("Debug")]
         [field:SerializeField]

@@ -1,6 +1,6 @@
 ﻿namespace Core.Input
 {
-    public class InputEvent
+    public class InputRawEvent
     {
         public Direction direction;
     }

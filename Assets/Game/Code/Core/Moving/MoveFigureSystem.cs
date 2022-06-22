@@ -7,6 +7,7 @@ using Core.Figures.FigureAlgorithms;
 using Core.Grid;
 using Core.Input;
 using Core.Path;
+using Core.Tutorial;
 using EcsCore;
 using Global;
 using Global.Audio;
@@ -20,7 +21,7 @@ using UnityEngine;
 namespace Core.Moving
 {
     [EcsSystem(typeof(CoreModule))]
-    public class MoveFigureSystem : IEcsInitSystem, IEcsRunSystem, IEcsDestroySystem
+    public class MoveFigureSystem : IEcsRunSystem, IEcsDestroySystem
     {
         private float _fallCounter;
         private int _moveDownActionsCount;
@@ -28,6 +29,7 @@ namespace Core.Moving
         private EcsFilter<Figure, FigureMoveChosen> _finishFigureFilter;
         private EcsFilter<Figure>.Exclude<FinalFigureComponent> _notFinalFigureFilter;
         private EcsFilter<AiDecision> _decisionsFilter;
+        private EcsFilter<SwipeInput> _inputFilter;
         private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
         private GridData _grid;
@@ -35,22 +37,11 @@ namespace Core.Moving
         private PlayerData _playedData;
         private EcsEventTable _eventTable;
         private EcsWorld _world;
-        private InputEvent _inputEvent;
         private MovingData _movingData;
         private CoreSettings _coreSettings;
         private SaveService _saveService;
         private GlobalSettings _settings;
-
-        public void Init()
-        {
-            EcsWorldEventsBlackboard.AddEventHandler<InputEvent>(SaveInputSignal);
-        }
-
-        private void SaveInputSignal(InputEvent inputEvent)
-        {
-            if (_activeFigureFilter.GetEntitiesCount() > 0)
-                _inputEvent = inputEvent;
-        }
+        private EcsOneData<TutorialProgressData> _tutorProgressData;
 
         public void Run()
         {
@@ -128,9 +119,10 @@ namespace Core.Moving
                     ClearDecisions();
                     return;
                 }
-                if (_inputEvent != null)
+                if (_inputFilter.GetEntitiesCount() > 0)
                 {
-                    var aiDecision = GetAiDecision(_inputEvent.direction);
+                    ref var swipe = ref _inputFilter.Get1(0);
+                    var aiDecision = GetAiDecision(swipe.direction);
                     if (aiDecision.Direction != Direction.None)
                     {
                         figure.rotation = aiDecision.Rotation;
@@ -149,8 +141,7 @@ namespace Core.Moving
                         var speed = math.max(_coreSettings.ManipulationSpeed, _movingData.currentFallSpeed);
                         _fallCounter = CalculateFallSpeed(speed);
                     }
-
-                    _inputEvent = null;
+                    _inputFilter.GetEntity(0).Destroy();
 
                     return;
                 }
@@ -231,8 +222,6 @@ namespace Core.Moving
 
         public void Destroy()
         {
-            EcsWorldEventsBlackboard.RemoveEventHandler<InputEvent>(SaveInputSignal);
-
             foreach (var i in _activeFigureFilter)
             {
                 _activeFigureFilter.GetEntity(i).Destroy();

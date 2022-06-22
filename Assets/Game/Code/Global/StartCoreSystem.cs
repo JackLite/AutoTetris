@@ -21,8 +21,6 @@ namespace Global
 
             _world.ActivateModule<CoreModule>();
             _playerData.adsWasUsedInCore = false;
-            if(!_saveService.GetTutorCompleted())
-                _world.ActivateModule<TutorialModule>();
         }
     }
 }

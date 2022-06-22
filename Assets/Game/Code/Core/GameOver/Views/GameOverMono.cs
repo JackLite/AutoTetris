@@ -11,19 +11,22 @@ namespace Core.GameOver.Views
     {
         [SerializeField]
         private TextMeshProUGUI _title;
-        
+
         [SerializeField]
         private Button tryAgainBtn;
 
         [SerializeField]
         private GameObject _newTopRecord;
-        
+
         [SerializeField]
         private GameObject _defaultLeaderboardTitle;
 
         [SerializeField]
-        private TextMeshProUGUI _currentScores;
-        
+        private GameObject _currentScores;
+
+        [SerializeField]
+        private TextMeshProUGUI _currentScoresText;
+
         [field:SerializeField]
         public LeaderboardView LeaderboardView { get; private set; }
 
@@ -41,7 +44,7 @@ namespace Core.GameOver.Views
         {
             _title.text = isAdsAvailable ? "Continue?" : "Game over";
         }
-        
+
         public void SetTryAgainActive(bool isActive)
         {
             UpdateTitle(!isActive);
@@ -52,10 +55,11 @@ namespace Core.GameOver.Views
         {
             _newTopRecord.SetActive(state);
             _defaultLeaderboardTitle.SetActive(!state);
+            _currentScores.SetActive(!state);
         }
         public void SetCurrentScores(long scores)
         {
-            _currentScores.text = scores.ToString(CultureInfo.InvariantCulture);
+            _currentScoresText.text = scores.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

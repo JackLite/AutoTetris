@@ -34,7 +34,7 @@ namespace Global
                 Debug.unityLogger.filterLogType = LogType.Error;
 
             PlayGamesPlatform.Instance.Authenticate(ProcessAuth);
-            
+            Application.targetFrameRate = 60;
             _dependencies.Add(typeof(PlayerData), new PlayerData());
             _dependencies.Add(typeof(AdsService), new AdsService());
             _dependencies.Add(typeof(StartCoreData), new StartCoreData());

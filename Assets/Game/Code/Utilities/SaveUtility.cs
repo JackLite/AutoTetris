@@ -39,7 +39,9 @@ namespace Utilities
 
         public static long LoadLong(string key)
         {
-            return long.Parse(LoadString(key), CultureInfo.InvariantCulture);
+            if (long.TryParse(LoadString(key), NumberStyles.Integer, CultureInfo.InvariantCulture, out var value))
+                return value;
+            return 0;
         }
 
         public static void SaveBytes(string key, byte[] bytes, bool saveImmediate = false)

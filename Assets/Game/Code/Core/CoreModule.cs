@@ -9,6 +9,7 @@ using Core.Grid;
 using Core.Moving;
 using Core.Pause;
 using Core.Saving;
+using Core.Tutorial;
 using EcsCore;
 using Global.Leaderboard.Services;
 using Global.Settings.Core;
@@ -43,6 +44,7 @@ namespace Core
             _dependencies[typeof(MovingData)] = new MovingData();
             _dependencies[typeof(CellsViewProvider)] = new CellsViewProvider(mainScreen);
             _dependencies[typeof(CoreProgressionService)] = new CoreProgressionService(_coreSettings.coreSettings);
+            OneDataDict[typeof(TutorialProgressData)] = new EcsOneData<TutorialProgressData>();
         }
 
         public override Dictionary<Type, object> GetDependencies()

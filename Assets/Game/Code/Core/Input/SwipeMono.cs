@@ -73,7 +73,7 @@ namespace Core.Input
         private void CreateSwipe(Direction direction)
         {
             _isSwipeStart = false;
-            EcsWorldEventsBlackboard.AddEvent(new InputEvent { direction = direction });
+            EcsWorldEventsBlackboard.AddEvent(new InputRawEvent { direction = direction });
         }
 
         private float GetDownDistance(in Vector2 endPos)
