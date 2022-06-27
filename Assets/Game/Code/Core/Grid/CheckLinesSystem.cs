@@ -77,7 +77,7 @@ namespace Core.Grid
                 return _coreSettings.linesScores[3] * level;
 
             if (rowsCount > 0)
-                return _coreSettings.linesScores[rowsCount - 1];
+                return _coreSettings.linesScores[rowsCount - 1] * level;
 
             return level;
         }
