@@ -47,7 +47,10 @@ namespace Core.Moving
         {
             if (_coreState.IsPaused || _notFinalFigureFilter.GetEntitiesCount() == 0)
                 return;
-
+            
+            if (!_movingData.isMoveAllowed)
+                return;
+            
             if (_finishFigureFilter.GetEntitiesCount() != 0)
                 ProcessFinishing();
             else if (_activeFigureFilter.GetEntitiesCount() != 0)
@@ -146,9 +149,6 @@ namespace Core.Moving
                     return;
                 }
             }
-
-            if (!_saveService.GetTutorCompleted())
-                return;
 
             _fallCounter -= Time.deltaTime;
 

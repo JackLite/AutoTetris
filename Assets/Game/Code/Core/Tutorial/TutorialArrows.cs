@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Core.Tutorial
@@ -14,11 +15,13 @@ namespace Core.Tutorial
         [SerializeField]
         private GameObject _bottomArrow;
 
-        public void ShowArrow(Direction direction)
+        public async void ShowArrow(Direction direction, float delay)
         {
             _rightArrow.SetActive(false);
             _leftArrow.SetActive(false);
             _bottomArrow.SetActive(false);
+
+            await Task.Delay(TimeSpan.FromSeconds(delay));
 
             var arr = direction switch
             {

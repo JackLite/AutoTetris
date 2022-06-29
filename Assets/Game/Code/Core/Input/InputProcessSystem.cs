@@ -5,7 +5,7 @@ using Leopotam.Ecs;
 namespace Core.Input
 {
     [EcsSystem(typeof(CoreModule))]
-    public class InputProcessSystem : IEcsInitSystem
+    public class InputProcessSystem : IEcsInitSystem, IEcsDestroySystem
     {
         private EcsWorld _world;
         private SaveService _saveService;
@@ -19,6 +19,12 @@ namespace Core.Input
         {
             if (_saveService.GetTutorCompleted())
                 _world.NewEntity().Replace(new SwipeInput { direction = ev.direction });
+        }
+
+
+        public void Destroy()
+        {
+            EcsWorldEventsBlackboard.RemoveEventHandler<InputRawEvent>(OnInputEvent);
         }
     }
 }

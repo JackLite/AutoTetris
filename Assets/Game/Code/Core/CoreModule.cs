@@ -41,10 +41,12 @@ namespace Core
                 gridSize = new Vector2Int(12, 10);
             _dependencies[typeof(GridData)] = new GridData(gridSize);
             _dependencies[typeof(CoreState)] = new CoreState();
-            _dependencies[typeof(MovingData)] = new MovingData();
+            _dependencies[typeof(MovingData)] = new MovingData {isMoveAllowed = true};
             _dependencies[typeof(CellsViewProvider)] = new CellsViewProvider(mainScreen);
             _dependencies[typeof(CoreProgressionService)] = new CoreProgressionService(_coreSettings.coreSettings);
-            OneDataDict[typeof(TutorialProgressData)] = new EcsOneData<TutorialProgressData>();
+            var data = new EcsOneData<TutorialProgressData>();
+            data.SetData(new TutorialProgressData { delay = 3 });
+            OneDataDict[typeof(TutorialProgressData)] = data;
         }
 
         public override Dictionary<Type, object> GetDependencies()

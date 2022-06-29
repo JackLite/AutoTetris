@@ -4,5 +4,6 @@
     {
         public float currentFallSpeed = 2f;
         public float factor = 1f;
+        public bool isMoveAllowed;
     }
 }
