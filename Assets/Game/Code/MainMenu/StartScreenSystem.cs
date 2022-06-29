@@ -78,9 +78,9 @@ namespace MainMenu
 
         private void Start()
         {
+            _startScreen.StartGameButton.OnClick -= StartGame;
             Addressables.ReleaseInstance(_startScreen.gameObject);
             _eventTable.AddEvent<StartCoreSignal>();
-            _world.DeactivateModule<MainMenuModule>();
         }
 
         public void RunLate()

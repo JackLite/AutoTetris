@@ -4,6 +4,7 @@ using Core.Figures;
 using Core.Figures.FigureAlgorithms;
 using Core.GameOver.Components;
 using Core.Grid;
+using Core.Input;
 using Core.Saving;
 using EcsCore;
 using Global.Saving;
@@ -21,6 +22,7 @@ namespace Core.Moving
         private GridData _grid;
         private EcsFilter<Figure, FinalFigureComponent> _filter;
         private EcsFilter<Cell> _cells;
+        private EcsFilter<SwipeInput> _swipes;
         private EcsFilter<AiDecision> _decisionsFilter;
         private bool _isActive;
         private float _processTime;
@@ -80,7 +82,10 @@ namespace Core.Moving
                 _eventTable.AddEvent<GameOverCoreSignal>();
                 return;
             }
-
+            foreach (var i in _swipes)
+            {
+                _swipes.GetEntity(i).Replace(new EcsOneFrame());
+            }
             _eventTable.AddEvent<FigureSpawnSignal>();
         }
 

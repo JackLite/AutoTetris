@@ -61,9 +61,9 @@ namespace Core.Tutorial
             data.step++;
 
             if (data.step == 1)
-                _mainScreen.Tutorial.ShowArrow(Direction.Left, 3);
+                _mainScreen.Tutorial.ShowArrow(Direction.Left, 2);
             else if (data.step == 2)
-                _mainScreen.Tutorial.ShowArrow(Direction.Bottom, 3);
+                _mainScreen.Tutorial.ShowArrow(Direction.Bottom, 1);
             else
             {
                 _saveService.SaveTutorCompleted();

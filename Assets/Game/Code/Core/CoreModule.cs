@@ -11,8 +11,8 @@ using Core.Pause;
 using Core.Saving;
 using Core.Tutorial;
 using EcsCore;
-using Global.Leaderboard.Services;
 using Global.Settings.Core;
+using MainMenu;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -47,6 +47,7 @@ namespace Core
             var data = new EcsOneData<TutorialProgressData>();
             data.SetData(new TutorialProgressData { delay = 3 });
             OneDataDict[typeof(TutorialProgressData)] = data;
+            EcsWorldContainer.World.DeactivateModule<MainMenuModule>();
         }
 
         public override Dictionary<Type, object> GetDependencies()

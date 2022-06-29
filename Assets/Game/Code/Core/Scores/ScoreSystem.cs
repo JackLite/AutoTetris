@@ -7,7 +7,7 @@ using Leopotam.Ecs;
 namespace Core.Scores
 {
     [EcsSystem(typeof(CoreModule))]
-    public class ScoreSystem : IEcsInitSystem, IEcsRunSystem
+    public class ScoreSystem : IEcsPreInitSystem, IEcsRunSystem
     {
         private MainScreenMono _mainScreenMono;
         private PlayerData _playerData;
@@ -17,7 +17,7 @@ namespace Core.Scores
         private StartCoreData startCoreData;
         private long _lastScores = -1;
 
-        public void Init()
+        public void PreInit()
         {
             if (startCoreData.isContinue && !_coreSettings.aiEnable)
             {
