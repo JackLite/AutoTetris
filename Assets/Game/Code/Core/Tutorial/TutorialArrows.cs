@@ -14,14 +14,12 @@ namespace Core.Tutorial
 
         [SerializeField]
         private GameObject _bottomArrow;
-
-        public async void ShowArrow(Direction direction, float delay)
+        
+        public void ShowArrow(Direction direction)
         {
             _rightArrow.SetActive(false);
             _leftArrow.SetActive(false);
             _bottomArrow.SetActive(false);
-
-            await Task.Delay(TimeSpan.FromSeconds(delay));
 
             var arr = direction switch
             {

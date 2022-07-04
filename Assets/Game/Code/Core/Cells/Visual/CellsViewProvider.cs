@@ -1,4 +1,5 @@
-﻿using UnityEngine.AddressableAssets;
+﻿using System.Collections.Generic;
+using UnityEngine.AddressableAssets;
 
 namespace Core.Cells.Visual
 {
@@ -33,6 +34,19 @@ namespace Core.Cells.Visual
         public CellMono GetCell(int row, int column)
         {
             return _cellsArray[row, column];
+        }
+
+        public IEnumerable<CellMono> GetLightedCells(Direction direction)
+        {
+            for (var i = 0; i < _cellsArray.GetLength(0); ++i)
+            {
+                for (var j = 0; j < _cellsArray.GetLength(1); ++j)
+                {
+                    var cellMono = _cellsArray[i, j];
+                    if (cellMono.IsLightUp && cellMono.Direction == direction)
+                        yield return cellMono;
+                }
+            }
         }
     }
 }

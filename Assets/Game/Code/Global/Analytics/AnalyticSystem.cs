@@ -12,7 +12,7 @@ namespace Global.Analytics
     public class AnalyticSystem : IEcsInitSystem, IEcsRunSystem
     {
         private const string INSTALL_KEY = "analytic.install";
-        private EcsFilter<AnalyticTag> _analytics;
+        private EcsFilter<AnalyticEvent> _analytics;
         private EcsEventTable _eventTable;
         private PlayerData _playerData;
 
@@ -49,6 +49,12 @@ namespace Global.Analytics
                 ByteBrew.NewCustomEvent("ad_video_view", 1);
             if (_eventTable.Has<AdsFailSignal>())
                 ByteBrew.NewCustomEvent("ad_video_view", 0);
+
+            foreach (var i in _analytics)
+            {
+                ref var a = ref _analytics.Get1(i);
+                ByteBrew.NewCustomEvent(a.eventId, a.data);
+            }
         }
     }
 }

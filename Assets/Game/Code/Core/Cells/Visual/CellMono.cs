@@ -41,6 +41,9 @@ namespace Core.Cells.Visual
 
         public Sprite CellSprite => _image.sprite;
 
+        public Direction Direction { get; private set; }
+        public bool IsLightUp => contour.gameObject.activeSelf;
+        
         public event Action DebugCellClick;
 
         private void Awake()
@@ -85,12 +88,7 @@ namespace Core.Cells.Visual
             contour.color = cellContours.FirstOrDefault(c => c.direction == direction).color;
             contour.gameObject.SetActive(true);
             ChangeOpacity(lightUpOpacity);
-            // foreach (var arrow in arrows)
-            // {
-            //     if (arrow.Direction != direction)
-            //         arrow.Hide();
-            // }
-            // _arrowsMap[direction].Show();
+            Direction = direction;
         }
 
         public void ChangeOpacity(float opacity)
@@ -123,6 +121,18 @@ namespace Core.Cells.Visual
         {
             cellVfx.PlayFairyDust();
             cellVfx.PlayGlow();
+        }
+
+        public void MoveToTopLayer()
+        {
+            var canvas = gameObject.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 100;
+        }
+
+        public void ResetLayer()
+        {
+            Destroy(gameObject.GetComponent<Canvas>());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Core.Figures;
+﻿using System.Collections.Generic;
+using Core.Figures;
 using UnityEngine;
 
 namespace Core.Cells.Visual
@@ -14,11 +15,17 @@ namespace Core.Cells.Visual
         [SerializeField]
         private ShadowCells _bottomShadow;
 
+        private readonly Dictionary<ShadowCells, Transform> _defaultParents = new();
+
         public void Init()
         {
             _leftShadow.Init(Direction.Left);
             _rightShadow.Init(Direction.Right);
             _bottomShadow.Init(Direction.Bottom);
+
+            _defaultParents[_bottomShadow] = _bottomShadow.transform.parent;
+            _defaultParents[_rightShadow] = _rightShadow.transform.parent;
+            _defaultParents[_leftShadow] = _leftShadow.transform.parent;
         }
 
         public void ShowLeft(in Figure figure)
@@ -72,6 +79,43 @@ namespace Core.Cells.Visual
         private void HideBottom()
         {
             _bottomShadow.Hide();
+        }
+
+        public void LightUpRight()
+        {
+            LightUpShadow(_rightShadow);
+        }
+        
+        public void LightUpLeft()
+        {
+            LightUpShadow(_leftShadow);
+        }
+        
+        public void LightUpBottom()
+        {
+            LightUpShadow(_bottomShadow);
+        }
+
+        private static void LightUpShadow(Component shadowCells)
+        {
+            var canvas = shadowCells.gameObject.AddComponent<Canvas>();
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 100;
+        }
+
+        public void ResetRightParent()
+        {
+            Destroy(_rightShadow.gameObject.GetComponent<Canvas>());
+        }
+        
+        public void ResetLeftParent()
+        {
+            Destroy(_leftShadow.gameObject.GetComponent<Canvas>());
+        }
+        
+        public void ResetBottomParent()
+        {
+            Destroy(_bottomShadow.gameObject.GetComponent<Canvas>());
         }
     }
 }

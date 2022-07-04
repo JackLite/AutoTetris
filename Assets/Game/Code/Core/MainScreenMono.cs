@@ -48,7 +48,7 @@ namespace Core
 
         [field:SerializeField]
         public Transform FiguresRoot { get; private set; }
-        
+
         [field:SerializeField]
         public TutorialArrows Tutorial { get; private set; }
 
