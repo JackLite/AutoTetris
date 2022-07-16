@@ -6,6 +6,7 @@ using Core.Cells.Visual;
 using Core.CoreDebug;
 using Core.Figures;
 using Core.Grid;
+using Core.Input;
 using Core.Moving;
 using Core.Pause;
 using Core.Saving;
@@ -41,12 +42,18 @@ namespace Core
                 gridSize = new Vector2Int(12, 10);
             _dependencies[typeof(GridData)] = new GridData(gridSize);
             _dependencies[typeof(CoreState)] = new CoreState();
-            _dependencies[typeof(MovingData)] = new MovingData {isMoveAllowed = true};
+            _dependencies[typeof(MovingData)] = new MovingData { isMoveAllowed = true };
             _dependencies[typeof(CellsViewProvider)] = new CellsViewProvider(mainScreen);
             _dependencies[typeof(CoreProgressionService)] = new CoreProgressionService(_coreSettings.coreSettings);
             var data = new EcsOneData<TutorialProgressData>();
             data.SetData(new TutorialProgressData { delay = 3 });
             OneDataDict[typeof(TutorialProgressData)] = data;
+
+            var swipeData = new SwipeData { state = SwipeState.Finished };
+            var swipeEcsData = new EcsOneData<SwipeData>();
+            swipeEcsData.SetData(swipeData);
+            OneDataDict[typeof(SwipeData)] = swipeEcsData;
+
             EcsWorldContainer.World.DeactivateModule<MainMenuModule>();
         }
 

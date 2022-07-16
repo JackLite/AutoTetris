@@ -3,7 +3,7 @@
 namespace Global.Settings.Core
 {
     [Serializable]
-    public class CoreSpeedProgression
+    public struct CoreSpeedProgression
     {
         public long scores;
         public float speed;

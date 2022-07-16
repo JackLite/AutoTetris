@@ -18,6 +18,7 @@ namespace Core.Tutorial
         private CellsViewProvider _cellsViewProvider;
         private EcsEventTable _eventTable;
         private EcsOneData<TutorialProgressData> _tutorProgressData;
+        private EcsOneData<SwipeData> _swipeData;
         private EcsWorld _world;
         private MainScreenMono _mainScreen;
         private MovingData _movingData;
@@ -28,13 +29,13 @@ namespace Core.Tutorial
         {
             ShowStep(0, _tutorProgressData.GetData().delay);
             EcsWorldEventsBlackboard.AddEventHandler<InputRawEvent>(OnInputEvent);
-            _world.CreateOneFrame().Replace(new AnalyticEvent { eventId = "tutorial_step", data = "0" });
+            CreateAnalyticStepEvent(0);
         }
 
         public void Run()
         {
             ref var data = ref _tutorProgressData.GetData();
-            if (data.isWaitSwipe)
+            if (data.isWaitSwipe || data.step > 2)
                 return;
             if (data.delay <= 0)
             {
@@ -63,10 +64,11 @@ namespace Core.Tutorial
             data.isWaitSwipe = false;
             data.delay = 2;
             _movingData.isMoveAllowed = true;
-            _world.NewEntity().Replace(new SwipeInput { direction = ev.direction });
+            ref var swipeData = ref _swipeData.GetData();
+            swipeData.direction = ev.direction;
+            swipeData.state = SwipeState.Start;
             data.step++;
-            _world.CreateOneFrame()
-                  .Replace(new AnalyticEvent { eventId = "tutorial_step", data = data.step.ToString() });
+            CreateAnalyticStepEvent(data.step);
 
             if (data.step == 1)
             {
@@ -82,12 +84,15 @@ namespace Core.Tutorial
                 foreach (var cellMono in _cellsViewProvider.GetLightedCells(Direction.Left))
                     cellMono.ResetLayer();
             }
-            else
+            else if (data.step == 3)
             {
                 _mainScreen.ShadowCellsController.ResetBottomParent();
                 foreach (var cellMono in _cellsViewProvider.GetLightedCells(Direction.Bottom))
                     cellMono.ResetLayer();
                 _saveService.SaveTutorCompleted();
+            }
+            else
+            {
                 _mainScreen.Tutorial.gameObject.SetActive(false);
                 _world.DeactivateModule<TutorialModule>();
             }
@@ -118,6 +123,11 @@ namespace Core.Tutorial
                 foreach (var cellMono in _cellsViewProvider.GetLightedCells(Direction.Bottom))
                     cellMono.MoveToTopLayer();
             }
+        }
+
+        private void CreateAnalyticStepEvent(int step)
+        {
+            _world.CreateOneFrame().Replace(AnalyticHelper.CreateEvent("tutorial_step", step));
         }
 
         public void Destroy()

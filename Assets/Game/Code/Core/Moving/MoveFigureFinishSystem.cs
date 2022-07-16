@@ -22,7 +22,7 @@ namespace Core.Moving
         private GridData _grid;
         private EcsFilter<Figure, FinalFigureComponent> _filter;
         private EcsFilter<Cell> _cells;
-        private EcsFilter<SwipeInput> _swipes;
+        private EcsOneData<SwipeData> _swipeData;
         private EcsFilter<AiDecision> _decisionsFilter;
         private bool _isActive;
         private float _processTime;
@@ -82,10 +82,8 @@ namespace Core.Moving
                 _eventTable.AddEvent<GameOverCoreSignal>();
                 return;
             }
-            foreach (var i in _swipes)
-            {
-                _swipes.GetEntity(i).Replace(new EcsOneFrame());
-            }
+            ref var swipeData = ref _swipeData.GetData();
+            swipeData.state = SwipeState.Finished;
             _eventTable.AddEvent<FigureSpawnSignal>();
         }
 

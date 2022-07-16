@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Core.AI.Genetic;
 using EcsCore;
 using Global.Ads;
+using Global.Analytics;
 using Global.Audio;
 using Global.Leaderboard.Services;
 using Global.Saving;
@@ -42,6 +43,7 @@ namespace Global
             _dependencies.Add(typeof(AiGeneticService), new AiGeneticService());
             _dependencies[typeof(ScoresService)] = new ScoresService();
             _dependencies[typeof(SelectScoresService)] = new SelectScoresService();
+            _dependencies[typeof(AnalyticEventService)] = new AnalyticEventService();
             await LoadCoreSettings();
             var globalSettings = await LoadGlobalSettings();
             _dependencies[typeof(FakeScoresService)] = new FakeScoresService(globalSettings.fakeScores.text);

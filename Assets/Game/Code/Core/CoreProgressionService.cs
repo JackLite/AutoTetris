@@ -5,25 +5,23 @@ namespace Core
 {
     public class CoreProgressionService
     {
-        private readonly CoreSettings _coreSettings;
-        private CoreSpeedProgression[] _speedProgression;
+        private readonly CoreSpeedProgression[] _speedProgression;
         
         public CoreProgressionService(CoreSettings coreSettings)
         {
-            _coreSettings = coreSettings;
-            _speedProgression = _coreSettings.fallSpeedProgression.OrderByDescending(p => p.scores).ToArray();
+            _speedProgression = coreSettings.fallSpeedProgression.OrderByDescending(p => p.scores).ToArray();
         }
 
-        public float GetSpeed(long scores)
+        public CoreSpeedProgression GetDifficult(long scores)
         {
             foreach (var progression in _speedProgression)
             {
                 if (progression.scores > scores)
                     continue;
 
-                return progression.speed;
+                return progression;
             }
-            return _speedProgression.Last().speed;
+            return _speedProgression.Last();
         }
 
         public int GetLevel(long scores)

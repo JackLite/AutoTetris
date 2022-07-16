@@ -8,6 +8,7 @@ using Global;
 using Global.Ads;
 using Global.Settings.Core;
 using Leopotam.Ecs;
+using UnityEngine;
 
 namespace Core.Ads
 {
@@ -77,6 +78,9 @@ namespace Core.Ads
         {
             // TODO: save that video failed
             _eventTable.AddEvent<AdsFailSignal>();
+            // TODO: add reason enum for detect errors easily
+            if (Debug.isDebugBuild)
+                Debug.Log("[IS Init] Ad video show failed");
             ContinueGame();
         }
     }

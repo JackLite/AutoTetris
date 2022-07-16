@@ -5,12 +5,10 @@ namespace Global.Ads
 {
     public class AdsService
     {
-        private const string APP_KEY = "13759d6c1";
         private Action _onSuccess;
         public void Init()
         {
             IronSource.Agent.validateIntegration();
-            IronSource.Agent.init(APP_KEY);
             IronSourceEvents.onRewardedVideoAdRewardedEvent += OnRewardedVideoReward;
         }
         public void ShowRewardedVideo(Action onSuccess, Action onFailed = null)

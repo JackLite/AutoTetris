@@ -29,7 +29,7 @@ namespace Core.Moving
         private EcsFilter<Figure, FigureMoveChosen> _finishFigureFilter;
         private EcsFilter<Figure>.Exclude<FinalFigureComponent> _notFinalFigureFilter;
         private EcsFilter<AiDecision> _decisionsFilter;
-        private EcsFilter<SwipeInput> _inputFilter;
+        private EcsOneData<SwipeData> _swipeData;
         private EcsFilter<Cell> _cells;
         private MainScreenMono _screenMono;
         private GridData _grid;
@@ -122,10 +122,10 @@ namespace Core.Moving
                     ClearDecisions();
                     return;
                 }
-                if (_inputFilter.GetEntitiesCount() > 0)
+                ref var swipeData = ref _swipeData.GetData();
+                if (swipeData.state == SwipeState.Start)
                 {
-                    ref var swipe = ref _inputFilter.Get1(0);
-                    var aiDecision = GetAiDecision(swipe.direction);
+                    var aiDecision = GetAiDecision(swipeData.direction);
                     if (aiDecision.Direction != Direction.None)
                     {
                         figure.rotation = aiDecision.Rotation;
@@ -144,7 +144,7 @@ namespace Core.Moving
                         var speed = math.max(_coreSettings.ManipulationSpeed, _movingData.currentFallSpeed);
                         _fallCounter = CalculateFallSpeed(speed);
                     }
-                    _inputFilter.GetEntity(0).Destroy();
+                    swipeData.state = SwipeState.Processing;
 
                     return;
                 }
