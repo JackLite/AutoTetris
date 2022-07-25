@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Core.Cells.Visual;
 using Core.Input;
@@ -127,7 +129,8 @@ namespace Core.Tutorial
 
         private void CreateAnalyticStepEvent(int step)
         {
-            _world.CreateOneFrame().Replace(AnalyticHelper.CreateEvent("tutorial_step", step));
+            var data = new Dictionary<string, string> { { "step", step.ToString(CultureInfo.InvariantCulture) } };
+            _world.CreateOneFrame().Replace(AnalyticHelper.CreateEvent("tutorial_step", data));
         }
 
         public void Destroy()

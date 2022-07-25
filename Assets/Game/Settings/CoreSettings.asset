@@ -68,7 +68,7 @@ MonoBehaviour:
       speed: 12
     - scores: 22500
       speed: 13
-    - scores: 4200
+    - scores: 42000
       speed: 14
     - scores: 9223372036854775807
       speed: 15

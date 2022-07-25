@@ -11,10 +11,11 @@ namespace Leaderboard.Editor
     public class LeaderboardDummiesWindow : EditorWindow
     {
         private static TextAsset _rawJson;
-        private static string _resultFileName;
-        private static readonly Dictionary<string, bool> _regions = new Dictionary<string, bool>();
+        private static string _resultFileName = "Assets/Game/Settings/leaderboard.json";
+        private static readonly Dictionary<string, bool> _regions = new();
         private Vector2 _scrollPos = Vector2.zero;
         private static int _resultCount = 3476;
+        private static Tuple<int, int> _scoresRange = new(0, 10000);
 
         [MenuItem("AWC/Leaderboard Dummies")]
         private static void ShowWindow()
@@ -83,7 +84,7 @@ namespace Leaderboard.Editor
             {
                 var o = new JObject
                 {
-                    ["scores"] = Random.Range(0, 100000),
+                    ["scores"] = Random.Range(_scoresRange.Item1, _scoresRange.Item2),
                     ["name"] = resultName
                 };
                 arr.Add(o);
@@ -112,6 +113,9 @@ namespace Leaderboard.Editor
         {
             _rawJson = (TextAsset) EditorGUILayout.ObjectField("Raw json", _rawJson, typeof(TextAsset), false);
             _resultFileName = EditorGUILayout.TextField("Result Filename", _resultFileName);
+            var min = EditorGUILayout.IntField("Min scores", _scoresRange.Item1);
+            var max = EditorGUILayout.IntField("Min scores", _scoresRange.Item2);
+            _scoresRange = new Tuple<int, int>(min, max);
         }
 
         [Serializable]
